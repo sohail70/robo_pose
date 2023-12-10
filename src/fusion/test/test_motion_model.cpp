@@ -4,6 +4,7 @@
 #include<typeinfo>
 #include<vector>
 #include<matplotlib-cpp/matplotlibcpp.h>
+#include<cmath>
 TEST(FactoryTest , creatingObjectTest) //1st is group and 2nd is specific thing you wanna do
 {
     ASSERT_EQ(1,1);
@@ -19,6 +20,7 @@ TEST(FactoryTest , creatingObjectTest) //1st is group and 2nd is specific thing 
     ASSERT_EQ(typeid(*car_) , typeid(Filter::Car));
 
 }
+namespace plt = matplotlibcpp;
 
 TEST(MotionModel , update)
 {
@@ -45,7 +47,15 @@ TEST(MotionModel , update)
     }
     };Angle angle_{0.0,0.0,0.0};
 
-    for (int i = 0; i < 100; i++) {
+
+    struct Point {
+        double x;
+        double y;
+        double yaw;
+    };
+    std::vector<Point> points;
+
+    for (int i = 0; i < 5000; i++) {
         current_time_ = rclcpp::Clock().now();
         constant_heading_model_->update(current_time_);
         position_.x =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getPosition().x;
@@ -54,6 +64,36 @@ TEST(MotionModel , update)
         angle_.roll =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getAngle().roll;
         angle_.pitch =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getAngle().pitch;
         angle_.yaw=  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getAngle().yaw;
+        std::cout<<angle_.yaw<<"\n";
+        Point p;
+        p.x = position_.x;
+        p.y = position_.y;
+        p.yaw = angle_.yaw;
+        points.push_back(p);
+
 
     }
+
+
+    // Extract x, y, and yaw data for plotting
+    std::vector<double> x, y, dx, dy;
+    for (const auto& point : points) {
+        x.push_back(point.x);
+        y.push_back(point.y);
+        // Calculate the endpoint of the vector based on yaw
+        dx.push_back(cos(point.yaw)); // X component of the vector
+        dy.push_back(sin(point.yaw)); // Y component of the vector
+    }
+
+    // Modify arrow size and color
+    std::map<std::string, std::string> keywords;
+    keywords["scale"] = 1.0; // Adjust arrow size (scale factor)
+    keywords["color"] = "red"; // Change arrow color to red
+    // Plot points with arrows representing their headings
+    plt::quiver(x, y, dx, dy);
+    plt::show();
+    
+
+
+
 }

@@ -13,6 +13,7 @@
         "string": "cpp",
         "unordered_set": "cpp",
         "string_view": "cpp",
-        "dense": "cpp"
+        "dense": "cpp",
+        "cmath": "cpp"
     }
 }
