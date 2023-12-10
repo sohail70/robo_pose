@@ -9,7 +9,7 @@ namespace Filter{
     void Car::init()
     {}
 
-    void Car::update()
+    void Car::update(const rclcpp::Time& current_time_)
     {}
 
 } //namespace Filter

@@ -26,7 +26,7 @@ add_library(
   src/constant_heading_rate.cpp
   src/car.cpp
 )
-
+ament_target_dependencies(fusemuse rclcpp)
 add_executable(fusion src/main.cpp)
 ament_target_dependencies(fusion rclcpp)
 install(TARGETS fusion DESTINATION lib/${PROJECT_NAME})

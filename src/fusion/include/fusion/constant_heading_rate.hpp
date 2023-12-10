@@ -9,7 +9,7 @@ namespace Filter{
         public:
             ConstantHeadingRate();
             virtual void init() override;
-            virtual void update() override;
+            virtual void update(const rclcpp::Time&) override;
         private:
 
     };
