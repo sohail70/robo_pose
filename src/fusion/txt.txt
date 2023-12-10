@@ -1,0 +1,18 @@
+## First we need a motion estimation model for a mobile robot or autonomous vehicle
+# for 50hz vehicle not faster! and small change in the heading angle (constant heading rate)
+theta_1 = thetat_0 + delta_theta_1
+x_1 = x_0 + delta_s_1 * cost(theta_0 + delta_theta_1/2)
+y_1 = y_0 + delta_s_1 * sin(theta_0 + delta_theta_1 /2)
+delta_s = v_x * delta_t
+delta_theta = theta_dot * delta_t
+
+
+this was from a youtube video
+I remeber i used this for a mobile robot once in matlab
+
+x1 = x0 + v*cos(theta)*delta_t
+y1 = y0 + v*sin(theta)*delta_t
+theta = theta_0 + omega*delta_t
+
+
+more sophistaced kinemtatics can be utilized if you want more accuracy

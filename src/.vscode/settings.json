@@ -1,0 +1,17 @@
+{
+    "python.autoComplete.extraPaths": [
+        "/opt/ros/galactic/lib/python3.8/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/opt/ros/galactic/lib/python3.8/site-packages"
+    ],
+    "files.associations": {
+        "*.ipp": "cpp",
+        "functional": "cpp",
+        "unordered_map": "cpp",
+        "*.tcc": "cpp",
+        "string": "cpp",
+        "unordered_set": "cpp",
+        "string_view": "cpp"
+    }
+}
