@@ -10,6 +10,8 @@ namespace Filter{
             ConstantHeadingRate();
             virtual void init() override;
             virtual void update(const rclcpp::Time&) override;
+            MotionModel::Position& getPosition();
+            MotionModel::Angle& getAngle();
         private:
 
     };

@@ -10,8 +10,7 @@ namespace Filter{
 
     void ConstantHeadingRate::init()
     {
-
-
+        previous_time_ = rclcpp::Clock().now();
     }
 
     void ConstantHeadingRate::update(const rclcpp::Time& current_time_)
@@ -22,6 +21,15 @@ namespace Filter{
         angle_.yaw = angle_.yaw + angular_velocity_.yaw_dot*dt.seconds();
         previous_time_ = current_time_;
     }
-    
+
+    MotionModel::Position& ConstantHeadingRate::getPosition()
+    {
+        return position_;
+    }
+
+    MotionModel::Angle& ConstantHeadingRate::getAngle()
+    {
+        return angle_;
+    }
 
 } //namespace Filter

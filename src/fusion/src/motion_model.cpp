@@ -5,6 +5,9 @@ namespace Filter{
         std::cout<<"Ctor of MotionModel \n";
     }
 
+    MotionModel::~MotionModel(){}
+
+
 
 
 } //namespace Filter

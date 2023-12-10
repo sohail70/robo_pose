@@ -12,6 +12,7 @@ namespace Filter{
                 virtual ~MotionModel();
                 virtual void init() = 0;
                 virtual void update(const rclcpp::Time& ) = 0;
+
             protected:
                 struct Position{
                     double x, y, z;

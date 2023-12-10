@@ -12,6 +12,7 @@
         "*.tcc": "cpp",
         "string": "cpp",
         "unordered_set": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "dense": "cpp"
     }
 }
