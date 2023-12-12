@@ -16,13 +16,13 @@ namespace Filter{
     void ConstantHeadingRate::update(const rclcpp::Time& current_time_)
     {
         rclcpp::Duration dt = current_time_ - previous_time_;
-        if(dt.seconds()>0.0001)
-        {
-            position_.x = position_.x + velocity_.x_dot*cos(angular_velocity_.yaw_dot)*dt.seconds();
-            position_.y = position_.y + velocity_.x_dot*sin(angular_velocity_.yaw_dot)*dt.seconds();
+        // if(dt.seconds()>0.0001)
+        // {
+            position_.x = position_.x + velocity_.x_dot*cos(angle_.yaw)*dt.seconds();
+            position_.y = position_.y + velocity_.x_dot*sin(angle_.yaw)*dt.seconds();
             angle_.yaw = angle_.yaw + angular_velocity_.yaw_dot*dt.seconds();
             previous_time_ = current_time_;
-        }
+        // }
     }
 
     MotionModel::Position& ConstantHeadingRate::getPosition()
