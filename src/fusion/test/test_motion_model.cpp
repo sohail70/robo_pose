@@ -54,8 +54,8 @@ TEST(MotionModel , update)
         double yaw;
     };
     std::vector<Point> points;
-
-    for (int i = 0; i < 5000; i++) {
+    rclcpp::Rate loop_rate_(1000);
+    for (int i = 0; i < 50; i++) {
         current_time_ = rclcpp::Clock().now();
         constant_heading_model_->update(current_time_);
         position_.x =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getPosition().x;
@@ -70,8 +70,7 @@ TEST(MotionModel , update)
         p.y = position_.y;
         p.yaw = angle_.yaw;
         points.push_back(p);
-
-
+        loop_rate_.sleep();
     }
 
 
@@ -91,6 +90,7 @@ TEST(MotionModel , update)
     keywords["color"] = "red"; // Change arrow color to red
     // Plot points with arrows representing their headings
     plt::quiver(x, y, dx, dy);
+    plt::plot(x, y, ".");
     plt::show();
     
 

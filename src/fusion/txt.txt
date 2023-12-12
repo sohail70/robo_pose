@@ -16,3 +16,8 @@ theta = theta_0 + omega*delta_t
 
 
 more sophistaced kinemtatics can be utilized if you want more accuracy
+
+
+
+
+TODO: Need to use real time library for the time -->but why ?is there a time constrait?! is there a callback thats being called every 10 ms and you have to fill the buffer in this time constraint!? i don't think so!
