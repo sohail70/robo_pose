@@ -56,6 +56,7 @@ TEST(MotionModel , update)
     std::vector<Point> points;
     rclcpp::Rate loop_rate_(1000);
     for (int i = 0; i < 50; i++) {
+        //plt::clf();
         current_time_ = rclcpp::Clock().now();
         constant_heading_model_->update(current_time_);
         position_.x =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getPosition().x;
@@ -71,7 +72,20 @@ TEST(MotionModel , update)
         p.yaw = angle_.yaw;
         points.push_back(p);
         loop_rate_.sleep();
+
+
+        // //Animtion
+        // std::vector<double> x, y, dx, dy;
+        // x.push_back(p.x);
+        // y.push_back(p.y);
+        // dx.push_back(cos(p.yaw)); // X component of the vector
+        // dy.push_back(sin(p.yaw)); // Y component of the vector 
+        // plt::plot(x, y, "r.");
+        // plt::quiver(x, y, dx, dy);
+        // plt::pause(0.00001);
     }
+    // plt::show();
+
 
 
     // Extract x, y, and yaw data for plotting

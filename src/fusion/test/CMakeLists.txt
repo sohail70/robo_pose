@@ -5,6 +5,10 @@ project(test)
 find_package(GTest REQUIRED)
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(sensor_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(visualization_msgs REQUIRED)
 find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
 include_directories(
     ${GTEST_INCLUDE_DIRS}
@@ -17,16 +21,18 @@ include_directories(
 set(TEST_SOURCES
     test_main.cpp 
     test_motion_model.cpp
+    test_visualization.cpp
     ../src/motion_model_factory.cpp
     ../src/motion_model.cpp
     ../src/constant_heading_rate.cpp
     ../src/car.cpp
+    ../src/visualization.cpp
 
 )
 
 add_executable(run_tests ${TEST_SOURCES})
 target_link_libraries(run_tests ${GTEST_BOTH_LIBRARIES} pthread  Python3::Python Python3::NumPy) #python  ro nazari matplot lib kar nemide
-ament_target_dependencies(run_tests rclcpp)
+ament_target_dependencies(run_tests rclcpp std_msgs geometry_msgs sensor_msgs visualization_msgs)
 
 enable_testing()
 add_test(NAME YourTestSuite COMMAND run_tests)
