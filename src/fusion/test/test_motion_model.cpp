@@ -26,6 +26,17 @@ TEST(MotionModel , update)
 {
     Filter::MotionModelFactory factory_;
     std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE);
+    Filter::Velocity velocity_{0.1,0.0,0.0};
+    constant_heading_model_->setVelocity(velocity_);
+    struct AngularVelocity{
+        double pitch_dot;
+        double roll_dot;
+        double yaw_dot;
+    };
+    Filter::AngularVelocity angular_velocity{0.0,0.0,1.0};
+    constant_heading_model_->setAngularVelocity(angular_velocity);
+
+
     rclcpp::Time current_time_ = rclcpp::Clock().now();
     
     struct Position {double x,y,z;

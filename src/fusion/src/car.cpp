@@ -12,4 +12,9 @@ namespace Filter{
     void Car::update(const rclcpp::Time& current_time_)
     {}
 
+    void Car::setVelocity(const Filter::Velocity& velocity_)
+    {}
+
+    void Car::setAngularVelocity(const Filter::AngularVelocity& angular_velocity_)
+    {}
 } //namespace Filter

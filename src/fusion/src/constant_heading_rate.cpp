@@ -25,12 +25,26 @@ namespace Filter{
         // }
     }
 
-    MotionModel::Position& ConstantHeadingRate::getPosition()
+    void ConstantHeadingRate::setVelocity(const Filter::Velocity& velocity_)
+    {
+        this->velocity_.x_dot = velocity_.x_dot;
+        this->velocity_.y_dot = velocity_.y_dot;
+        this->velocity_.z_dot = velocity_.z_dot;
+    }
+
+    void ConstantHeadingRate::setAngularVelocity(const Filter::AngularVelocity& angular_velocity_)
+    {
+        this->angular_velocity_.pitch_dot = angular_velocity_.pitch_dot;
+        this->angular_velocity_.roll_dot = angular_velocity_.roll_dot;
+        this->angular_velocity_.yaw_dot = angular_velocity_.yaw_dot;
+    }
+
+    Filter::Position& ConstantHeadingRate::getPosition()
     {
         return position_;
     }
 
-    MotionModel::Angle& ConstantHeadingRate::getAngle()
+    Filter::Angle& ConstantHeadingRate::getAngle()
     {
         return angle_;
     }

@@ -23,3 +23,8 @@ TEST(visualizationTest , rvizMarkers)
     }
      
 }
+
+TEST(visualizationTest , gazeboTest)
+{
+    rclcpp::init(0,nullptr);
+}

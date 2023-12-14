@@ -10,6 +10,8 @@ namespace Filter{
             Car();
             virtual void init() override;
             virtual void update(const rclcpp::Time&) override;
+            virtual void setVelocity(const Filter::Velocity& ) override;
+            virtual void setAngularVelocity(const Filter::AngularVelocity& ) override;
         private:
 
     };
