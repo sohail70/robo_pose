@@ -17,4 +17,8 @@ namespace Filter{
 
     void Car::setAngularVelocity(const Filter::AngularVelocity& angular_velocity_)
     {}
+
+    void Car::setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& twist_)
+    {}
+
 } //namespace Filter

@@ -1,0 +1,4 @@
+for running an specific test 
+to get help --> ./run_tests --help
+./run_tests --gtest_list_tests
+./run_tests --gtest_filter=....* (* for matching with different test cases)

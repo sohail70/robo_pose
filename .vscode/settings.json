@@ -4,5 +4,13 @@
     ],
     "python.analysis.extraPaths": [
         "/opt/ros/galactic/lib/python3.8/site-packages"
-    ]
+    ],
+    "files.associations": {
+        "memory": "cpp",
+        "future": "cpp",
+        "istream": "cpp",
+        "functional": "cpp",
+        "tuple": "cpp",
+        "chrono": "cpp"
+    }
 }

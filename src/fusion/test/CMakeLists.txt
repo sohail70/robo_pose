@@ -13,7 +13,7 @@ find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
 include_directories(
     ${GTEST_INCLUDE_DIRS}
     ${Python3_INCLUDE_DIRS} # nazarama build mishe ba matplot lib!
-    ../include
+    ../include #matplotlib header only ro ham gozashtam in to 
     )
 
 

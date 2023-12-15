@@ -5,6 +5,7 @@
 // #include<Eigen/Dense>
 #include<cmath>
 #include<rclcpp/rclcpp.hpp>
+#include<geometry_msgs/msg/twist.hpp>
 namespace Filter{
     struct Position{
         double x, y, z;
@@ -33,6 +34,7 @@ namespace Filter{
                 virtual void update(const rclcpp::Time& ) = 0;
                 virtual void setVelocity(const Filter::Velocity& ) = 0;
                 virtual void setAngularVelocity(const Filter::AngularVelocity& ) = 0;
+                virtual void setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& ) = 0;
         };
 } //namespace Filter
 #endif

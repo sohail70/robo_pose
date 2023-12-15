@@ -39,6 +39,16 @@ namespace Filter{
         this->angular_velocity_.yaw_dot = angular_velocity_.yaw_dot;
     }
 
+    void ConstantHeadingRate::setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& twist_)
+    {
+        velocity_.x_dot = twist_.linear.x;
+        velocity_.y_dot = twist_.linear.y;
+        velocity_.z_dot = twist_.linear.z;
+        angular_velocity_.roll_dot = twist_.angular.x;
+        angular_velocity_.pitch_dot = twist_.angular.y;
+        angular_velocity_.yaw_dot = twist_.angular.z;
+    }
+
     Filter::Position& ConstantHeadingRate::getPosition()
     {
         return position_;

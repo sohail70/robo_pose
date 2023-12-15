@@ -12,6 +12,8 @@ namespace Filter{
             virtual void update(const rclcpp::Time&) override;
             virtual void setVelocity(const Filter::Velocity& ) override;
             virtual void setAngularVelocity(const Filter::AngularVelocity& ) override;
+            virtual void setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& ) override;
+
             Filter::Position& getPosition();
             Filter::Angle& getAngle();
         private:
