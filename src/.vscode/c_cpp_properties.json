@@ -6,7 +6,6 @@
                 "${workspaceFolder}/**",
                 "/opt/ros/galactic/include/**",
                 "/usr/include/**",
-                "${workspaceFolder}/fusion/include/ekf",
                 "${workspaceFolder}/fusion/include/fusion"
             ],
             "defines": [],
