@@ -7,7 +7,9 @@
 TEST(Eigen, simple)
 {
     // ASSERT_EQ(1,1);
-    Eigen::VectorXd v1(3,1); //3 by 1 vector: instead of X we can put a number but we put X for any dimension that we specify
+    Eigen::VectorXd v1; //3 by 1 vector: instead of X we can put a number but we put X for any dimension that we specify
+    v1 = Eigen::VectorXd(3,1);
+    
     v1<<6,7,8;
     std::cout<<v1<<"\n";
     std::cout<<v1.sum()<<" "<<v1.prod()<<" "<<v1.mean()<<" "<<v1.minCoeff()<<" "<<v1.norm()<<" " <<v1.size()<<" \n";

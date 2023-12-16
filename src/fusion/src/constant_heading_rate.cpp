@@ -59,4 +59,18 @@ namespace Filter{
         return angle_;
     }
 
+    Filter::Velocity& ConstantHeadingRate::getVelocity()
+    {
+        return velocity_;
+    }
+
+    Filter::AngularVelocity& ConstantHeadingRate::getAngularVelocity()
+    {
+        return angular_velocity_;
+    }
+
+    rclcpp::Time ConstantHeadingRate::getPrevTime()
+    {
+        return previous_time_;
+    }
 } //namespace Filter

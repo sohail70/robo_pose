@@ -21,3 +21,64 @@ more sophistaced kinemtatics can be utilized if you want more accuracy
 
 
 TODO: Need to use real time library for the time -->but why ?is there a time constrait?! is there a callback thats being called every 10 ms and you have to fill the buffer in this time constraint!? i don't think so!
+
+should i make distinction between ekf2d 3d . should i create a state space class and inject it into motion model !
+
+
+take a look at this --> https://robotics.stackexchange.com/questions/23179/sensor-fusion-with-extended-kalman-filter-for-roll-and-pitch
+this was for fusing accelerometer with the gyroscoe to get the roll and pitch data! --> but doesn't the imu already provide those?! maybe its not using the acceleration and it only integrate the angular velocities!
+
+
+-------------
+motion model for constant heading rate (v and w are constants)
+x_dot = v*cos(yaw) = f1
+y_dot = v*sin(yaw) = f2
+yaw_dot = w = f3
+
+
+in continuous mode  with the state space like this : [x;y;yaw;v;w]
+A = [df1/dx , df1/dy , df1/dYaw , df1/dv , df1/dw
+    df2/dx , df2/dy , df2/dYaw , df2/dv , df2/dw
+    df3/dx , df3/dy , df3/dYaw , df3/dv , df3/dw
+    df4/dx ....
+    df5/dx ....] //albate f4 va f5 nadarim dar vaghe v=v va w=w mishe f4 va f5
+
+= [0 0 -v*sin(yaw) cos(yaw) 0
+   .  . .. . . . .. . . 
+   . .. . . . .. . . . .
+   ................
+   ................. ]
+
+
+
+in discrete mode:
+x(k+1) = x(k) + v*cos(yaw(k))*dt =f1
+y(k+1) = y(k) + v*sin(yaw(k))*dt = f2
+yaw(k+1) = yaw(k) + w*dt  =f3
+v(k+1) = v(k) =f4 --> because of my choosen state space in kf i have to write this also
+w(k+1) = w(k) =f5 ---> same as above line
+
+A = [df1/dx(k) , df1/dy(k) , df1/dYaw(k) , df1/dv(k) , df1/dw(k)
+df2/dx(k) , df2/dy(k) , df2/dYaw(k) , df2/dv(k) , df2/dw(k)
+df3/dx(k) , df3/dy(k) , df3/dYaw(k) , df3/dv(k) , df3/dw(k)
+df4/dx(k) , df4/dy(k) , df4/dYaw(k) , df4/dv(k) , df4/dw(k)
+df5/dx(k) , df5/dy(k) , df5/dYaw(k) , df5/dv(k) , df5/dw(k)
+]
+
+so the A would be :
+
+A= [ 1 0 -v*sin(yaw(k))*dt   cos(yaw(k))*dt  0
+     0 1  v*cos(yaw(k))*dt   sin(yaw(k))*dt  0
+     0 0        1                 0          dt
+     0 0        0                 1          0
+     0 0        0                 0          1]
+
+state space :
+X = [x 
+     y
+     yaw 
+     v 
+     w]
+
+TODO: put these in the motion model of constant heading rate not those formula! but right now im gonna convert them in the ekf predict function
+TODO: i also didn't implement measurement model yet!
