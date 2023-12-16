@@ -22,13 +22,13 @@ include_directories(
 )
 
 add_library(
-  fusemuse
+  motion
   src/motion_model_factory.cpp 
   src/motion_model.cpp 
   src/constant_heading_rate.cpp
   src/car.cpp
 )
-ament_target_dependencies(fusemuse rclcpp)
+ament_target_dependencies(motion rclcpp)
 add_executable(fusion src/main.cpp)
 ament_target_dependencies(fusion rclcpp)
 install(TARGETS fusion DESTINATION lib/${PROJECT_NAME})
@@ -39,8 +39,14 @@ add_library(
   src/visualization.cpp
 )
 ament_target_dependencies(visualization rclcpp std_msgs visualization_msgs geometry_msgs)
-# 
 
+add_library(
+  fusemuse
+  src/fusion.cpp
+  src/ekf.cpp
+)
+ament_target_dependencies(fusemuse rclcpp)
+target_link_libraries(fusemuse motion)
 
 
 if(BUILD_TESTING)
