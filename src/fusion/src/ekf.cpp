@@ -59,7 +59,7 @@ namespace Filter{
         A(4,0) = 0; A(4,1) = 0; A(4,2) =  0            ; A(4,3)= 0          ; A(4,4) = 1;  
 
         P = A*P*A.transpose() + Q;
-        std::cout<<v<<" "<<w<<"\n";
+        std::cout<<cmd.linear.x<<" "<<w<<"\n";
 
 
     }

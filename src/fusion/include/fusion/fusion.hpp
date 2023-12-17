@@ -1,3 +1,6 @@
+#ifndef FUSION_HPP
+#define FUSION_HPP
+
 #include<iostream>
 #include<memory>
 #include<fusion/motion_model.hpp>
@@ -18,3 +21,4 @@ namespace Filter{
     };
 
 } //namespace Filter
+#endif

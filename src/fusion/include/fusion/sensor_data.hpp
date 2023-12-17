@@ -24,6 +24,7 @@ class RosCmdVelSource : public VelocitySource<geometry_msgs::msg::Twist>
     public:
         RosCmdVelSource();
         virtual const geometry_msgs::msg::Twist& getVelocity() const;
+        rclcpp::Node::SharedPtr getRosNode();
 };
 
 
@@ -46,6 +47,7 @@ class RosImuSource: public ImuSource<sensor_msgs::msg::Imu>{
     public:
        RosImuSource();
        virtual const sensor_msgs::msg::Imu& getImuData() const override;
+        rclcpp::Node::SharedPtr getRosNode();
 };
 
 #endif

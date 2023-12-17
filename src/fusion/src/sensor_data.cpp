@@ -18,6 +18,13 @@ const geometry_msgs::msg::Twist& RosCmdVelSource::getVelocity() const
 }
 
 
+
+rclcpp::Node::SharedPtr RosCmdVelSource::getRosNode()
+{
+    return node_;
+}
+
+
 RosImuSource::RosImuSource()
 {
     node_ = rclcpp::Node::make_shared("imu_source_node");
@@ -33,4 +40,9 @@ void RosImuSource::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
 const sensor_msgs::msg::Imu& RosImuSource::getImuData() const
 {
     return imu_;
+}
+
+rclcpp::Node::SharedPtr RosImuSource::getRosNode()
+{
+    return node_;
 }
