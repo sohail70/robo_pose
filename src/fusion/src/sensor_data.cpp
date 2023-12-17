@@ -1,4 +1,4 @@
-#include<fusion/sensorData.hpp>
+#include<fusion/sensor_data.hpp>
 
 
 RosCmdVelSource::RosCmdVelSource()
@@ -28,4 +28,9 @@ RosImuSource::RosImuSource()
 void RosImuSource::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
     imu_ = *msg; 
+}
+
+const sensor_msgs::msg::Imu& RosImuSource::getImuData() const
+{
+    return imu_;
 }

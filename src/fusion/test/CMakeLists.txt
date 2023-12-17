@@ -17,23 +17,25 @@ include_directories(
     ../include #matplotlib header only ro ham gozashtam in to 
     )
 
-
-
 set(TEST_SOURCES
     test_main.cpp 
     test_motion_model.cpp
     test_visualization.cpp
     test_eigen.cpp
+    test_ekf.cpp
     ../src/motion_model_factory.cpp
     ../src/motion_model.cpp
     ../src/constant_heading_rate.cpp
     ../src/car.cpp
     ../src/visualization.cpp
+    ../src/sensor_data.cpp
+    ../src/ekf.cpp 
+    ../src/fusion.cpp
 
 )
 
 add_executable(run_tests ${TEST_SOURCES})
-target_link_libraries(run_tests ${GTEST_BOTH_LIBRARIES} pthread  Python3::Python Python3::NumPy Eigen3::Eigen) #python  ro nazari matplot lib kar nemide
+target_link_libraries(run_tests ${GTEST_BOTH_LIBRARIES} pthread Python3::Python Python3::NumPy Eigen3::Eigen) #python  ro nazari matplot lib kar nemide
 ament_target_dependencies(run_tests rclcpp std_msgs geometry_msgs sensor_msgs visualization_msgs)
 
 enable_testing()

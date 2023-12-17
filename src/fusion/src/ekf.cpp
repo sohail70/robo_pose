@@ -1,12 +1,17 @@
 #include<fusion/ekf.hpp>
 #include<fusion/constant_heading_rate.hpp>
 namespace Filter{
-    Ekf::Ekf(std::unique_ptr<MotionModel> motion_model_):Fusion(std::move(motion_model_))
+    template<typename velType , typename imuType>
+    Ekf<velType,imuType>::Ekf(std::unique_ptr<MotionModel> motion_model_ ,
+             std::shared_ptr<VelocitySource<velType>> velocity_source_ ,
+             std::shared_ptr<ImuSource<imuType>> imu_source_):
+    Fusion(std::move(motion_model_)) ,velocity_source_(velocity_source_) , imu_source_(imu_source_)
     {
         std::cout<<"Ctor of Ekf \n";
     }
 
-    void Ekf::initialize()
+    template<typename velType , typename imuType>
+    void Ekf<velType,imuType>::initialize()
     {
         // initialize dimensions of the state space
         int num_states_ = 5; //[x,y,yaw,x_dot,yaw_dot]
@@ -37,8 +42,11 @@ namespace Filter{
         I = Eigen::MatrixXd::Identity(num_states_ , num_states_);
     }
 
-    void Ekf::predict(const rclcpp::Time& current_time_)
+    template<typename velType , typename imuType>
+    void Ekf<velType,imuType>::predict(const rclcpp::Time& current_time_)
     {
+        auto cmd = velocity_source_->getVelocity();
+        motion_model_->setVelAndAngVelFromTwist(cmd);
         motion_model_->update(current_time_);
         double dt = current_time_.seconds() - motion_model_->getPrevTime().seconds();
         double v = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getVelocity().x_dot;
@@ -51,13 +59,17 @@ namespace Filter{
         A(4,0) = 0; A(4,1) = 0; A(4,2) =  0            ; A(4,3)= 0          ; A(4,4) = 1;  
 
         P = A*P*A.transpose() + Q;
-        
+        std::cout<<v<<" "<<w<<"\n";
+
 
     }
 
-    void Ekf::update()
+    template<typename velType , typename imuType>
+    void Ekf<velType,imuType>::update()
     {
 
     }
+
+    template class Ekf<geometry_msgs::msg::Twist, sensor_msgs::msg::Imu>;
 
 } //namespace Filter

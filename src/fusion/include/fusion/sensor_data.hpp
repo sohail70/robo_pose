@@ -1,5 +1,5 @@
-#ifndef ROS_DATA_HPP
-#define ROS_DATA_HPP
+#ifndef SENSOR_DATA_HPP
+#define SENSOR_DATA_HPP
 #include<rclcpp/rclcpp.hpp>
 #include<geometry_msgs/msg/twist.hpp>
 #include<sensor_msgs/msg/imu.hpp>

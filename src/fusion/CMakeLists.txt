@@ -41,18 +41,20 @@ add_library(
 ament_target_dependencies(visualization rclcpp std_msgs visualization_msgs geometry_msgs)
 
 add_library(
+  sensor_data
+  src/sensor_data.cpp
+)
+ament_target_dependencies(sensor_data rclcpp geometry_msgs sensor_msgs )
+
+add_library(
   fusemuse
   src/fusion.cpp
   src/ekf.cpp
 )
 ament_target_dependencies(fusemuse rclcpp)
-target_link_libraries(fusemuse motion Eigen3::Eigen)
+target_link_libraries(fusemuse motion sensor_data Eigen3::Eigen)
 
-add_library(
-  sensor_data
-  src/sensorData.cpp
-)
-ament_target_dependencies(sensor_data rclcpp geometry_msgs sensor_msgs )
+
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)

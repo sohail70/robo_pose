@@ -21,4 +21,7 @@ namespace Filter{
     void Car::setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& twist_)
     {}
 
+
+    rclcpp::Time Car::getPrevTime()
+    {}
 } //namespace Filter
