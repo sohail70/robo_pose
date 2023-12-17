@@ -1,6 +1,7 @@
 #ifndef SENSOR_DATA_HPP
 #define SENSOR_DATA_HPP
 #include<rclcpp/rclcpp.hpp>
+#include<rclcpp/qos.hpp>
 #include<geometry_msgs/msg/twist.hpp>
 #include<sensor_msgs/msg/imu.hpp>
 template<typename velType>

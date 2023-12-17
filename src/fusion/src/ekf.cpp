@@ -40,6 +40,8 @@ namespace Filter{
         // P = Eigen::MatrixXd(num_states_ , num_states_);
         P.setZero(num_states_,num_states_);
         I = Eigen::MatrixXd::Identity(num_states_ , num_states_);
+
+        X.setZero(num_states_,1);
     }
 
     template<typename velType , typename imuType>
@@ -49,6 +51,8 @@ namespace Filter{
         motion_model_->setVelAndAngVelFromTwist(cmd);
         motion_model_->update(current_time_);
         rclcpp::Duration dt = motion_model_->getDt();
+        double x = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getPosition().x;
+        double y = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getPosition().y;
         double v = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getVelocity().x_dot;
         double w = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngularVelocity().yaw_dot;
         double yaw = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngle().yaw;
@@ -57,11 +61,18 @@ namespace Filter{
         A(2,0) = 0; A(2,1) = 0; A(2,2) =  1            ; A(2,3)= 0          ; A(2,4) = dt.seconds();  
         A(3,0) = 0; A(3,1) = 0; A(3,2) =  0            ; A(3,3)= 1          ; A(3,4) = 0;  
         A(4,0) = 0; A(4,1) = 0; A(4,2) =  0            ; A(4,3)= 0          ; A(4,4) = 1;  
-
+        // Are you tempted to use the A matrix to update the X? don't :) use the original non linear model to update the States. use A only in P calculations
+        X(0,0) = x;
+        X(1,0) = y;
+        X(2,0) = yaw;
+        X(3,0) = v;
+        X(4,0) = w;
+        
         P = A*P*A.transpose() + Q;
         // std::cout<<"V_x: "<<v<<" W: "<<w<<" Yaw:"<< yaw <<" dt:" <<dt.seconds()<<"\n";
         // std::cout<<A<<"\n \n \n";
-        std::cout<<P<<"\n \n \n";
+        // std::cout<<X<<"\n \n \n"; 
+        // std::cout<<P<<"\n \n \n";
 
 
 
@@ -70,6 +81,13 @@ namespace Filter{
     template<typename velType , typename imuType>
     void Ekf<velType,imuType>::update()
     {
+        std::cout<<"In the update \n";
+        Eigen::MatrixXd measurement_prediction_ = H*X;
+        // std::cout<<measurement_prediction_<<"\n"; //I only get data when i give angular velocity and 
+        // Eigen::MatrixXd measurement_residual_ = imu_source_->getImuData().angular_velocity.z - measurement_prediction_;
+        // std::cout<<measurement_residual_<<"\n";
+        std::cout<<imu_source_->getImuData().angular_velocity.z<<"\n";
+
 
     }
 

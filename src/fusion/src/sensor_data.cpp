@@ -28,12 +28,14 @@ rclcpp::Node::SharedPtr RosCmdVelSource::getRosNode()
 RosImuSource::RosImuSource()
 {
     node_ = rclcpp::Node::make_shared("imu_source_node");
-    imu_sub_ = node_->create_subscription<sensor_msgs::msg::Imu>("imu" , 1 , std::bind(&RosImuSource::imuCallback , this , std::placeholders::_1));
+    rclcpp::QoS qos_ = rclcpp::SensorDataQoS();
+    imu_sub_ = node_->create_subscription<sensor_msgs::msg::Imu>("imu" , qos_ , std::bind(&RosImuSource::imuCallback , this , std::placeholders::_1));
 }
 
 
 void RosImuSource::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
+    std::cout<<"In the Imu subscriber \n";
     imu_ = *msg; 
 }
 
