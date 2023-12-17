@@ -49,6 +49,8 @@ namespace Filter{
     {
         auto cmd = velocity_source_->getVelocity();
         motion_model_->setVelAndAngVelFromTwist(cmd);
+        cmd.angular.z = X(4,0); // from the updated yaw_dot from ekf's update
+        motion_model_->setVelAndAngVelFromTwist(cmd);
         motion_model_->update(current_time_);
         rclcpp::Duration dt = motion_model_->getDt();
         double x = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getPosition().x;
@@ -96,8 +98,10 @@ namespace Filter{
         Eigen::MatrixXd kalman_gain_ = P*H.transpose()*innovation_covariance_.inverse();
         // std::cout<<innovation_covariance_<<"\n";
         // std::cout<<"KALMAN GAIN:\n"<<kalman_gain_<<"\n";
+        // std::cout<<"K*res:\n"<<kalman_gain_*measurement_residual_<<"\n";
         X = X + kalman_gain_*measurement_residual_;
-        P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
+        // P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
+        P = (I-kalman_gain_*H)*P;
         // std::cout<<"X: \n"<<X.transpose()<<"\n \n \n";
         // std::cout<<"P: \n"<<P<<"\n \n \n ";
     }

@@ -87,9 +87,10 @@ TODO: use observer design so that as soon as cmd_vel or any other velocity sourc
 TODO: P0 zero should me inf if you don't know where the robot is at first iteration. for now I assume we know the first location because im working on tracking not localization
 TODO: create a factory for ekf and stuff
 TODO: should i make the fusion template not the ekf or what?
-TODO: normalize yaw angle in constion heading rate 
+TODO(DONE): normalize yaw angle in constion heading rate
 TODO: create state space class and not just create a matrix in the ekf!
 TODO: when do i know the measurment has arrived and that I should do a ekk update! for now i just go with it assuming I have the Imu measurements
+TODO: You need to update the motion models states based on the output of the ekf's update and set velocity based on cmd is wrong now that you updated the states
 
 Ekf is template base so the test_ekf.cpp would give me errors on creating ekf because ekf.hpp is not visiible ---> Template classes need to have their implementation visible during compilation
 solution --> 
