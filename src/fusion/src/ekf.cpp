@@ -81,15 +81,33 @@ namespace Filter{
     template<typename velType , typename imuType>
     void Ekf<velType,imuType>::update()
     {
-        std::cout<<"In the update \n";
+        // std::cout<<"In the update \n";
         Eigen::MatrixXd measurement_prediction_ = H*X;
-        // std::cout<<measurement_prediction_<<"\n"; //I only get data when i give angular velocity and 
-        // Eigen::MatrixXd measurement_residual_ = imu_source_->getImuData().angular_velocity.z - measurement_prediction_;
-        // std::cout<<measurement_residual_<<"\n";
-        std::cout<<imu_source_->getImuData().angular_velocity.z<<"\n";
-
-
+        // std::cout<<H<<"\n \n \n ";
+        // std::cout<<X<<"\n \n \n ";
+        // std::cout<<measurement_prediction_<<"\n"; //I only get data when i give angular velocity
+        int num_obs_ = 1;
+        Eigen::MatrixXd imu_measurement_(num_obs_ , 1);
+        imu_measurement_<< imu_source_->getImuData().angular_velocity.z ;
+        Eigen::MatrixXd measurement_residual_ = imu_measurement_ - measurement_prediction_;
+        // std::cout<< imu_measurement_<<"  "<< measurement_prediction_ <<" "<<measurement_residual_<<"\n";
+        // std::cout<<imu_source_->getImuData().angular_velocity.z<<"\n";
+        Eigen::MatrixXd innovation_covariance_ = H*P*H.transpose() + R;
+        Eigen::MatrixXd kalman_gain_ = P*H.transpose()*innovation_covariance_.inverse();
+        // std::cout<<innovation_covariance_<<"\n";
+        // std::cout<<"KALMAN GAIN:\n"<<kalman_gain_<<"\n";
+        X = X + kalman_gain_*measurement_residual_;
+        P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
+        // std::cout<<"X: \n"<<X.transpose()<<"\n \n \n";
+        // std::cout<<"P: \n"<<P<<"\n \n \n ";
     }
+
+    template<typename velType, typename imuType>
+    Eigen::MatrixXd Ekf<velType,imuType>::getStates()
+    {
+        return X;
+    }
+
 
     template class Ekf<geometry_msgs::msg::Twist, sensor_msgs::msg::Imu>;
 

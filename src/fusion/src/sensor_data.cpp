@@ -35,7 +35,6 @@ RosImuSource::RosImuSource()
 
 void RosImuSource::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg)
 {
-    std::cout<<"In the Imu subscriber \n";
     imu_ = *msg; 
 }
 

@@ -17,6 +17,7 @@ namespace Filter{
             virtual void initialize() = 0;
             virtual void predict(const rclcpp::Time&) = 0;
             virtual void update() = 0;
+            virtual Eigen::MatrixXd getStates() = 0;
 
     };
 

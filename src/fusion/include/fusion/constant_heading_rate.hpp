@@ -19,6 +19,7 @@ namespace Filter{
             Filter::Angle& getAngle();
             Filter::Velocity& getVelocity();
             Filter::AngularVelocity& getAngularVelocity();
+            void normalizeAngle(double&);
 
         private:
     };

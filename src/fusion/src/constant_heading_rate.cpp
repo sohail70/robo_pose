@@ -21,6 +21,7 @@ namespace Filter{
             position_.x = position_.x + velocity_.x_dot*cos(angle_.yaw)*dt_.seconds();
             position_.y = position_.y + velocity_.x_dot*sin(angle_.yaw)*dt_.seconds();
             angle_.yaw = angle_.yaw + angular_velocity_.yaw_dot*dt_.seconds();
+            normalizeAngle(angle_.yaw);
             previous_time_ = current_time_;
         // }
     }
@@ -72,5 +73,13 @@ namespace Filter{
     rclcpp::Duration ConstantHeadingRate::getDt()
     {
         return dt_;
+    }
+
+    void ConstantHeadingRate::normalizeAngle(double& angle_)
+    {
+        while(angle_>M_PI)
+            angle_ -= 2.0*M_PI;
+        while(angle_<-M_PI)
+            angle_ += 2.0*M_PI;
     }
 } //namespace Filter

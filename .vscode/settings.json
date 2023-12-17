@@ -64,6 +64,7 @@
         "thread": "cpp",
         "dense": "cpp",
         "cholesky": "cpp",
-        "core": "cpp"
+        "core": "cpp",
+        "*.ipp": "cpp"
     }
 }

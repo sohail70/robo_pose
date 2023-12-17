@@ -23,6 +23,7 @@ namespace Filter{
             virtual void initialize() override;
             virtual void predict(const rclcpp::Time& ) override;
             virtual void update() override;
+            virtual Eigen::MatrixXd getStates() override;
     };
 } //namespace Filter
 #endif
