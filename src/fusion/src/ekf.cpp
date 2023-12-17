@@ -48,18 +48,21 @@ namespace Filter{
         auto cmd = velocity_source_->getVelocity();
         motion_model_->setVelAndAngVelFromTwist(cmd);
         motion_model_->update(current_time_);
-        double dt = current_time_.seconds() - motion_model_->getPrevTime().seconds();
+        rclcpp::Duration dt = motion_model_->getDt();
         double v = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getVelocity().x_dot;
         double w = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngularVelocity().yaw_dot;
         double yaw = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngle().yaw;
-        A(0,0) = 1; A(0,1) = 0; A(0,2) = -v*sin(yaw)*dt; A(0,3)= cos(yaw)*dt; A(0,4) = 0;  
-        A(1,0) = 0; A(1,1) = 1; A(1,2) =  v*cos(yaw)*dt; A(1,3)= sin(yaw)*dt; A(1,4) = 0;  
-        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1            ; A(2,3)= 0          ; A(2,4) = dt;  
+        A(0,0) = 1; A(0,1) = 0; A(0,2) = -v*sin(yaw)*dt.seconds(); A(0,3)= cos(yaw)*dt.seconds(); A(0,4) = 0;  
+        A(1,0) = 0; A(1,1) = 1; A(1,2) =  v*cos(yaw)*dt.seconds(); A(1,3)= sin(yaw)*dt.seconds(); A(1,4) = 0;  
+        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1            ; A(2,3)= 0          ; A(2,4) = dt.seconds();  
         A(3,0) = 0; A(3,1) = 0; A(3,2) =  0            ; A(3,3)= 1          ; A(3,4) = 0;  
         A(4,0) = 0; A(4,1) = 0; A(4,2) =  0            ; A(4,3)= 0          ; A(4,4) = 1;  
 
         P = A*P*A.transpose() + Q;
-        std::cout<<cmd.linear.x<<" "<<w<<"\n";
+        // std::cout<<"V_x: "<<v<<" W: "<<w<<" Yaw:"<< yaw <<" dt:" <<dt.seconds()<<"\n";
+        // std::cout<<A<<"\n \n \n";
+        std::cout<<P<<"\n \n \n";
+
 
 
     }

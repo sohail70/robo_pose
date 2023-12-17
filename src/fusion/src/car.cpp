@@ -22,6 +22,6 @@ namespace Filter{
     {}
 
 
-    rclcpp::Time Car::getPrevTime()
+    rclcpp::Duration Car::getDt()
     {}
 } //namespace Filter

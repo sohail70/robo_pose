@@ -17,7 +17,7 @@ TEST(Ekf , prediction)
     std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE);
     std::unique_ptr<Filter::Fusion> ekf_ = std::make_unique<Filter::Ekf<geometry_msgs::msg::Twist , sensor_msgs::msg::Imu>>(std::move(constant_heading_model_) , velocity_source_ , imu_source_);
     ekf_->initialize();
-    rclcpp::Rate loop_rate_(30);
+    rclcpp::Rate loop_rate_(1);
 
     while(rclcpp::ok())
     {

@@ -25,6 +25,7 @@ namespace Filter{
                 Angle angle_;
                 Velocity velocity_;
                 AngularVelocity angular_velocity_;
+                rclcpp::Duration dt_;
                 rclcpp::Time previous_time_;
             public:
                 MotionModel();
@@ -34,7 +35,7 @@ namespace Filter{
                 virtual void setVelocity(const Filter::Velocity& ) = 0;
                 virtual void setAngularVelocity(const Filter::AngularVelocity& ) = 0;
                 virtual void setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& ) = 0;
-                virtual rclcpp::Time getPrevTime() = 0;
+                virtual rclcpp::Duration getDt() = 0;
         };
 } //namespace Filter
 #endif
