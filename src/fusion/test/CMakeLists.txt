@@ -33,6 +33,7 @@ set(TEST_SOURCES
     ../src/ekf.cpp 
     ../src/fusion.cpp
     ../src/state_space.cpp
+    ../src/mediator.cpp
 
 )
 

@@ -5,6 +5,7 @@
 #include<fusion/motion_model_factory.hpp>
 #include<geometry_msgs/msg/pose2_d.hpp>
 #include<fusion/visualization.hpp>
+#include<fusion/mediator.hpp>
 TEST(Ekf , ekf)
 {
     ASSERT_EQ(1,1);
@@ -20,6 +21,8 @@ TEST(Ekf , ekf)
     Filter::StateSpace states_(state_names_);
     Filter::MotionModelFactory factory_;
     std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE,&states_);
+    Filter::MessageHub hub_(constant_heading_model_.get());
+    dynamic_cast<RosCmdVelSource*>(velocity_source_.get())->setMediator(&hub_);
     std::unique_ptr<Filter::Fusion> ekf_ = std::make_unique<Filter::Ekf<geometry_msgs::msg::Twist , sensor_msgs::msg::Imu>>(std::move(constant_heading_model_) , velocity_source_ , imu_source_);
     ekf_->initialize();
     rclcpp::Rate loop_rate_(100);

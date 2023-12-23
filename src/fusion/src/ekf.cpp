@@ -48,8 +48,8 @@ namespace Filter{
     void Ekf<velType,imuType>::predict(const rclcpp::Time& current_time_)
     {
         auto cmd = velocity_source_->getVelocity();
-        motion_model_->setVelAndAngVelFromTwist(cmd);
-        cmd.angular.z = X(4,0); // from the updated yaw_dot from ekf's update
+        // motion_model_->setVelAndAngVelFromTwist(cmd);
+        // cmd.angular.z = X(4,0); // from the updated yaw_dot from ekf's update
         motion_model_->setVelAndAngVelFromTwist(cmd);
         motion_model_->update(current_time_);
         rclcpp::Duration dt = motion_model_->getDt();
@@ -71,11 +71,10 @@ namespace Filter{
         X(4,0) = w;
         
         P = A*P*A.transpose() + Q;
-        // std::cout<<"V_x: "<<v<<" W: "<<w<<" Yaw:"<< yaw <<" dt:" <<dt.seconds()<<"\n";
+        std::cout<<"V_x: "<<v<<" W: "<<w<<" Yaw:"<< yaw <<" dt:" <<dt.seconds()<<"\n";
         // std::cout<<A<<"\n \n \n";
         // std::cout<<X<<"\n \n \n"; 
         // std::cout<<P<<"\n \n \n";
-
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
         
 
