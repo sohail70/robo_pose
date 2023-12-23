@@ -50,11 +50,26 @@ namespace Filter{
         angular_velocity_.yaw_dot = twist_.angular.z;
     }
 
+    void ConstantHeadingRate::setStates(StateSpace* states_)
+    {
+        this->states_ = states_;
+    }
+
+
+    void ConstantHeadingRate::setPosition(const Position& position_)
+    {
+
+    }
+
     Filter::Position& ConstantHeadingRate::getPosition()
     {
         return position_;
     }
 
+    void ConstantHeadingRate::setAngle(const Angle& angle_)
+    {
+        
+    }
     Filter::Angle& ConstantHeadingRate::getAngle()
     {
         return angle_;

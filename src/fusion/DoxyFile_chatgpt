@@ -1,0 +1,29 @@
+# Doxyfile
+
+# Set the project name and version
+PROJECT_NAME           = "My C++ Project"
+PROJECT_NUMBER         = 1.0
+
+# Set the input directories (where your code resides)
+INPUT                  = ./src ./include
+RECURSIVE              = YES
+
+# Set the output directory for generated documentation
+OUTPUT_DIRECTORY       = ./docs
+
+# Generate a hierarchy of class diagrams
+HAVE_DOT               = YES
+CLASS_DIAGRAMS         = YES
+
+# Exclude some directories or files from documentation
+#EXCLUDE                = ./src/private
+
+# Enable some useful features
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+GENERATE_TREEVIEW      = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+
+# Additional configuration options can be added as needed

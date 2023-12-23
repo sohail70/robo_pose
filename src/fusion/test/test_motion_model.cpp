@@ -5,12 +5,17 @@
 #include<vector>
 #include<matplotlib-cpp/matplotlibcpp.h>
 #include<cmath>
+#include<fusion/state_space.hpp>
+#include<vector>
 TEST(FactoryTest , creatingObjectTest) //1st is group and 2nd is specific thing you wanna do
 {
     ASSERT_EQ(1,1);
+    std::vector<std::string> state_names_{"x" , "y" , "yaw"};
+    Filter::StateSpace states_(state_names_);
+
     Filter::MotionModelFactory factory_;
-    std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE);
-    std::unique_ptr<Filter::MotionModel> car_ = factory_.createModel(Filter::ModelType::CAR);
+    std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE , &states_);
+    std::unique_ptr<Filter::MotionModel> car_ = factory_.createModel(Filter::ModelType::CAR , &states_);
 
     ASSERT_NE(constant_heading_model_,nullptr);
     ASSERT_NE(car_,nullptr);
@@ -24,8 +29,11 @@ namespace plt = matplotlibcpp;
 
 TEST(MotionModel , update)
 {
+    std::vector<std::string> state_names_{"x" , "y" , "yaw"};
+    Filter::StateSpace states_(state_names_);
+
     Filter::MotionModelFactory factory_;
-    std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE);
+    std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE , &states_);
     Filter::Velocity velocity_{0.1,0.0,0.0};
     constant_heading_model_->setVelocity(velocity_);
     struct AngularVelocity{

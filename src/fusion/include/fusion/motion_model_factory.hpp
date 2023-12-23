@@ -14,7 +14,7 @@ namespace Filter
     class MotionModelFactory{
             public:
                 MotionModelFactory();
-                std::unique_ptr<MotionModel> createModel( ModelType type);
+                std::unique_ptr<MotionModel> createModel( ModelType , StateSpace* );
             private:
                 using Creator = std::function<std::unique_ptr<MotionModel>()>;
                 std::unordered_map<int , Creator> creators;

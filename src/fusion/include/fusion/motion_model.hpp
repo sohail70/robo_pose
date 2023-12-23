@@ -6,6 +6,7 @@
 #include<cmath>
 #include<rclcpp/rclcpp.hpp>
 #include<geometry_msgs/msg/twist.hpp>
+#include<fusion/state_space.hpp>
 namespace Filter{
     struct Position{
         double x, y, z;
@@ -27,6 +28,7 @@ namespace Filter{
                 AngularVelocity angular_velocity_;
                 rclcpp::Duration dt_;
                 rclcpp::Time previous_time_;
+                StateSpace* states_;
             public:
                 MotionModel();
                 virtual ~MotionModel();
@@ -35,6 +37,7 @@ namespace Filter{
                 virtual void setVelocity(const Filter::Velocity& ) = 0;
                 virtual void setAngularVelocity(const Filter::AngularVelocity& ) = 0;
                 virtual void setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& ) = 0;
+                virtual void setStates(StateSpace* states_) = 0;
                 virtual rclcpp::Duration getDt() = 0;
         };
 } //namespace Filter

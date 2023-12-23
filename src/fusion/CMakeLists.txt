@@ -23,6 +23,7 @@ include_directories(
 
 add_library(
   motion
+  src/state_space.cpp
   src/motion_model_factory.cpp 
   src/motion_model.cpp 
   src/constant_heading_rate.cpp

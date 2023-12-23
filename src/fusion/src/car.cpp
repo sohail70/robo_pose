@@ -21,6 +21,8 @@ namespace Filter{
     void Car::setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& twist_)
     {}
 
+    void Car::setStates(StateSpace* states_)
+    {}
 
     rclcpp::Duration Car::getDt()
     {}

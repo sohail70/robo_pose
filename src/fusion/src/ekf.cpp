@@ -60,9 +60,9 @@ namespace Filter{
         double yaw = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngle().yaw;
         A(0,0) = 1; A(0,1) = 0; A(0,2) = -v*sin(yaw)*dt.seconds(); A(0,3)= cos(yaw)*dt.seconds(); A(0,4) = 0;  
         A(1,0) = 0; A(1,1) = 1; A(1,2) =  v*cos(yaw)*dt.seconds(); A(1,3)= sin(yaw)*dt.seconds(); A(1,4) = 0;  
-        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1            ; A(2,3)= 0          ; A(2,4) = dt.seconds();  
-        A(3,0) = 0; A(3,1) = 0; A(3,2) =  0            ; A(3,3)= 1          ; A(3,4) = 0;  
-        A(4,0) = 0; A(4,1) = 0; A(4,2) =  0            ; A(4,3)= 0          ; A(4,4) = 1;  
+        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1                      ; A(2,3)= 0                    ; A(2,4) = dt.seconds();  
+        A(3,0) = 0; A(3,1) = 0; A(3,2) =  0                      ; A(3,3)= 1                    ; A(3,4) = 0;  
+        A(4,0) = 0; A(4,1) = 0; A(4,2) =  0                      ; A(4,3)= 0                    ; A(4,4) = 1;  
         // Are you tempted to use the A matrix to update the X? don't :) use the original non linear model to update the States. use A only in P calculations
         X(0,0) = x;
         X(1,0) = y;
@@ -102,8 +102,23 @@ namespace Filter{
         X = X + kalman_gain_*measurement_residual_;
         // P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
         P = (I-kalman_gain_*H)*P;
-        // std::cout<<"X: \n"<<X.transpose()<<"\n \n \n";
+        // std::cout<<"X: \n"<<std::fixed << std::setprecision(6) <<X.transpose()<<"\n \n \n";
         // std::cout<<"P: \n"<<P<<"\n \n \n ";
+
+        //This is wrong approach , my state space is [x,y,yaw,v,w] and i can update the w directly not calculating yaw indirectly and update it
+        // Filter::Position position_;
+        // position_.x = X(0,0);
+        // position_.y = X(1,0);
+        // position_.z = 0.0;
+        // Filter::Angle angle_;
+        // angle_.roll = 0.0;
+        // angle_.pitch = 0.0;
+        // double delta_yaw = X(4,0)*motion_model_->getDt().seconds();
+        // angle_.yaw = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngle().yaw + delta_yaw;
+        // std::cout<<" "<<"dt: "<<motion_model_->getDt().seconds()<<" w: "<<X(4,0)<<"yaw: "<< angle_.yaw <<" delta_yaw:"<<delta_yaw<<"\n";
+        // dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->setPosition(position_);
+        // dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->setAngle(angle_);
+
     }
 
     template<typename velType, typename imuType>

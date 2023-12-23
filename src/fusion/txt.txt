@@ -28,6 +28,8 @@ should i make distinction between ekf2d 3d . should i create a state space class
 take a look at this --> https://robotics.stackexchange.com/questions/23179/sensor-fusion-with-extended-kalman-filter-for-roll-and-pitch
 this was for fusing accelerometer with the gyroscoe to get the roll and pitch data! --> but doesn't the imu already provide those?! maybe its not using the acceleration and it only integrate the angular velocities!
 
+https://dsp.stackexchange.com/questions/8860/kalman-filter-for-position-and-velocity-introducing-speed-estimates
+https://towardsdatascience.com/kalman-filter-an-algorithm-for-making-sense-from-the-insights-of-various-sensors-fused-together-ddf67597f35e
 
 -------------
 motion model for constant heading rate (v and w are constants)
