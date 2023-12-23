@@ -10,8 +10,9 @@ namespace Filter{
         public:
             StateSpace(std::vector<std::string> );
             void updateStates();
+            std::unordered_map<std::string,double>& getStates();
 
-        private:
+        public:
             std::unordered_map<std::string,double> states_;
 
     };

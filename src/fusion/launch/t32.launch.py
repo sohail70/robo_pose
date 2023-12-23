@@ -63,8 +63,8 @@ def generate_launch_description():
     ld.add_action(launch.actions.DeclareLaunchArgument(name='model', default_value=default_model_path , description='Absolute path to robot urdf file'))
     ld.add_action(args)
     ld.add_action(gazebo)
-    ld.add_action(joint_state_publisher) #in va paeeni age bashan robot dar gazebo nemiad!!!!
-    ld.add_action(joint_state_publisher_gui)
+    # ld.add_action(joint_state_publisher) #in va paeeni age bashan robot dar gazebo nemiad!!!!
+    # ld.add_action(joint_state_publisher_gui)
     ld.add_action(robot_state_publisher)
     ld.add_action(spawn_robot)
     

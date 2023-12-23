@@ -29,6 +29,7 @@ namespace Filter{
                 rclcpp::Duration dt_;
                 rclcpp::Time previous_time_;
                 StateSpace* states_;
+
             public:
                 MotionModel();
                 virtual ~MotionModel();

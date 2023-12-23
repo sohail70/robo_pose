@@ -16,38 +16,44 @@ namespace Filter{
     void ConstantHeadingRate::update(const rclcpp::Time& current_time_)
     {
         dt_ = current_time_ - previous_time_;
-        // if(dt.seconds()>0.0001)
-        // {
-            position_.x = position_.x + velocity_.x_dot*cos(angle_.yaw)*dt_.seconds();
-            position_.y = position_.y + velocity_.x_dot*sin(angle_.yaw)*dt_.seconds();
-            angle_.yaw = angle_.yaw + angular_velocity_.yaw_dot*dt_.seconds();
-            normalizeAngle(angle_.yaw);
-            previous_time_ = current_time_;
-        // }
+
+            // position_.x = position_.x + velocity_.x_dot*cos(angle_.yaw)*dt_.seconds();
+            // position_.y = position_.y + velocity_.x_dot*sin(angle_.yaw)*dt_.seconds();
+            // angle_.yaw = angle_.yaw + angular_velocity_.yaw_dot*dt_.seconds();
+            // normalizeAngle(angle_.yaw);
+            // previous_time_ = current_time_;
+        auto& state_ = states_->getStates(); //don't forget the & because we don't wanna update a copy of the states!
+        state_["x"] += state_["x_dot"]*cos(state_["yaw"])*dt_.seconds();
+        state_["y"] += state_["x_dot"]*sin(state_["yaw"])*dt_.seconds();
+        state_["yaw"] += state_["yaw_dot"]*dt_.seconds();
+        normalizeAngle(state_["yaw"]);
+        previous_time_ = current_time_;
+
+
     }
 
     void ConstantHeadingRate::setVelocity(const Filter::Velocity& velocity_)
     {
-        this->velocity_.x_dot = velocity_.x_dot;
-        this->velocity_.y_dot = velocity_.y_dot;
-        this->velocity_.z_dot = velocity_.z_dot;
+
+        states_->getStates()["x_dot"] = velocity_.x_dot;
+        // state_["y_dot"] = velocity_.y_dot;
+        // state_["z_dot"] = velocity_.z_dot;
+        
+
     }
 
     void ConstantHeadingRate::setAngularVelocity(const Filter::AngularVelocity& angular_velocity_)
     {
-        this->angular_velocity_.pitch_dot = angular_velocity_.pitch_dot;
-        this->angular_velocity_.roll_dot = angular_velocity_.roll_dot;
-        this->angular_velocity_.yaw_dot = angular_velocity_.yaw_dot;
+        // state_["roll_dot"] = angular_velocity_.roll_dot;
+        // state_["pitch_dot"] =  angular_velocity_.pitch_dot;
+        states_->getStates()["yaw_dot"] = angular_velocity_.yaw_dot;
+
     }
 
     void ConstantHeadingRate::setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& twist_)
     {
-        velocity_.x_dot = twist_.linear.x;
-        velocity_.y_dot = twist_.linear.y;
-        velocity_.z_dot = twist_.linear.z;
-        angular_velocity_.roll_dot = twist_.angular.x;
-        angular_velocity_.pitch_dot = twist_.angular.y;
-        angular_velocity_.yaw_dot = twist_.angular.z;
+        states_->getStates()["x_dot"] =  twist_.linear.x;
+        states_->getStates()["yaw_dot"] = twist_.angular.z;
     }
 
     void ConstantHeadingRate::setStates(StateSpace* states_)
@@ -61,8 +67,9 @@ namespace Filter{
 
     }
 
-    Filter::Position& ConstantHeadingRate::getPosition()
+    Filter::Position ConstantHeadingRate::getPosition()
     {
+        Filter::Position position_; position_.x = states_->getStates()["x"] , position_.y = states_->getStates()["y"];
         return position_;
     }
 
@@ -70,18 +77,21 @@ namespace Filter{
     {
         
     }
-    Filter::Angle& ConstantHeadingRate::getAngle()
+    Filter::Angle ConstantHeadingRate::getAngle()
     {
+        Filter::Angle angle_; angle_.yaw = states_->getStates()["yaw"];
         return angle_;
     }
 
-    Filter::Velocity& ConstantHeadingRate::getVelocity()
+    Filter::Velocity ConstantHeadingRate::getVelocity()
     {
+        Filter::Velocity velocity_; velocity_.x_dot = states_->getStates()["x_dot"];
         return velocity_;
     }
 
-    Filter::AngularVelocity& ConstantHeadingRate::getAngularVelocity()
+    Filter::AngularVelocity ConstantHeadingRate::getAngularVelocity()
     {
+        Filter::AngularVelocity angular_velocity_; angular_velocity_.yaw_dot = states_->getStates()["yaw_dot"];
         return angular_velocity_;
     }
 

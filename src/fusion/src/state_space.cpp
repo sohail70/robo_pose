@@ -15,8 +15,13 @@ namespace Filter{
     {
         for(auto& state_ : states_)
         {
-            std::cout<<state_.first<<"^^^^" <<state_.second<<"\n";
+            std::cout<<state_.first<<" ----- " <<state_.second<<"\n";
         }
+    }
+
+    std::unordered_map<std::string,double>& StateSpace::getStates()
+    {
+        return states_;
     }
 
 };

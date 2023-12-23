@@ -10,7 +10,7 @@
 TEST(FactoryTest , creatingObjectTest) //1st is group and 2nd is specific thing you wanna do
 {
     ASSERT_EQ(1,1);
-    std::vector<std::string> state_names_{"x" , "y" , "yaw"};
+    std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
     Filter::StateSpace states_(state_names_);
 
     Filter::MotionModelFactory factory_;
@@ -29,7 +29,7 @@ namespace plt = matplotlibcpp;
 
 TEST(MotionModel , update)
 {
-    std::vector<std::string> state_names_{"x" , "y" , "yaw"};
+    std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
     Filter::StateSpace states_(state_names_);
 
     Filter::MotionModelFactory factory_;
@@ -43,8 +43,7 @@ TEST(MotionModel , update)
     };
     Filter::AngularVelocity angular_velocity{0.0,0.0,1.0};
     constant_heading_model_->setAngularVelocity(angular_velocity);
-
-
+    std::cout<<"IN THE TEST "<<states_.states_["yaw_dot"]<<"\n";
     rclcpp::Time current_time_ = rclcpp::Clock().now();
     
     struct Position {double x,y,z;
@@ -74,7 +73,7 @@ TEST(MotionModel , update)
     };
     std::vector<Point> points;
     rclcpp::Rate loop_rate_(1000);
-    for (int i = 0; i < 50; i++) {
+    for (int i = 0; i < 1000; i++) {
         //plt::clf();
         current_time_ = rclcpp::Clock().now();
         constant_heading_model_->update(current_time_);

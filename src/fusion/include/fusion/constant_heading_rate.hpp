@@ -17,11 +17,11 @@ namespace Filter{
             virtual rclcpp::Duration getDt() override;
 
             void setPosition(const Position&);
-            Filter::Position& getPosition();
+            Filter::Position getPosition();
             void setAngle(const Angle&);
-            Filter::Angle& getAngle();
-            Filter::Velocity& getVelocity();
-            Filter::AngularVelocity& getAngularVelocity();
+            Filter::Angle getAngle();
+            Filter::Velocity getVelocity();
+            Filter::AngularVelocity getAngularVelocity();
             void normalizeAngle(double&);
 
         private:

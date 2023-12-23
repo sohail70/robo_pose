@@ -4,6 +4,8 @@
 #include<rclcpp/qos.hpp>
 #include<geometry_msgs/msg/twist.hpp>
 #include<sensor_msgs/msg/imu.hpp>
+#include<sensor_msgs/msg/joint_state.hpp>
+#include<fusion/mediator.hpp>
 template<typename velType>
 class VelocitySource {
     protected:
@@ -18,15 +20,33 @@ class RosCmdVelSource : public VelocitySource<geometry_msgs::msg::Twist>
     private:
         rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_sub_;
         geometry_msgs::msg::Twist cmd_vel_;
-        rclcpp::Node::SharedPtr node_;
-        
-        void CmdCallback(const geometry_msgs::msg::Twist::SharedPtr );
+        rclcpp::Node::SharedPtr node_;        
+        Filter::Mediator* mediator_;
+        void cmdCallback(const geometry_msgs::msg::Twist::SharedPtr );
+
 
     public:
         RosCmdVelSource();
         virtual const geometry_msgs::msg::Twist& getVelocity() const;
         rclcpp::Node::SharedPtr getRosNode();
+        void setMediator(Filter::Mediator* );
+
 };
+
+// class RosJointStateVelocitySource: public VelocitySource<double>
+// {
+//     private:
+//         rclcpp::Subscription<geometry_msgs::msg::JointState>::SharedPtr joint_state_sub_;
+//         sensor_msgs::msg::JointState joint_state_;
+//         rclcpp::Node::SharedPtr node_;
+//         void jointStateCallback(const sensor_msgs::msg::JointState::SharedPtr );
+//     public:
+//         RosJointStateVelocitySource();
+//         virtual const double& getVelocity() const;
+//         rclcpp::Node::SharedPtr getRosNode();
+
+
+// };
 
 
 template<typename imuType>

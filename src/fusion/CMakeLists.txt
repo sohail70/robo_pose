@@ -44,6 +44,7 @@ ament_target_dependencies(visualization rclcpp std_msgs visualization_msgs geome
 add_library(
   sensor_data
   src/sensor_data.cpp
+  src/mediator.cpp
 )
 ament_target_dependencies(sensor_data rclcpp geometry_msgs sensor_msgs )
 
