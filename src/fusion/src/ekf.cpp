@@ -11,6 +11,12 @@ namespace Filter{
     }
 
     template<typename velType , typename imuType>
+    void Ekf<velType,imuType>::setStates(StateSpace* states_)
+    {
+        this->states_ = states_;
+    }
+    
+    template<typename velType , typename imuType>
     void Ekf<velType,imuType>::initialize()
     {
         // initialize dimensions of the state space
@@ -41,42 +47,50 @@ namespace Filter{
         P.setZero(num_states_,num_states_);
         I = Eigen::MatrixXd::Identity(num_states_ , num_states_);
 
-        X.setZero(num_states_,1);
+        // X.setZero(num_states_,1);
     }
 
     template<typename velType , typename imuType>
     void Ekf<velType,imuType>::predict(const rclcpp::Time& current_time_)
     {
-        auto cmd = velocity_source_->getVelocity();
-        // motion_model_->setVelAndAngVelFromTwist(cmd);
+        // auto cmd = velocity_source_->getVelocity();
+        // // motion_model_->setVelAndAngVelFromTwist(cmd);
         // cmd.angular.z = X(4,0); // from the updated yaw_dot from ekf's update
-        motion_model_->setVelAndAngVelFromTwist(cmd);
-        motion_model_->update(current_time_);
-        rclcpp::Duration dt = motion_model_->getDt();
-        double x = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getPosition().x;
-        double y = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getPosition().y;
-        double v = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getVelocity().x_dot;
-        double w = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngularVelocity().yaw_dot;
-        double yaw = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngle().yaw;
-        A(0,0) = 1; A(0,1) = 0; A(0,2) = -v*sin(yaw)*dt.seconds(); A(0,3)= cos(yaw)*dt.seconds(); A(0,4) = 0;  
-        A(1,0) = 0; A(1,1) = 1; A(1,2) =  v*cos(yaw)*dt.seconds(); A(1,3)= sin(yaw)*dt.seconds(); A(1,4) = 0;  
-        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1                      ; A(2,3)= 0                    ; A(2,4) = dt.seconds();  
-        A(3,0) = 0; A(3,1) = 0; A(3,2) =  0                      ; A(3,3)= 1                    ; A(3,4) = 0;  
-        A(4,0) = 0; A(4,1) = 0; A(4,2) =  0                      ; A(4,3)= 0                    ; A(4,4) = 1;  
-        // Are you tempted to use the A matrix to update the X? don't :) use the original non linear model to update the States. use A only in P calculations
-        X(0,0) = x;
-        X(1,0) = y;
-        X(2,0) = yaw;
-        X(3,0) = v;
-        X(4,0) = w;
+        // motion_model_->setVelAndAngVelFromTwist(cmd);
+        // motion_model_->update(current_time_);
+        // rclcpp::Duration dt = motion_model_->getDt();
+        // double x = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getPosition().x;
+        // double y = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getPosition().y;
+        // double v = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getVelocity().x_dot;
+        // double w = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngularVelocity().yaw_dot;
+        // double yaw = dynamic_cast<Filter::ConstantHeadingRate*>(motion_model_.get())->getAngle().yaw;
+        // A(0,0) = 1; A(0,1) = 0; A(0,2) = -v*sin(yaw)*dt.seconds(); A(0,3)= cos(yaw)*dt.seconds(); A(0,4) = 0;  
+        // A(1,0) = 0; A(1,1) = 1; A(1,2) =  v*cos(yaw)*dt.seconds(); A(1,3)= sin(yaw)*dt.seconds(); A(1,4) = 0;  
+        // A(2,0) = 0; A(2,1) = 0; A(2,2) =  1                      ; A(2,3)= 0                    ; A(2,4) = dt.seconds();  
+        // A(3,0) = 0; A(3,1) = 0; A(3,2) =  0                      ; A(3,3)= 1                    ; A(3,4) = 0;  
+        // A(4,0) = 0; A(4,1) = 0; A(4,2) =  0                      ; A(4,3)= 0                    ; A(4,4) = 1;  
+        // // Are you tempted to use the A matrix to update the X? don't :) use the original non linear model to update the States. use A only in P calculations
+        // X(0,0) = x;
+        // X(1,0) = y;
+        // X(2,0) = yaw;
+        // X(3,0) = v;
+        // X(4,0) = w;
         
-        P = A*P*A.transpose() + Q;
-        std::cout<<"V_x: "<<v<<" W: "<<w<<" Yaw:"<< yaw <<" dt:" <<dt.seconds()<<"\n";
-        // std::cout<<A<<"\n \n \n";
-        // std::cout<<X<<"\n \n \n"; 
-        // std::cout<<P<<"\n \n \n";
+        // P = A*P*A.transpose() + Q;
+        // std::cout<<"V_x: "<<v<<" W: "<<w<<" Yaw:"<< yaw <<" dt:" <<dt.seconds()<<"\n";
+        // // std::cout<<A<<"\n \n \n";
+        // // std::cout<<X<<"\n \n \n"; 
+        // // std::cout<<P<<"\n \n \n";
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
+        motion_model_->update(current_time_); 
+        rclcpp::Duration dt = motion_model_->getDt();
+        A(0,0) = 1; A(0,1) = 0; A(0,2) = -states_->getStates()["x_dot"]*sin(states_->getStates()["yaw"])*dt.seconds(); A(0,3)= cos(states_->getStates()["yaw"])*dt.seconds(); A(0,4) = 0;  
+        A(1,0) = 0; A(1,1) = 1; A(1,2) =  states_->getStates()["x_dot"]*cos(states_->getStates()["yaw"])*dt.seconds(); A(1,3)= sin(states_->getStates()["yaw"])*dt.seconds(); A(1,4) = 0;  
+        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1                                                                                                        ; A(2,3)= 0                                                           ; A(2,4) = dt.seconds();  
+        A(3,0) = 0; A(3,1) = 0; A(3,2) =  0                                                                                                        ; A(3,3)= 1                                                           ; A(3,4) = 0;  
+        A(4,0) = 0; A(4,1) = 0; A(4,2) =  0                                                                                                        ; A(4,3)= 0                                                           ; A(4,4) = 1;  
+        P = A*P*A.transpose() + Q;
+        // std::cout<<"V_x: "<<states_->getStates()["x_dot"]<<" W: "<<states_->getStates()["yaw_dot"]<<" Yaw:"<< states_->getStates()["yaw"] <<" dt:" <<dt.seconds()<<"\n";
 
 
     }
@@ -84,6 +98,14 @@ namespace Filter{
     template<typename velType , typename imuType>
     void Ekf<velType,imuType>::update()
     {
+        Eigen::MatrixXd X;
+        X.setZero(5,1);
+        X<<states_->getStates()["x"],
+           states_->getStates()["y"],
+           states_->getStates()["yaw"],
+           states_->getStates()["x_dot"],
+           states_->getStates()["yaw_dot"];
+        
         // std::cout<<"In the update \n";
         Eigen::MatrixXd measurement_prediction_ = H*X;
         // std::cout<<H<<"\n \n \n ";
@@ -105,7 +127,11 @@ namespace Filter{
         P = (I-kalman_gain_*H)*P;
         // std::cout<<"X: \n"<<std::fixed << std::setprecision(6) <<X.transpose()<<"\n \n \n";
         // std::cout<<"P: \n"<<P<<"\n \n \n ";
-
+        states_->getStates()["x"] = X(0);
+        states_->getStates()["y"] = X(1);
+        states_->getStates()["yaw"] = X(2);
+        states_->getStates()["x_dot"] = X(3);
+        states_->getStates()["yaw_dot"] = X(4);
         //This is wrong approach , my state space is [x,y,yaw,v,w] and i can update the w directly not calculating yaw indirectly and update it
         // Filter::Position position_;
         // position_.x = X(0,0);
@@ -125,6 +151,14 @@ namespace Filter{
     template<typename velType, typename imuType>
     Eigen::MatrixXd Ekf<velType,imuType>::getStates()
     {
+        Eigen::MatrixXd X;
+        X.setZero(5,1);
+        X<<states_->getStates()["x"],
+           states_->getStates()["y"],
+           states_->getStates()["yaw"],
+           states_->getStates()["x_dot"],
+           states_->getStates()["yaw_dot"];
+        
         return X;
     }
 

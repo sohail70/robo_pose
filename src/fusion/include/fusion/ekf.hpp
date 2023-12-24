@@ -15,7 +15,7 @@ namespace Filter{
             Eigen::MatrixXd H; //Measuring Matrix 
             Eigen::MatrixXd R; //Measurment Noise covariance Matrix
             Eigen::MatrixXd I; //Identiy Matrix
-            Eigen::MatrixXd X; //State Space
+            // Eigen::MatrixXd X; //State Space
             std::shared_ptr<VelocitySource<velType>>  velocity_source_;
             std::shared_ptr<ImuSource<imuType>> imu_source_;
         public:
@@ -24,6 +24,8 @@ namespace Filter{
             virtual void predict(const rclcpp::Time& ) override;
             virtual void update() override;
             virtual Eigen::MatrixXd getStates() override;
+            virtual void setStates(StateSpace* ) override;
+
     };
 } //namespace Filter
 #endif
