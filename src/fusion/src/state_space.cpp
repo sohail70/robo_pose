@@ -7,21 +7,28 @@ namespace Filter{
         for(auto& state_name_ :state_names_)
         {
             states_[state_name_] = 0.0;
+            state_order_.push_back(state_name_);
         }
 
     }
 
-    void StateSpace::updateStates()
+    void StateSpace::updateStates(std::vector<double> values_)
     {
-        for(auto& state_ : states_)
+        int index = 0;
+        for(auto&  state_ : state_order_)
         {
-            std::cout<<state_.first<<" ----- " <<state_.second<<"\n";
+            states_[state_] = values_[index];
+            index++;
         }
     }
 
     std::unordered_map<std::string,double>& StateSpace::getStates()
     {
         return states_;
+    }
+
+    std::vector<std::string>& StateSpace::getStateOrder() {
+        return state_order_;
     }
 
 };

@@ -1,6 +1,5 @@
 
 #include "fusion/constant_heading_rate.hpp"
-
 namespace Filter{
     ConstantHeadingRate::ConstantHeadingRate()
     {
@@ -13,9 +12,9 @@ namespace Filter{
         previous_time_ = rclcpp::Clock().now();
     }
 
-    void ConstantHeadingRate::update(const rclcpp::Time& current_time_)
+    autodiff::VectorXreal ConstantHeadingRate::update(const autodiff::VectorXreal& state)
     {
-        dt_ = current_time_ - previous_time_;
+        // dt_ = current_time_ - previous_time_;
 
             // position_.x = position_.x + velocity_.x_dot*cos(angle_.yaw)*dt_.seconds();
             // position_.y = position_.y + velocity_.x_dot*sin(angle_.yaw)*dt_.seconds();
@@ -27,9 +26,40 @@ namespace Filter{
         state_["y"] += state_["x_dot"]*sin(state_["yaw"])*dt_.seconds();
         state_["yaw"] += state_["yaw_dot"]*dt_.seconds();
         normalizeAngle(state_["yaw"]);
+        // previous_time_ = current_time_;
+        return state;
+
+
+    }
+
+    Eigen::MatrixXd ConstantHeadingRate::getJacobian()
+    {
+        Eigen::MatrixXd A = Eigen::MatrixXd(states_->states_.size() , states_->states_.size());   
+        A(0,0) = 1; A(0,1) = 0; A(0,2) = -states_->getStates()["x_dot"]*sin(states_->getStates()["yaw"])*dt_.seconds(); A(0,3)= cos(states_->getStates()["yaw"])*dt_.seconds(); A(0,4) = 0;  
+        A(1,0) = 0; A(1,1) = 1; A(1,2) =  states_->getStates()["x_dot"]*cos(states_->getStates()["yaw"])*dt_.seconds(); A(1,3)= sin(states_->getStates()["yaw"])*dt_.seconds(); A(1,4) = 0;  
+        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1                                                                                                        ; A(2,3)= 0                ; A(2,4) = dt_.seconds();  
+        A(3,0) = 0; A(3,1) = 0; A(3,2) =  0                                                                                                        ; A(3,3)= 1                ; A(3,4) = 0;  
+        A(4,0) = 0; A(4,1) = 0; A(4,2) =  0                                                                                                        ; A(4,3)= 0                ; A(4,4) = 1;  
+        return A;
+  
+    }
+
+    Eigen::MatrixXd ConstantHeadingRate::calcJacobianAndUpdate(const rclcpp::Time& current_time_)
+    {
+        dt_ = current_time_ - previous_time_;
+        autodiff::VectorXreal state_(states_->states_.size());
+        int index = 0;
+        for(auto it = states_->getStateOrder().begin() ; it!= states_->getStateOrder().end() ; ++it)
+        {
+            state_(index) = states_->getStates()[*it];
+            // std::cout<<"S:"<<state_(index)<<"\n";
+            index++;
+        }
+        autodiff::VectorXreal newState;
+        
+        Eigen::MatrixXd J = jacobian( [&](auto state_){return this->update(state_); }, wrt(state_), at(state_), newState);
         previous_time_ = current_time_;
-
-
+        
     }
 
     void ConstantHeadingRate::setVelocity(const Filter::Velocity& velocity_)

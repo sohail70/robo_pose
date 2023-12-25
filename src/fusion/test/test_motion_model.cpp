@@ -76,7 +76,7 @@ TEST(MotionModel , update)
     for (int i = 0; i < 1000; i++) {
         //plt::clf();
         current_time_ = rclcpp::Clock().now();
-        constant_heading_model_->update(current_time_);
+        constant_heading_model_->calcJacobianAndUpdate(current_time_);
         position_.x =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getPosition().x;
         position_.y =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getPosition().y;
         position_.z =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getPosition().z;

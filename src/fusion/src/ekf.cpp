@@ -82,13 +82,9 @@ namespace Filter{
         // // std::cout<<X<<"\n \n \n"; 
         // // std::cout<<P<<"\n \n \n";
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        motion_model_->update(current_time_); 
-        rclcpp::Duration dt = motion_model_->getDt();
-        A(0,0) = 1; A(0,1) = 0; A(0,2) = -states_->getStates()["x_dot"]*sin(states_->getStates()["yaw"])*dt.seconds(); A(0,3)= cos(states_->getStates()["yaw"])*dt.seconds(); A(0,4) = 0;  
-        A(1,0) = 0; A(1,1) = 1; A(1,2) =  states_->getStates()["x_dot"]*cos(states_->getStates()["yaw"])*dt.seconds(); A(1,3)= sin(states_->getStates()["yaw"])*dt.seconds(); A(1,4) = 0;  
-        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1                                                                                                        ; A(2,3)= 0                                                           ; A(2,4) = dt.seconds();  
-        A(3,0) = 0; A(3,1) = 0; A(3,2) =  0                                                                                                        ; A(3,3)= 1                                                           ; A(3,4) = 0;  
-        A(4,0) = 0; A(4,1) = 0; A(4,2) =  0                                                                                                        ; A(4,3)= 0                                                           ; A(4,4) = 1;  
+        // motion_model_->update(current_time_); 
+        // A = motion_model_->getJacobian();
+        A = motion_model_->calcJacobianAndUpdate(current_time_);
         P = A*P*A.transpose() + Q;
         // std::cout<<"V_x: "<<states_->getStates()["x_dot"]<<" W: "<<states_->getStates()["yaw_dot"]<<" Yaw:"<< states_->getStates()["yaw"] <<" dt:" <<dt.seconds()<<"\n";
 

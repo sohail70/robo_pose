@@ -13,7 +13,7 @@ TEST(StateSpace , test1)
     ASSERT_EQ(1,1);
     std::vector<std::string> state_names{"x" , "y" , "yaw"};
     Filter::StateSpace state_space_(state_names);
-    state_space_.updateStates(); 
+    state_space_.updateStates({1,2,3}); 
     /////////////////////////////////
 
 

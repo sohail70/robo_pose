@@ -2,11 +2,14 @@
 #define MOTION_MODEL_HPP
 
 #include<iostream>
-// #include<Eigen/Dense>
+#include<Eigen/Dense>
 #include<cmath>
 #include<rclcpp/rclcpp.hpp>
 #include<geometry_msgs/msg/twist.hpp>
 #include<fusion/state_space.hpp>
+#include<autodiff/forward/real.hpp>
+#include <autodiff/forward/real/eigen.hpp>
+
 namespace Filter{
     struct Position{
         double x, y, z;
@@ -29,16 +32,17 @@ namespace Filter{
                 rclcpp::Duration dt_;
                 rclcpp::Time previous_time_;
                 StateSpace* states_;
-
             public:
                 MotionModel();
                 virtual ~MotionModel();
                 virtual void init() = 0;
-                virtual void update(const rclcpp::Time& ) = 0;
+                virtual autodiff::VectorXreal update(const autodiff::VectorXreal&)=0;
                 virtual void setVelocity(const Filter::Velocity& ) = 0;
                 virtual void setAngularVelocity(const Filter::AngularVelocity& ) = 0;
                 virtual void setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& ) = 0;
                 virtual void setStates(StateSpace* states_) = 0;
+                virtual Eigen::MatrixXd getJacobian() = 0;
+                virtual Eigen::MatrixXd calcJacobianAndUpdate(const rclcpp::Time& ) = 0;
                 virtual rclcpp::Duration getDt() = 0;
         };
 } //namespace Filter

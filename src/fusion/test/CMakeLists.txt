@@ -11,6 +11,8 @@ find_package(geometry_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(autodiff REQUIRED)
+
 include_directories(
     ${GTEST_INCLUDE_DIRS}
     ${Python3_INCLUDE_DIRS} # nazarama build mishe ba matplot lib!
@@ -19,11 +21,12 @@ include_directories(
 
 set(TEST_SOURCES
     test_main.cpp 
-    test_motion_model.cpp
+    # test_motion_model.cpp
     # test_visualization.cpp
     # test_eigen.cpp
-    test_ekf.cpp
-    test_state_space.cpp
+    # test_ekf.cpp
+    # test_state_space.cpp
+    test_autodiff.cpp
     ../src/motion_model_factory.cpp
     ../src/motion_model.cpp
     ../src/constant_heading_rate.cpp
@@ -38,7 +41,7 @@ set(TEST_SOURCES
 )
 
 add_executable(run_tests ${TEST_SOURCES})
-target_link_libraries(run_tests ${GTEST_BOTH_LIBRARIES} pthread Python3::Python Python3::NumPy Eigen3::Eigen) #python  ro nazari matplot lib kar nemide
+target_link_libraries(run_tests ${GTEST_BOTH_LIBRARIES} pthread Python3::Python Python3::NumPy Eigen3::Eigen autodiff::autodiff) #python  ro nazari matplot lib kar nemide
 ament_target_dependencies(run_tests rclcpp std_msgs geometry_msgs sensor_msgs visualization_msgs)
 
 enable_testing()

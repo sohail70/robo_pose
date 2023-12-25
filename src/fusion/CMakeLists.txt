@@ -16,9 +16,10 @@ find_package(nav_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(control_msgs REQUIRED)
 find_package(Eigen3 REQUIRED)
-
+find_package(autodiff REQUIRED)
 include_directories(
   include
+  ${EIGEN3_INCLUDE_DIRS} #for fusemuse library i didin't have to specify this but for motion library it was essential! weird! Good practice to include this!
 )
 
 add_library(
@@ -30,6 +31,7 @@ add_library(
   src/car.cpp
 )
 ament_target_dependencies(motion rclcpp)
+target_link_libraries(motion Eigen3::Eigen autodiff::autodiff)
 add_executable(fusion src/main.cpp)
 ament_target_dependencies(fusion rclcpp)
 install(TARGETS fusion DESTINATION lib/${PROJECT_NAME})
