@@ -34,14 +34,14 @@ TEST(MotionModel , update)
 
     Filter::MotionModelFactory factory_;
     std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE , &states_);
-    Filter::Velocity velocity_{0.1,0.0,0.0};
+    Filter::Velocity velocity_{5.0,0.0,0.0};
     constant_heading_model_->setVelocity(velocity_);
     struct AngularVelocity{
         double pitch_dot;
         double roll_dot;
         double yaw_dot;
     };
-    Filter::AngularVelocity angular_velocity{0.0,0.0,1.0};
+    Filter::AngularVelocity angular_velocity{0.0,0.0,5.0};
     constant_heading_model_->setAngularVelocity(angular_velocity);
     std::cout<<"IN THE TEST "<<states_.states_["yaw_dot"]<<"\n";
     rclcpp::Time current_time_ = rclcpp::Clock().now();
@@ -73,10 +73,11 @@ TEST(MotionModel , update)
     };
     std::vector<Point> points;
     rclcpp::Rate loop_rate_(1000);
-    for (int i = 0; i < 1000; i++) {
+    for (int i = 0; i < 3000; i++) {
         //plt::clf();
         current_time_ = rclcpp::Clock().now();
         constant_heading_model_->calcJacobianAndUpdate(current_time_);
+
         position_.x =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getPosition().x;
         position_.y =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getPosition().y;
         position_.z =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getPosition().z;

@@ -70,7 +70,7 @@ TEST(autodiff, augmented)
     using Eigen::MatrixXd;
     std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
     Filter::StateSpace states_(state_names_);
-    states_.updateStates({1.0,2.0,0.3,5.0,0.1});
+    states_.updateStates({0.0,0.0,0.0,5.0,5.0});
 
     VectorXreal state(5);   // Current state (x, y, yaw, v, w)
     // state << 1, 2, 0.3, 5.0, 0.1; // Method1
@@ -84,7 +84,7 @@ TEST(autodiff, augmented)
     }
 
 
-    real deltaT = 0.1;     // Time step
+    real deltaT = 0.001;     // Time step
 
     VectorXreal newState;  // Updated state after time step
 

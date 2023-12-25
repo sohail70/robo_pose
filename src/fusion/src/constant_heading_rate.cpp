@@ -21,13 +21,32 @@ namespace Filter{
             // angle_.yaw = angle_.yaw + angular_velocity_.yaw_dot*dt_.seconds();
             // normalizeAngle(angle_.yaw);
             // previous_time_ = current_time_;
-        auto& state_ = states_->getStates(); //don't forget the & because we don't wanna update a copy of the states!
-        state_["x"] += state_["x_dot"]*cos(state_["yaw"])*dt_.seconds();
-        state_["y"] += state_["x_dot"]*sin(state_["yaw"])*dt_.seconds();
-        state_["yaw"] += state_["yaw_dot"]*dt_.seconds();
-        normalizeAngle(state_["yaw"]);
-        // previous_time_ = current_time_;
-        return state;
+        // auto& state_ = states_->getStates(); //don't forget the & because we don't wanna update a copy of the states!
+        // state_["x"] += state_["x_dot"]*cos(state_["yaw"])*dt_.seconds();
+        // state_["y"] += state_["x_dot"]*sin(state_["yaw"])*dt_.seconds();
+        // state_["yaw"] += state_["yaw_dot"]*dt_.seconds();
+        // normalizeAngle(state_["yaw"]);
+        
+        // autodiff::VectorXreal new_state_(states_->states_.size());
+        // int index = 0;
+        // for(auto it = states_->getStateOrder().begin() ; it!= states_->getStateOrder().end() ; ++it)
+        // {
+        //     new_state_(index) = states_->getStates()[*it];
+        //     // std::cout<<"S:"<<state_(index)<<"\n";
+        //     index++;
+        // }
+        // // previous_time_ = current_time_;
+        // std::cout<<"herhre \n ";
+        // return new_state_;
+            autodiff::VectorXreal newState(5);
+            autodiff::real dt = autodiff::real(dt_.seconds()); 
+            newState(0) = state(0) + state(3) * cos(state(2)) * dt; // Update x
+            newState(1) = state(1) + state(3) * sin(state(2)) * dt; // Update y
+            newState(2) = state(2) + state(4) * dt;                 // Update yaw angle
+            newState(3) = state(3);                                 // Velocity remains constant
+            newState(4) = state(4);                                 // Yaw rate remains constant
+
+            return newState;
 
 
     }
@@ -46,20 +65,35 @@ namespace Filter{
 
     Eigen::MatrixXd ConstantHeadingRate::calcJacobianAndUpdate(const rclcpp::Time& current_time_)
     {
+
         dt_ = current_time_ - previous_time_;
         autodiff::VectorXreal state_(states_->states_.size());
         int index = 0;
+        //creating autodiff variable from my state space for differentiation purpose
         for(auto it = states_->getStateOrder().begin() ; it!= states_->getStateOrder().end() ; ++it)
         {
             state_(index) = states_->getStates()[*it];
-            // std::cout<<"S:"<<state_(index)<<"\n";
+            // std::cout<<"S0:"<<state_(index)<<"\n";
             index++;
         }
         autodiff::VectorXreal newState;
         
         Eigen::MatrixXd J = jacobian( [&](auto state_){return this->update(state_); }, wrt(state_), at(state_), newState);
+        // std::cout<<"states Jacobian:\n "<<J<<"\n";
         previous_time_ = current_time_;
-        
+
+        // updating state space 
+        index = 0;
+        for(auto it = states_->getStateOrder().begin() ; it!= states_->getStateOrder().end() ; ++it)
+        {
+            states_->getStates()[*it] = newState(index).val();
+            //  std::cout<<"S1:"<<newState(index)<<"\n";
+            index++;
+        }
+        normalizeAngle(states_->getStates()["yaw"]);
+
+
+        return J;  //retrun nazari seg fault mide!!!!
     }
 
     void ConstantHeadingRate::setVelocity(const Filter::Velocity& velocity_)
