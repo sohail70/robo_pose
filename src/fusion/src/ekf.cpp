@@ -86,6 +86,7 @@ namespace Filter{
         // A = motion_model_->getJacobian();
         A = motion_model_->calcJacobianAndUpdate(current_time_);
         P = A*P*A.transpose() + Q;
+        std::cout<<"P0: \n"<<P<<"\n";
         // std::cout<<"V_x: "<<states_->getStates()["x_dot"]<<" W: "<<states_->getStates()["yaw_dot"]<<" Yaw:"<< states_->getStates()["yaw"] <<" dt:" <<dt.seconds()<<"\n";
 
 
@@ -96,11 +97,11 @@ namespace Filter{
     {
         Eigen::MatrixXd X;
         X.setZero(5,1);
-        X<<states_->getStates()["x"],
-           states_->getStates()["y"],
-           states_->getStates()["yaw"],
-           states_->getStates()["x_dot"],
-           states_->getStates()["yaw_dot"];
+        X<<states_->getStates()[states_->getStateOrder()["x"]].val(),
+           states_->getStates()[states_->getStateOrder()["y"]].val(),
+           states_->getStates()[states_->getStateOrder()["yaw"]].val(),
+           states_->getStates()[states_->getStateOrder()["x_dot"]].val(),
+           states_->getStates()[states_->getStateOrder()["yaw_dot"]].val();
         
         // std::cout<<"In the update \n";
         Eigen::MatrixXd measurement_prediction_ = H*X;
@@ -123,11 +124,13 @@ namespace Filter{
         P = (I-kalman_gain_*H)*P;
         // std::cout<<"X: \n"<<std::fixed << std::setprecision(6) <<X.transpose()<<"\n \n \n";
         // std::cout<<"P: \n"<<P<<"\n \n \n ";
-        states_->getStates()["x"] = X(0);
-        states_->getStates()["y"] = X(1);
-        states_->getStates()["yaw"] = X(2);
-        states_->getStates()["x_dot"] = X(3);
-        states_->getStates()["yaw_dot"] = X(4);
+        states_->getStates()[states_->getStateOrder()["x"]] = X(0);
+        states_->getStates()[states_->getStateOrder()["y"]] = X(1);
+        states_->getStates()[states_->getStateOrder()["yaw"]] = X(2);
+        states_->getStates()[states_->getStateOrder()["x_dot"]] = X(3);
+        states_->getStates()[states_->getStateOrder()["yaw_dot"]] = X(4);
+        std::cout<<"P1: \n"<<P<<"\n";
+
         //This is wrong approach , my state space is [x,y,yaw,v,w] and i can update the w directly not calculating yaw indirectly and update it
         // Filter::Position position_;
         // position_.x = X(0,0);
@@ -149,11 +152,11 @@ namespace Filter{
     {
         Eigen::MatrixXd X;
         X.setZero(5,1);
-        X<<states_->getStates()["x"],
-           states_->getStates()["y"],
-           states_->getStates()["yaw"],
-           states_->getStates()["x_dot"],
-           states_->getStates()["yaw_dot"];
+        X<<states_->getStates()[states_->getStateOrder()["x"]].val(),
+           states_->getStates()[states_->getStateOrder()["y"]].val(),
+           states_->getStates()[states_->getStateOrder()["yaw"]].val(),
+           states_->getStates()[states_->getStateOrder()["x_dot"]].val(),
+           states_->getStates()[states_->getStateOrder()["yaw_dot"]].val();
         
         return X;
     }

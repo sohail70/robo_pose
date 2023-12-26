@@ -3,11 +3,14 @@
 namespace Filter{
     StateSpace::StateSpace(std::vector<std::string> state_names_)
     {
+        states_.resize(state_names_.size());
         std::cout<<"Ctor of state space \n";
+        int index = 0;
         for(auto& state_name_ :state_names_)
         {
-            states_[state_name_] = 0.0;
-            state_order_.push_back(state_name_);
+            states_[index] = 0.0;
+            states_name_[state_name_] = index;
+            index++;
         }
 
     }
@@ -15,20 +18,20 @@ namespace Filter{
     void StateSpace::updateStates(std::vector<double> values_)
     {
         int index = 0;
-        for(auto&  state_ : state_order_)
+        for(auto&  value_ : values_)
         {
-            states_[state_] = values_[index];
+            states_[index] = values_[index];
             index++;
         }
     }
 
-    std::unordered_map<std::string,double>& StateSpace::getStates()
+    autodiff::VectorXreal& StateSpace::getStates()
     {
         return states_;
     }
 
-    std::vector<std::string>& StateSpace::getStateOrder() {
-        return state_order_;
+    std::unordered_map<std::string,int>& StateSpace::getStateOrder() {
+        return states_name_;
     }
 
 };

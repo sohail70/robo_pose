@@ -24,7 +24,7 @@ set(TEST_SOURCES
     test_motion_model.cpp
     # test_visualization.cpp
     # test_eigen.cpp
-    # test_ekf.cpp
+    test_ekf.cpp
     # test_state_space.cpp
     test_autodiff.cpp
     ../src/motion_model_factory.cpp

@@ -4,18 +4,21 @@
 #include<unordered_map>
 #include<vector>
 #include<iostream>
+#include<autodiff/forward/real.hpp>
+#include <autodiff/forward/real/eigen.hpp>
 namespace Filter{
     class  StateSpace
     {
         public:
             StateSpace(std::vector<std::string> );
             void updateStates(std::vector<double> );
-            std::unordered_map<std::string,double>& getStates();
-            std::vector<std::string>& getStateOrder();
+            autodiff::VectorXreal& getStates();
+            std::unordered_map<std::string,int>& getStateOrder();
 
         public:
-            std::unordered_map<std::string,double> states_;
-            std::vector<std::string> state_order_; 
+            std::unordered_map<std::string,int> states_name_;
+            // std::vector<std::string> state_order_; 
+            autodiff::VectorXreal states_;
 
 
     };

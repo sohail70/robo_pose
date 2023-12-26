@@ -94,6 +94,8 @@ TODO: create state space class and not just create a matrix in the ekf!
 TODO: when do i know the measurment has arrived and that I should do a ekk update! for now i just go with it assuming I have the Imu measurements
 TODO: You need to update the motion models states based on the output of the ekf's update and set velocity based on cmd is wrong now that you updated the states
 TODO: EIgen auto differentation for jacobain in motion model --> use the hard code for the firstt 3by3 mat and for other based on the states make the diffs
+TODO: take care of Q matrix . it shouldn't keep goind up if we are not moving I guess!
+
 
 Ekf is template base so the test_ekf.cpp would give me errors on creating ekf because ekf.hpp is not visiible ---> Template classes need to have their implementation visible during compilation
 solution --> 
@@ -112,3 +114,4 @@ Note: one thing to note is that the jacobian at the prediction step is calculate
       jacobian function in autodiff which calcs the jacobian using the current state and at the same time propagate the state one time interval forward
 
 autodiff probelm with member class functions for jacobian--> https://github.com/autodiff/autodiff/issues/51
+important thing about the jacobian is when you update the states after the jacobian functino you have to do it one by one and USE val() function or else it gives wrong jacobina calculations!

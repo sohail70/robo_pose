@@ -43,7 +43,7 @@ TEST(MotionModel , update)
     };
     Filter::AngularVelocity angular_velocity{0.0,0.0,5.0};
     constant_heading_model_->setAngularVelocity(angular_velocity);
-    std::cout<<"IN THE TEST "<<states_.states_["yaw_dot"]<<"\n";
+    std::cout<<"IN THE TEST "<<states_.states_[states_.getStateOrder()["yaw_dot"]]<<"\n";
     rclcpp::Time current_time_ = rclcpp::Clock().now();
     
     struct Position {double x,y,z;
@@ -73,7 +73,7 @@ TEST(MotionModel , update)
     };
     std::vector<Point> points;
     rclcpp::Rate loop_rate_(1000);
-    for (int i = 0; i < 3000; i++) {
+    for (int i = 0; i < 5; i++) {
         //plt::clf();
         current_time_ = rclcpp::Clock().now();
         constant_heading_model_->calcJacobianAndUpdate(current_time_);
@@ -84,7 +84,7 @@ TEST(MotionModel , update)
         angle_.roll =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getAngle().roll;
         angle_.pitch =  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getAngle().pitch;
         angle_.yaw=  dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_model_.get())->getAngle().yaw;
-        std::cout<<angle_.yaw<<"\n";
+        // std::cout<<angle_.yaw<<"\n";
         Point p;
         p.x = position_.x;
         p.y = position_.y;
