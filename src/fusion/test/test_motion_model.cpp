@@ -73,7 +73,7 @@ TEST(MotionModel , update)
     };
     std::vector<Point> points;
     rclcpp::Rate loop_rate_(1000);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < 5000; i++) {
         //plt::clf();
         current_time_ = rclcpp::Clock().now();
         constant_heading_model_->calcJacobianAndUpdate(current_time_);

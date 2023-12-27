@@ -44,17 +44,17 @@ namespace Filter{
         autodiff::VectorXreal newState; 
         
         //////Test///////////
-        Eigen::MatrixXd A = Eigen::MatrixXd(states_->states_.size() , states_->states_.size());   
-        A(0,0) = 1; A(0,1) = 0; A(0,2) = -states_->getStates()[states_->getStateOrder()["x_dot"]].val()*sin(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(0,3)= cos(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(0,4) = 0;  
-        A(1,0) = 0; A(1,1) = 1; A(1,2) =  states_->getStates()[states_->getStateOrder()["x_dot"]].val()*cos(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(1,3)= sin(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(1,4) = 0;  
-        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1;                                                                                                        A(2,3)= 0;                 A(2,4) = dt_.seconds();  
-        A(3,0) = 0; A(3,1) = 0; A(3,2) =  0;                                                                                                         A(3,3)= 1;                 A(3,4) = 0;  
-        A(4,0) = 0; A(4,1) = 0; A(4,2) =  0;                                                                                                        A(4,3)= 0;                 A(4,4) = 1;          
-        std::cout<<"states Jacobian Test:\n "<<A<<"\n \n";
-        std::cout<<"States: \n"<<state_<<"\n \n";
+        // Eigen::MatrixXd A = Eigen::MatrixXd(states_->states_.size() , states_->states_.size());   
+        // A(0,0) = 1; A(0,1) = 0; A(0,2) = -states_->getStates()[states_->getStateOrder()["x_dot"]].val()*sin(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(0,3)= cos(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(0,4) = 0;  
+        // A(1,0) = 0; A(1,1) = 1; A(1,2) =  states_->getStates()[states_->getStateOrder()["x_dot"]].val()*cos(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(1,3)= sin(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(1,4) = 0;  
+        // A(2,0) = 0; A(2,1) = 0; A(2,2) =  1;                                                                                                        A(2,3)= 0;                 A(2,4) = dt_.seconds();  
+        // A(3,0) = 0; A(3,1) = 0; A(3,2) =  0;                                                                                                         A(3,3)= 1;                 A(3,4) = 0;  
+        // A(4,0) = 0; A(4,1) = 0; A(4,2) =  0;                                                                                                        A(4,3)= 0;                 A(4,4) = 1;          
+        // std::cout<<"states Jacobian Test:\n "<<A<<"\n \n";
+        // std::cout<<"States: \n"<<state_<<"\n \n";
         ////////////////////
         Eigen::MatrixXd J = jacobian( [&](auto state_){return this->update(state_); }, wrt(state_), at(state_), newState);
-        std::cout<<"states Jacobian:\n "<<J<<"\n \n";
+        // std::cout<<"states Jacobian:\n "<<J<<"\n \n";
         previous_time_ = current_time_;
         
         // state_ = newState;

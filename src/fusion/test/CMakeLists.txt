@@ -22,7 +22,7 @@ include_directories(
 set(TEST_SOURCES
     test_main.cpp 
     test_motion_model.cpp
-    # test_visualization.cpp
+    test_visualization.cpp
     # test_eigen.cpp
     test_ekf.cpp
     # test_state_space.cpp

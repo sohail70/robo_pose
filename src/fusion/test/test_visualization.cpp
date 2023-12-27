@@ -46,8 +46,11 @@ TEST(visualizationTest , cmdVelTopicTest)
     geometry_msgs::msg::Twist cmd;
     auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, [&cmd](const geometry_msgs::msg::Twist::SharedPtr msg){cmd_callback(msg,cmd);});
     // auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, std::bind(cmd_callback , std::placeholders::_1 , std::ref(cmd))); //this version needs a std::reference_warpper<geometr...Twist> on the args of the callback and also needs a cmd.get() in the body of the callback
+    std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
+    Filter::StateSpace states_(state_names_);
+
     Filter::MotionModelFactory factory_;
-    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ =  factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE);
+    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE , &states_);
 
     rclcpp::Rate loop_rate_(1000);
     auto cur_time_ = rclcpp::Clock().now(); // *
@@ -57,7 +60,7 @@ TEST(visualizationTest , cmdVelTopicTest)
         // plt::clf();
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->update(rclcpp::Clock().now());
+        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
         Filter::Position position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         Filter::Angle angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
 
@@ -118,8 +121,11 @@ TEST(visualizationTest , cmdVelTopicTestMultiThread)
     geometry_msgs::msg::Twist cmd;
     auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, [&cmd](const geometry_msgs::msg::Twist::SharedPtr msg){cmd_callback(msg,cmd);});
     // auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, std::bind(cmd_callback , std::placeholders::_1 , std::ref(cmd))); //this version needs a std::reference_warpper<geometr...Twist> on the args of the callback and also needs a cmd.get() in the body of the callback
+    std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
+    Filter::StateSpace states_(state_names_);
+
     Filter::MotionModelFactory factory_;
-    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ =  factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE);
+    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE , &states_);
 
     rclcpp::Rate loop_rate_(1000);
     auto cur_time_ = rclcpp::Clock().now(); // *
@@ -132,7 +138,7 @@ TEST(visualizationTest , cmdVelTopicTestMultiThread)
         
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->update(rclcpp::Clock().now());
+        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
         position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
 
@@ -192,8 +198,11 @@ TEST(visualizationTest , cmdVelTopicTestRvizMarkers)
     geometry_msgs::msg::Twist cmd;
     auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, [&cmd](const geometry_msgs::msg::Twist::SharedPtr msg){cmd_callback(msg,cmd);});
     // auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, std::bind(cmd_callback , std::placeholders::_1 , std::ref(cmd))); //this version needs a std::reference_warpper<geometr...Twist> on the args of the callback and also needs a cmd.get() in the body of the callback
+    std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
+    Filter::StateSpace states_(state_names_);
+
     Filter::MotionModelFactory factory_;
-    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ =  factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE);
+    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE , &states_);
 
     rclcpp::Rate loop_rate_(1000);
     auto cur_time_ = rclcpp::Clock().now(); // *
@@ -211,7 +220,7 @@ TEST(visualizationTest , cmdVelTopicTestRvizMarkers)
     {
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->update(rclcpp::Clock().now());
+        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
         position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
   
@@ -256,8 +265,11 @@ TEST(visualizationTest , cmdVelTopicTestRvizMarkersSimple)
     geometry_msgs::msg::Twist cmd;
     auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, [&cmd](const geometry_msgs::msg::Twist::SharedPtr msg){cmd_callback(msg,cmd);});
     // auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, std::bind(cmd_callback , std::placeholders::_1 , std::ref(cmd))); //this version needs a std::reference_warpper<geometr...Twist> on the args of the callback and also needs a cmd.get() in the body of the callback
+    std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
+    Filter::StateSpace states_(state_names_);
+
     Filter::MotionModelFactory factory_;
-    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ =  factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE);
+    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE , &states_);
 
     rclcpp::Rate loop_rate_(1000);
     auto cur_time_ = rclcpp::Clock().now(); // *
@@ -271,7 +283,7 @@ TEST(visualizationTest , cmdVelTopicTestRvizMarkersSimple)
     {
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->update(rclcpp::Clock().now());
+        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
         position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
   
@@ -302,8 +314,11 @@ TEST(visualizationTest , cmdVelTopicTestRvizMarkersArrow)
     geometry_msgs::msg::Twist cmd;
     auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, [&cmd](const geometry_msgs::msg::Twist::SharedPtr msg){cmd_callback(msg,cmd);});
     // auto sub_ = node_->create_subscription<geometry_msgs::msg::Twist>("/cmd_vel" ,1, std::bind(cmd_callback , std::placeholders::_1 , std::ref(cmd))); //this version needs a std::reference_warpper<geometr...Twist> on the args of the callback and also needs a cmd.get() in the body of the callback
+    std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
+    Filter::StateSpace states_(state_names_);
+
     Filter::MotionModelFactory factory_;
-    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ =  factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE);
+    std::unique_ptr<Filter::MotionModel> constant_heading_rate_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE , &states_);
 
     rclcpp::Rate loop_rate_(100);
     auto cur_time_ = rclcpp::Clock().now(); // *
@@ -317,10 +332,10 @@ TEST(visualizationTest , cmdVelTopicTestRvizMarkersArrow)
     {
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->update(rclcpp::Clock().now());
+        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
         position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
-  
+        std::cout<<position_.x<<"\n";
 
         pose_.x = position_.x;
         pose_.y = position_.y;

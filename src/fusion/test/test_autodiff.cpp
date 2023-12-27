@@ -65,7 +65,7 @@ VectorXreal stateUpdate(const VectorXreal& state, const real& dt)
 
 //     return newState;
 // };
-TEST(autodiff, augmented)
+TEST(autodiff, wrongApproach)
 {
     using Eigen::MatrixXd;
     std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
@@ -153,9 +153,9 @@ TEST(autodiff,works)
 VectorXreal stateUpdate3( VectorXreal& x) {
     real dt = 1.0;
     VectorXreal f(5);
-    f(0) = x(0) + x(3)*cos(x(2));
-    f(1) = x(1) + x(3)*sin(x(2)); 
-    f(2) = x(2) + x(4);
+    f(0) = x(0) + x(3)*cos(x(2))*dt;
+    f(1) = x(1) + x(3)*sin(x(2))*dt; 
+    f(2) = x(2) + x(4)*dt;
     f(3) = x(3);
     f(4) = x(4);
     // new_state(1) = state(1)*state(1);
@@ -163,26 +163,22 @@ VectorXreal stateUpdate3( VectorXreal& x) {
 }
 
 
-TEST(autodiff,three)
+//I could've created 3 VectorXreal of 1 dimentsion as x and y and yaw similar to last example but i decided to use one x varibale
+
+TEST(autodiff,rightApproach)
 {
     using Eigen::MatrixXd;
 
     VectorXreal x(5);   // State vector x, y, yaw, v, w
     x <<0,0,0,1,0.1; // Initial state values
-    // VectorXreal y(1);
-    // y << 0;
 
     for (int i = 1; i < 5; ++i) {
         MatrixXd J_state;
-        VectorXreal f(5);//f1(x,y) and f2(x,y)
+        VectorXreal f(5);//f1(x,y,yaw,v,w) and f2(x,...) etc
         jacobian(stateUpdate3, wrt(x), at(x),f, J_state);
         std::cout << "Jacobian at iteration " << i + 1 << ":\n" << J_state << std::endl;
-        // state = new_state;
         std::cout<<"State: \n"<<f<<"\n";
-        // stateUpdate2(state);
         x << f(0).val(),f(1).val(),f(2).val(),f(3).val(),f(4).val(); //if you don't put val you are gonna get wrong jacobian
-        // x =f;
-        // y << i; 
-        // state = new_state; // Update state for the next iteration
+
     }
 }
