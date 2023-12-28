@@ -12,52 +12,49 @@ namespace Filter{
         previous_time_ = rclcpp::Clock().now();
     }
 
-    autodiff::VectorXreal ConstantHeadingRate::update(const autodiff::VectorXreal& state)
+    autodiff::VectorXreal ConstantHeadingRate::propagate(const autodiff::VectorXreal& state)
     {
-        autodiff::VectorXreal newState(5);
+        autodiff::VectorXreal newState(state.size());
         autodiff::real dt = autodiff::real(dt_.seconds()); 
-        newState(0) = state(0) + state(3) * cos(state(2)) * dt; // Update x
-        newState(1) = state(1) + state(3) * sin(state(2)) * dt; // Update y
-        newState(2) = state(2) + state(4) * dt;                 // Update yaw angle
-        newState(3) = state(3);                                 // Velocity remains constant
-        newState(4) = state(4);                                 // Yaw rate remains constant
+        auto index = states_->getStateOrder();
+        // std::cout<<"x_dot:"<<(index.find("x") != index.end() )<<"\n";
+        newState(0) = state(index["x"]) + state(index["x_dot"]) * cos(state(index["yaw"])) * dt; // Update x
+        newState(1) = state(index["y"]) + state(index["x_dot"]) * sin(state(index["yaw"])) * dt; // Update y
+        newState(2) = state(index["yaw"]) + state(index["yaw_dot"]) * dt;                 // Update yaw angle
+        newState(3) = state(index["x_dot"]) + state(index["x_ddot"])*dt;                                 
+        newState(4) = state(index["yaw_dot"]);                                
+        newState(5) = state(index["x_ddot"]);
         return newState;
     }
 
-    Eigen::MatrixXd ConstantHeadingRate::getJacobian()
+
+    Eigen::MatrixXd ConstantHeadingRate::getJacobian() //Hardcoded jacobina for the [x,y,yaw,x_dot,yaw_dot] states
     {
-        // Eigen::MatrixXd A = Eigen::MatrixXd(states_->states_.size() , states_->states_.size());   
-        // A(0,0) = 1; A(0,1) = 0; A(0,2) = -states_->getStates()[states_->getStateOrder()["x_dot"]]*sin(states_->getStates()[states_->getStateOrder()["yaw"]])*dt_.seconds(); A(0,3)= cos(states_->getStates()[states_->getStateOrder()["yaw"]])*dt_.seconds(); A(0,4) = 0;  
-        // A(1,0) = 0; A(1,1) = 1; A(1,2) =  states_->getStates()[states_->getStateOrder()["x_dot"]]*cos(states_->getStates()[states_->getStateOrder()["yaw"]])*dt_.seconds(); A(1,3)= sin(states_->getStates()[states_->getStateOrder()["yaw"]])*dt_.seconds(); A(1,4) = 0;  
-        // A(2,0) = 0; A(2,1) = 0; A(2,2) =  1                                                                                                        ; A(2,3)= 0                ; A(2,4) = dt_.seconds();  
-        // A(3,0) = 0; A(3,1) = 0; A(3,2) =  0                                                                                                        ; A(3,3)= 1                ; A(3,4) = 0;  
-        // A(4,0) = 0; A(4,1) = 0; A(4,2) =  0                                                                                                        ; A(4,3)= 0                ; A(4,4) = 1;  
-        // return A;
+        Eigen::MatrixXd A = Eigen::MatrixXd(states_->states_.size() , states_->states_.size());   
+        A(0,0) = 1; A(0,1) = 0; A(0,2) = -states_->getStates()[states_->getStateOrder()["x_dot"]].val()*sin(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(0,3)= cos(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(0,4) = 0;  
+        A(1,0) = 0; A(1,1) = 1; A(1,2) =  states_->getStates()[states_->getStateOrder()["x_dot"]].val()*cos(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(1,3)= sin(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(1,4) = 0;  
+        A(2,0) = 0; A(2,1) = 0; A(2,2) =  1;A(2,3)= 0;A(2,4) = dt_.seconds();
+        A(3,0) = 0; A(3,1) = 0; A(3,2) =  0;A(3,3)= 1;A(3,4) = 0;  
+        A(4,0) = 0; A(4,1) = 0; A(4,2) =  0;A(4,3)= 0;A(4,4) = 1;                                                                                                
+        return A;
   
     }
 
-    Eigen::MatrixXd ConstantHeadingRate::calcJacobianAndUpdate(const rclcpp::Time& current_time_)
+    Eigen::MatrixXd ConstantHeadingRate::update(const rclcpp::Time& current_time_)
     {
 
         dt_ = current_time_ - previous_time_;
         autodiff::VectorXreal& state_ = states_->getStates();
         autodiff::VectorXreal newState; 
         
-        //////Test///////////
-        // Eigen::MatrixXd A = Eigen::MatrixXd(states_->states_.size() , states_->states_.size());   
-        // A(0,0) = 1; A(0,1) = 0; A(0,2) = -states_->getStates()[states_->getStateOrder()["x_dot"]].val()*sin(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(0,3)= cos(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(0,4) = 0;  
-        // A(1,0) = 0; A(1,1) = 1; A(1,2) =  states_->getStates()[states_->getStateOrder()["x_dot"]].val()*cos(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(1,3)= sin(states_->getStates()[states_->getStateOrder()["yaw"]].val())*dt_.seconds(); A(1,4) = 0;  
-        // A(2,0) = 0; A(2,1) = 0; A(2,2) =  1;                                                                                                        A(2,3)= 0;                 A(2,4) = dt_.seconds();  
-        // A(3,0) = 0; A(3,1) = 0; A(3,2) =  0;                                                                                                         A(3,3)= 1;                 A(3,4) = 0;  
-        // A(4,0) = 0; A(4,1) = 0; A(4,2) =  0;                                                                                                        A(4,3)= 0;                 A(4,4) = 1;          
-        // std::cout<<"states Jacobian Test:\n "<<A<<"\n \n";
+        //////Test///////////        
+        // std::cout<<"states Jacobian Test:\n "<<this->getJacobian()<<"\n \n";
         // std::cout<<"States: \n"<<state_<<"\n \n";
         ////////////////////
-        Eigen::MatrixXd J = jacobian( [&](auto state_){return this->update(state_); }, wrt(state_), at(state_), newState);
+        Eigen::MatrixXd J = jacobian( [&](auto state_){return this->propagate(state_); }, wrt(state_), at(state_), newState);
         // std::cout<<"states Jacobian:\n "<<J<<"\n \n";
         previous_time_ = current_time_;
         
-        // state_ = newState;
         for(int i = 0 ; i<state_.size() ; i++)
             state_(i) = newState(i).val();
         normalizeAngle(states_->getStates()[states_->getStateOrder()["yaw"]].val());

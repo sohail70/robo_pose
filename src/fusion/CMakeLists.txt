@@ -34,6 +34,8 @@ ament_target_dependencies(motion rclcpp)
 target_link_libraries(motion Eigen3::Eigen autodiff::autodiff)
 add_executable(fusion src/main.cpp)
 ament_target_dependencies(fusion rclcpp)
+target_link_libraries(fusion fusemuse motion sensor_data Eigen3::Eigen)
+
 install(TARGETS fusion DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch urdf worlds params DESTINATION share/${PROJECT_NAME})
 
@@ -52,6 +54,7 @@ ament_target_dependencies(sensor_data rclcpp geometry_msgs sensor_msgs )
 
 add_library(
   fusemuse
+  src/filter_node.cpp
   src/fusion.cpp
   src/ekf.cpp
 )

@@ -1,0 +1,15 @@
+Filter:
+  ros__parameters:
+    use_sim_time: true
+    soheil: false
+    states: [true,  true,   false,
+             false, false,  false,
+             false, false,  false,
+             false, false,  true,
+             false, false,  false]
+
+        #        [x   , y    , z,
+        #         roll    , pitch    , yaw,
+        #         x_dot   , y_dot    , z_dot,
+        #         roll_dot, pitch_dot, yaw_dot,
+        #         x_ddot , y_ddot  , z_ddot]

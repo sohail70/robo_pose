@@ -9,7 +9,7 @@ namespace Filter{
     void Car::init()
     {}
 
-    autodiff::VectorXreal Car::update(const autodiff::VectorXreal&)
+    autodiff::VectorXreal Car::propagate(const autodiff::VectorXreal&)
     {}
 
     void Car::setVelocity(const Filter::Velocity& velocity_)
@@ -27,7 +27,7 @@ namespace Filter{
     Eigen::MatrixXd Car::getJacobian()
     {}
 
-    Eigen::MatrixXd Car::calcJacobianAndUpdate(const rclcpp::Time& ) 
+    Eigen::MatrixXd Car::update(const rclcpp::Time& ) 
     {}
 
     rclcpp::Duration Car::getDt()

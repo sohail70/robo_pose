@@ -49,7 +49,7 @@ TEST(Ekf, rviz)
     executor->add_node( dynamic_cast<RosCmdVelSource*>(velocity_source_.get())->getRosNode());
     executor->add_node(dynamic_cast<RosImuSource*>(imu_source_.get())->getRosNode());
 
-    std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot"};
+    std::vector<std::string> state_names_{"x" , "y" , "yaw" , "x_dot" , "yaw_dot" , "x_ddot"};
     Filter::StateSpace states_(state_names_);
     Filter::MotionModelFactory factory_;
     std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE ,&states_);

@@ -60,7 +60,7 @@ TEST(visualizationTest , cmdVelTopicTest)
         // plt::clf();
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
+        constant_heading_rate_->update(rclcpp::Clock().now());
         Filter::Position position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         Filter::Angle angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
 
@@ -138,7 +138,7 @@ TEST(visualizationTest , cmdVelTopicTestMultiThread)
         
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
+        constant_heading_rate_->update(rclcpp::Clock().now());
         position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
 
@@ -220,7 +220,7 @@ TEST(visualizationTest , cmdVelTopicTestRvizMarkers)
     {
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
+        constant_heading_rate_->update(rclcpp::Clock().now());
         position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
   
@@ -283,7 +283,7 @@ TEST(visualizationTest , cmdVelTopicTestRvizMarkersSimple)
     {
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
+        constant_heading_rate_->update(rclcpp::Clock().now());
         position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
   
@@ -332,7 +332,7 @@ TEST(visualizationTest , cmdVelTopicTestRvizMarkersArrow)
     {
         cur_time_ = rclcpp::Clock().now(); // *
         constant_heading_rate_->setVelAndAngVelFromTwist(cmd);
-        constant_heading_rate_->calcJacobianAndUpdate(rclcpp::Clock().now());
+        constant_heading_rate_->update(rclcpp::Clock().now());
         position_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getPosition();
         angle_ = dynamic_cast<Filter::ConstantHeadingRate*>(constant_heading_rate_.get())->getAngle();
         std::cout<<position_.x<<"\n";

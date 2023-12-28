@@ -8,13 +8,13 @@ namespace Filter{
     template<typename velType , typename imuType> 
     class Ekf: public Fusion{
         private:
-            Eigen::MatrixXd P; //Covariance matrix
-            Eigen::MatrixXd A; //Linearized model
-            Eigen::MatrixXd B; //Control Matrix
-            Eigen::MatrixXd Q; //Process Noise Matrix
-            Eigen::MatrixXd H; //Measuring Matrix 
-            Eigen::MatrixXd R; //Measurment Noise covariance Matrix
-            Eigen::MatrixXd I; //Identiy Matrix
+            autodiff::MatrixXreal P; //Covariance matrix
+            autodiff::MatrixXreal A; //Linearized model
+            autodiff::MatrixXreal B; //Control Matrix
+            autodiff::MatrixXreal Q; //Process Noise Matrix
+            autodiff::MatrixXreal H; //Measuring Matrix 
+            autodiff::MatrixXreal R; //Measurment Noise covariance Matrix
+            autodiff::MatrixXreal I; //Identiy Matrix
             // Eigen::MatrixXd X; //State Space
             std::shared_ptr<VelocitySource<velType>>  velocity_source_;
             std::shared_ptr<ImuSource<imuType>> imu_source_;

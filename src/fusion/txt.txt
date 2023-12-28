@@ -95,8 +95,9 @@ TODO: when do i know the measurment has arrived and that I should do a ekk updat
 TODO: You need to update the motion models states based on the output of the ekf's update and set velocity based on cmd is wrong now that you updated the states
 TODO: EIgen auto differentation for jacobain in motion model --> use the hard code for the firstt 3by3 mat and for other based on the states make the diffs
 TODO: take care of Q matrix . it shouldn't keep goind up if we are not moving I guess!
-
-
+TODO: propgate equation in motion model needs reconsideration. mainly motion model velocity commands may get updated by the output of the ekf if its being updated by or Not. mind the jacobian. changing the equation messes up the jacobian
+TODO: https://automaticaddison.com/sensor-fusion-using-the-robot-localization-package-ros-2/ ---> test it with your pkg and robot_locaziation ros pkg
+TODO: check the config file of ekf.yaml and get ideas --> another thing:https://github.com/cra-ros-pkg/robot_localization/issues/249 , another thing: have the full states specified but in the matricies put zero (i guess H)
 Ekf is template base so the test_ekf.cpp would give me errors on creating ekf because ekf.hpp is not visiible ---> Template classes need to have their implementation visible during compilation
 solution --> 
 Option 1: Move Entire Template Implementation to Header
@@ -115,3 +116,5 @@ Note: one thing to note is that the jacobian at the prediction step is calculate
 
 autodiff probelm with member class functions for jacobian--> https://github.com/autodiff/autodiff/issues/51
 important thing about the jacobian is when you update the states after the jacobian functino you have to do it one by one and USE val() function or else it gives wrong jacobina calculations!
+
+https://answers.ros.org/question/370980/3d-pose-with-imu-and-odometry-using-robot-localization/
