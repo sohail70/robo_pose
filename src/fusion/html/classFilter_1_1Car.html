@@ -104,12 +104,13 @@ Collaboration diagram for Filter::Car:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFilter_1_1Car__coll__graph.png" border="0" usemap="#Filter_1_1Car_coll__map" alt="Collaboration graph"/></div>
 <map name="Filter_1_1Car_coll__map" id="Filter_1_1Car_coll__map">
-<area shape="rect" title=" " alt="" coords="241,171,325,197"/>
-<area shape="rect" href="classFilter_1_1MotionModel.html" title=" " alt="" coords="209,95,356,121"/>
-<area shape="rect" href="structFilter_1_1Velocity.html" title=" " alt="" coords="5,5,120,32"/>
-<area shape="rect" href="structFilter_1_1Position.html" title=" " alt="" coords="144,5,259,32"/>
-<area shape="rect" href="structFilter_1_1AngularVelocity.html" title=" " alt="" coords="283,5,448,32"/>
-<area shape="rect" href="structFilter_1_1Angle.html" title=" " alt="" coords="472,5,571,32"/>
+<area shape="rect" title=" " alt="" coords="535,107,619,133"/>
+<area shape="rect" href="classFilter_1_1MotionModel.html" title=" " alt="" coords="339,107,485,133"/>
+<area shape="rect" href="structFilter_1_1Velocity.html" title=" " alt="" coords="31,5,145,32"/>
+<area shape="rect" href="classFilter_1_1StateSpace.html" title=" " alt="" coords="21,56,155,83"/>
+<area shape="rect" href="structFilter_1_1Position.html" title=" " alt="" coords="31,107,145,133"/>
+<area shape="rect" href="structFilter_1_1AngularVelocity.html" title=" " alt="" coords="5,157,171,184"/>
+<area shape="rect" href="structFilter_1_1Angle.html" title=" " alt="" coords="39,208,137,235"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -119,14 +120,20 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a28245099164e4ac92710199829f37629"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae34808a93bfdf5bf7f74f9fe02ca5b20"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#ae34808a93bfdf5bf7f74f9fe02ca5b20">init</a> () override</td></tr>
 <tr class="separator:ae34808a93bfdf5bf7f74f9fe02ca5b20"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaabd9b2d846cb23c89ae30705c63dae3"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#aaabd9b2d846cb23c89ae30705c63dae3">update</a> (const rclcpp::Time &amp;) override</td></tr>
-<tr class="separator:aaabd9b2d846cb23c89ae30705c63dae3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab0f35f60dc3b19d4e187fa939cc7abe4"><td class="memItemLeft" align="right" valign="top">virtual Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#ab0f35f60dc3b19d4e187fa939cc7abe4">getJacobian</a> () override</td></tr>
+<tr class="separator:ab0f35f60dc3b19d4e187fa939cc7abe4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4810adc585fee576bd96749bcf507f28"><td class="memItemLeft" align="right" valign="top">virtual Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#a4810adc585fee576bd96749bcf507f28">update</a> (const rclcpp::Time &amp;) override</td></tr>
+<tr class="separator:a4810adc585fee576bd96749bcf507f28"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ae1aa99555e2b5a06a27e86b5722eab"><td class="memItemLeft" align="right" valign="top">virtual autodiff::VectorXreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#a1ae1aa99555e2b5a06a27e86b5722eab">propagate</a> (const autodiff::VectorXreal &amp;) override</td></tr>
+<tr class="separator:a1ae1aa99555e2b5a06a27e86b5722eab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c46c2657df7fdf41689e72d4dc5d41a"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#a4c46c2657df7fdf41689e72d4dc5d41a">setVelocity</a> (const <a class="el" href="structFilter_1_1Velocity.html">Filter::Velocity</a> &amp;) override</td></tr>
 <tr class="separator:a4c46c2657df7fdf41689e72d4dc5d41a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1ca592f148483966513afcbb1d97b0b5"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#a1ca592f148483966513afcbb1d97b0b5">setAngularVelocity</a> (const <a class="el" href="structFilter_1_1AngularVelocity.html">Filter::AngularVelocity</a> &amp;) override</td></tr>
 <tr class="separator:a1ca592f148483966513afcbb1d97b0b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5344b8f73f36112c239a227f48c2cb45"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#a5344b8f73f36112c239a227f48c2cb45">setVelAndAngVelFromTwist</a> (const geometry_msgs::msg::Twist &amp;) override</td></tr>
 <tr class="separator:a5344b8f73f36112c239a227f48c2cb45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a06fdb96341139f0448bd6521702e5581"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#a06fdb96341139f0448bd6521702e5581">setStates</a> (<a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *) override</td></tr>
+<tr class="separator:a06fdb96341139f0448bd6521702e5581"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97da17f452413a2060e2215efbfc5cf9"><td class="memItemLeft" align="right" valign="top">virtual rclcpp::Duration&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Car.html#a97da17f452413a2060e2215efbfc5cf9">getDt</a> () override</td></tr>
 <tr class="separator:a97da17f452413a2060e2215efbfc5cf9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classFilter_1_1MotionModel"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classFilter_1_1MotionModel')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classFilter_1_1MotionModel.html">Filter::MotionModel</a></td></tr>
@@ -150,6 +157,8 @@ Additional Inherited Members</h2></td></tr>
 <tr class="separator:a0e167553bae03b9e91ab2a77aeafc87e inherit pro_attribs_classFilter_1_1MotionModel"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f11c60e761a4d67470eb8b25feb3f2d inherit pro_attribs_classFilter_1_1MotionModel"><td class="memItemLeft" align="right" valign="top">rclcpp::Time&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1MotionModel.html#a5f11c60e761a4d67470eb8b25feb3f2d">previous_time_</a></td></tr>
 <tr class="separator:a5f11c60e761a4d67470eb8b25feb3f2d inherit pro_attribs_classFilter_1_1MotionModel"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3e3687e10ff61c95f136ccd437aacb71 inherit pro_attribs_classFilter_1_1MotionModel"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1MotionModel.html#a3e3687e10ff61c95f136ccd437aacb71">states_</a></td></tr>
+<tr class="separator:a3e3687e10ff61c95f136ccd437aacb71 inherit pro_attribs_classFilter_1_1MotionModel"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a28245099164e4ac92710199829f37629"></a>
@@ -197,6 +206,33 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
+<a id="ab0f35f60dc3b19d4e187fa939cc7abe4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0f35f60dc3b19d4e187fa939cc7abe4">&#9670;&nbsp;</a></span>getJacobian()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Eigen::MatrixXd Filter::Car::getJacobian </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classFilter_1_1MotionModel.html#add6a5145f518ff59877e81fda8d037b8">Filter::MotionModel</a>.</p>
+
+</div>
+</div>
 <a id="ae34808a93bfdf5bf7f74f9fe02ca5b20"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae34808a93bfdf5bf7f74f9fe02ca5b20">&#9670;&nbsp;</a></span>init()</h2>
 
@@ -221,6 +257,34 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classFilter_1_1MotionModel.html#ac4ff3e3f0a39e1a7664362f3b9b44866">Filter::MotionModel</a>.</p>
+
+</div>
+</div>
+<a id="a1ae1aa99555e2b5a06a27e86b5722eab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ae1aa99555e2b5a06a27e86b5722eab">&#9670;&nbsp;</a></span>propagate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">autodiff::VectorXreal Filter::Car::propagate </td>
+          <td>(</td>
+          <td class="paramtype">const autodiff::VectorXreal &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classFilter_1_1MotionModel.html#abb6811f94b8906eda0d3417d723935fc">Filter::MotionModel</a>.</p>
 
 </div>
 </div>
@@ -249,6 +313,34 @@ Additional Inherited Members</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classFilter_1_1MotionModel.html#a89b8d390fa5d822b5abd21fdf9892a59">Filter::MotionModel</a>.</p>
+
+</div>
+</div>
+<a id="a06fdb96341139f0448bd6521702e5581"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a06fdb96341139f0448bd6521702e5581">&#9670;&nbsp;</a></span>setStates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Filter::Car::setStates </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *&#160;</td>
+          <td class="paramname"><em>states_</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classFilter_1_1MotionModel.html#ade245a654fbb8a272b63e104918e621b">Filter::MotionModel</a>.</p>
 
 </div>
 </div>
@@ -308,8 +400,8 @@ Additional Inherited Members</h2></td></tr>
 
 </div>
 </div>
-<a id="aaabd9b2d846cb23c89ae30705c63dae3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aaabd9b2d846cb23c89ae30705c63dae3">&#9670;&nbsp;</a></span>update()</h2>
+<a id="a4810adc585fee576bd96749bcf507f28"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4810adc585fee576bd96749bcf507f28">&#9670;&nbsp;</a></span>update()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -318,10 +410,10 @@ Additional Inherited Members</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void Filter::Car::update </td>
+          <td class="memname">Eigen::MatrixXd Filter::Car::update </td>
           <td>(</td>
           <td class="paramtype">const rclcpp::Time &amp;&#160;</td>
-          <td class="paramname"><em>current_time_</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -332,7 +424,7 @@ Additional Inherited Members</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Implements <a class="el" href="classFilter_1_1MotionModel.html#a03b0fcd0aa375a967375348e82738dd7">Filter::MotionModel</a>.</p>
+<p>Implements <a class="el" href="classFilter_1_1MotionModel.html#a4ac262470484699226de89ea6d765860">Filter::MotionModel</a>.</p>
 
 </div>
 </div>

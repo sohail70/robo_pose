@@ -5,7 +5,6 @@
 #include<fusion/sensor_data.hpp>
 
 namespace Filter{
-    template<typename velType , typename imuType> 
     class Ekf: public Fusion{
         private:
             autodiff::MatrixXreal P; //Covariance matrix
@@ -16,13 +15,14 @@ namespace Filter{
             autodiff::MatrixXreal R; //Measurment Noise covariance Matrix
             autodiff::MatrixXreal I; //Identiy Matrix
             // Eigen::MatrixXd X; //State Space
-            std::shared_ptr<VelocitySource<velType>>  velocity_source_;
-            std::shared_ptr<ImuSource<imuType>> imu_source_;
+           
         public:
-            Ekf(std::unique_ptr<MotionModel>  , std::shared_ptr<VelocitySource<velType>> , std::shared_ptr<ImuSource<imuType>> );
+            Ekf();
+            Ekf(std::unique_ptr<MotionModel> );
             virtual void initialize() override;
             virtual void predict(const rclcpp::Time& ) override;
             virtual void update() override;
+            virtual void setMotionModel(std::unique_ptr<MotionModel> ) override;
             virtual Eigen::MatrixXd getStates() override;
             virtual void setStates(StateSpace* ) override;
 

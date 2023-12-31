@@ -1,13 +1,18 @@
 <map id="include/fusion/motion_model_factory.hpp" name="include/fusion/motion_model_factory.hpp">
-<area shape="rect" id="node1" title=" " alt="" coords="355,5,517,47"/>
-<area shape="rect" id="node2" href="$motion__model_8hpp.html" title=" " alt="" coords="107,184,295,211"/>
-<area shape="rect" id="node7" href="$constant__heading__rate_8hpp.html" title=" " alt="" coords="111,95,292,136"/>
-<area shape="rect" id="node8" href="$car_8hpp.html" title=" " alt="" coords="316,102,431,129"/>
-<area shape="rect" id="node9" title=" " alt="" coords="455,102,542,129"/>
-<area shape="rect" id="node10" title=" " alt="" coords="566,102,690,129"/>
-<area shape="rect" id="node11" title=" " alt="" coords="715,102,792,129"/>
-<area shape="rect" id="node3" title=" " alt="" coords="5,259,85,285"/>
-<area shape="rect" id="node4" title=" " alt="" coords="110,259,173,285"/>
-<area shape="rect" id="node5" title=" " alt="" coords="197,259,329,285"/>
-<area shape="rect" id="node6" title=" " alt="" coords="353,259,575,285"/>
+<area shape="rect" id="node1" title=" " alt="" coords="249,5,411,47"/>
+<area shape="rect" id="node2" href="$motion__model_8hpp.html" title=" " alt="" coords="236,184,424,211"/>
+<area shape="rect" id="node9" title=" " alt="" coords="5,341,129,367"/>
+<area shape="rect" id="node13" href="$constant__heading__rate_8hpp.html" title=" " alt="" coords="154,95,335,136"/>
+<area shape="rect" id="node14" href="$car_8hpp.html" title=" " alt="" coords="359,102,474,129"/>
+<area shape="rect" id="node15" title=" " alt="" coords="499,102,585,129"/>
+<area shape="rect" id="node16" title=" " alt="" coords="610,102,687,129"/>
+<area shape="rect" id="node3" title=" " alt="" coords="363,341,443,367"/>
+<area shape="rect" id="node4" title=" " alt="" coords="51,259,153,285"/>
+<area shape="rect" id="node5" title=" " alt="" coords="177,259,240,285"/>
+<area shape="rect" id="node6" title=" " alt="" coords="264,259,396,285"/>
+<area shape="rect" id="node7" title=" " alt="" coords="420,259,643,285"/>
+<area shape="rect" id="node8" href="$state__space_8hpp.html" title=" " alt="" coords="667,259,839,285"/>
+<area shape="rect" id="node11" title=" " alt="" coords="661,341,845,367"/>
+<area shape="rect" id="node12" title=" " alt="" coords="869,333,1025,375"/>
+<area shape="rect" id="node10" title=" " alt="" coords="573,341,636,367"/>
 </map>

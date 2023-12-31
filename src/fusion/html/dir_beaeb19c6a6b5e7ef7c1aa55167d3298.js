@@ -9,6 +9,9 @@ var dir_beaeb19c6a6b5e7ef7c1aa55167d3298 =
     [ "ekf.hpp", "ekf_8hpp.html", [
       [ "Ekf", "classFilter_1_1Ekf.html", "classFilter_1_1Ekf" ]
     ] ],
+    [ "filter_node.hpp", "filter__node_8hpp.html", [
+      [ "FilterNode", "classFilter_1_1FilterNode.html", "classFilter_1_1FilterNode" ]
+    ] ],
     [ "fusion.hpp", "fusion_8hpp.html", [
       [ "Fusion", "classFilter_1_1Fusion.html", "classFilter_1_1Fusion" ]
     ] ],
@@ -17,6 +20,11 @@ var dir_beaeb19c6a6b5e7ef7c1aa55167d3298 =
     ] ],
     [ "measurement_model.hpp", "measurement__model_8hpp.html", [
       [ "MeasurementModel", "classFilter_1_1MeasurementModel.html", "classFilter_1_1MeasurementModel" ]
+    ] ],
+    [ "mediator.hpp", "mediator_8hpp.html", [
+      [ "Message", "structFilter_1_1Message.html", "structFilter_1_1Message" ],
+      [ "Mediator", "classFilter_1_1Mediator.html", "classFilter_1_1Mediator" ],
+      [ "MessageHub", "classFilter_1_1MessageHub.html", "classFilter_1_1MessageHub" ]
     ] ],
     [ "motion_model.hpp", "motion__model_8hpp.html", [
       [ "Position", "structFilter_1_1Position.html", "structFilter_1_1Position" ],
@@ -32,7 +40,9 @@ var dir_beaeb19c6a6b5e7ef7c1aa55167d3298 =
       [ "ImuSource", "classImuSource.html", "classImuSource" ],
       [ "RosImuSource", "classRosImuSource.html", "classRosImuSource" ]
     ] ],
-    [ "state_space.hpp", "state__space_8hpp.html", null ],
+    [ "state_space.hpp", "state__space_8hpp.html", [
+      [ "StateSpace", "classFilter_1_1StateSpace.html", "classFilter_1_1StateSpace" ]
+    ] ],
     [ "visualization.hpp", "visualization_8hpp.html", [
       [ "Visualization", "classVisualization_1_1Visualization.html", "classVisualization_1_1Visualization" ]
     ] ]

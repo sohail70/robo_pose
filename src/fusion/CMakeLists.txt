@@ -55,6 +55,7 @@ ament_target_dependencies(sensor_data rclcpp geometry_msgs sensor_msgs )
 add_library(
   fusemuse
   src/filter_node.cpp
+  src/filter_factory.cpp
   src/fusion.cpp
   src/ekf.cpp
 )

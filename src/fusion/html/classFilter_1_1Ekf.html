@@ -105,8 +105,9 @@ Collaboration diagram for Filter::Ekf&lt; velType, imuType &gt;:</div>
 <div class="dyncontent">
 <div class="center"><img src="classFilter_1_1Ekf__coll__graph.png" border="0" usemap="#Filter_1_1Ekf_3_01velType_00_01imuType_01_4_coll__map" alt="Collaboration graph"/></div>
 <map name="Filter_1_1Ekf_3_01velType_00_01imuType_01_4_coll__map" id="Filter_1_1Ekf_3_01velType_00_01imuType_01_4_coll__map">
-<area shape="rect" title=" " alt="" coords="5,80,157,121"/>
-<area shape="rect" href="classFilter_1_1Fusion.html" title=" " alt="" coords="29,5,133,32"/>
+<area shape="rect" title=" " alt="" coords="5,171,157,212"/>
+<area shape="rect" href="classFilter_1_1Fusion.html" title=" " alt="" coords="29,95,133,121"/>
+<area shape="rect" href="classFilter_1_1StateSpace.html" title=" " alt="" coords="14,5,149,32"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
@@ -122,28 +123,28 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a7a77296b78e0b86b08fff8cf1df87221"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee632f33d30cbb46397b689783c9b1d3"><td class="memItemLeft" align="right" valign="top">virtual Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#aee632f33d30cbb46397b689783c9b1d3">getStates</a> () override</td></tr>
 <tr class="separator:aee632f33d30cbb46397b689783c9b1d3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:add6d040e8c8ffdde420a4b02215223ed"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#add6d040e8c8ffdde420a4b02215223ed">setStates</a> (<a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *) override</td></tr>
+<tr class="separator:add6d040e8c8ffdde420a4b02215223ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classFilter_1_1Fusion"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classFilter_1_1Fusion')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classFilter_1_1Fusion.html">Filter::Fusion</a></td></tr>
 <tr class="memitem:a135d7867f108ac7f013abb34958fc182 inherit pub_methods_classFilter_1_1Fusion"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Fusion.html#a135d7867f108ac7f013abb34958fc182">Fusion</a> (std::unique_ptr&lt; <a class="el" href="classFilter_1_1MotionModel.html">MotionModel</a> &gt;)</td></tr>
 <tr class="separator:a135d7867f108ac7f013abb34958fc182 inherit pub_methods_classFilter_1_1Fusion"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
-<tr class="memitem:aef93e4cb538c8a4454250d632e1c679b"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#aef93e4cb538c8a4454250d632e1c679b">P</a></td></tr>
-<tr class="separator:aef93e4cb538c8a4454250d632e1c679b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2a47c4e98220aef83442f0a18ff44475"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a2a47c4e98220aef83442f0a18ff44475">A</a></td></tr>
-<tr class="separator:a2a47c4e98220aef83442f0a18ff44475"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a89a922cd0f3c2d022d282da0b0202124"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a89a922cd0f3c2d022d282da0b0202124">B</a></td></tr>
-<tr class="separator:a89a922cd0f3c2d022d282da0b0202124"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fc2f6583add67276551e4c9f3b5e0d9"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a6fc2f6583add67276551e4c9f3b5e0d9">Q</a></td></tr>
-<tr class="separator:a6fc2f6583add67276551e4c9f3b5e0d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1de30c1f76139ed2d882db46eddee5ed"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a1de30c1f76139ed2d882db46eddee5ed">H</a></td></tr>
-<tr class="separator:a1de30c1f76139ed2d882db46eddee5ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea7d50b4f203ed87bb7164693f24a72f"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#aea7d50b4f203ed87bb7164693f24a72f">R</a></td></tr>
-<tr class="separator:aea7d50b4f203ed87bb7164693f24a72f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7dce779cdff1148d77d7d9ce4d49ddc7"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a7dce779cdff1148d77d7d9ce4d49ddc7">I</a></td></tr>
-<tr class="separator:a7dce779cdff1148d77d7d9ce4d49ddc7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8391abd1500aab99388193c485edecb4"><td class="memItemLeft" align="right" valign="top">Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a8391abd1500aab99388193c485edecb4">X</a></td></tr>
-<tr class="separator:a8391abd1500aab99388193c485edecb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a42db80eb317bf269278613d1205de570"><td class="memItemLeft" align="right" valign="top">autodiff::MatrixXreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a42db80eb317bf269278613d1205de570">P</a></td></tr>
+<tr class="separator:a42db80eb317bf269278613d1205de570"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c7b02579cfa550645f39900d58b2487"><td class="memItemLeft" align="right" valign="top">autodiff::MatrixXreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a4c7b02579cfa550645f39900d58b2487">A</a></td></tr>
+<tr class="separator:a4c7b02579cfa550645f39900d58b2487"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2bf748636f552b754326f62e5166ef5"><td class="memItemLeft" align="right" valign="top">autodiff::MatrixXreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#ab2bf748636f552b754326f62e5166ef5">B</a></td></tr>
+<tr class="separator:ab2bf748636f552b754326f62e5166ef5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ae6a93f7937c52e78022d6fe8aeb82b"><td class="memItemLeft" align="right" valign="top">autodiff::MatrixXreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a5ae6a93f7937c52e78022d6fe8aeb82b">Q</a></td></tr>
+<tr class="separator:a5ae6a93f7937c52e78022d6fe8aeb82b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac6c4bae9c7447834d090527b64949e71"><td class="memItemLeft" align="right" valign="top">autodiff::MatrixXreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#ac6c4bae9c7447834d090527b64949e71">H</a></td></tr>
+<tr class="separator:ac6c4bae9c7447834d090527b64949e71"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a3737312af8d5ff8231de529e2f27a5"><td class="memItemLeft" align="right" valign="top">autodiff::MatrixXreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a9a3737312af8d5ff8231de529e2f27a5">R</a></td></tr>
+<tr class="separator:a9a3737312af8d5ff8231de529e2f27a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a699c7d661808150e1114bc409412d3c9"><td class="memItemLeft" align="right" valign="top">autodiff::MatrixXreal&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a699c7d661808150e1114bc409412d3c9">I</a></td></tr>
+<tr class="separator:a699c7d661808150e1114bc409412d3c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae1bffe83e0ad4a9de5f2c341cfe1b400"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classVelocitySource.html">VelocitySource</a>&lt; velType &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#ae1bffe83e0ad4a9de5f2c341cfe1b400">velocity_source_</a></td></tr>
 <tr class="separator:ae1bffe83e0ad4a9de5f2c341cfe1b400"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a85d8961eb40ef0bcaca6c178cae7501d"><td class="memItemLeft" align="right" valign="top">std::shared_ptr&lt; <a class="el" href="classImuSource.html">ImuSource</a>&lt; imuType &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Ekf.html#a85d8961eb40ef0bcaca6c178cae7501d">imu_source_</a></td></tr>
@@ -154,6 +155,8 @@ Additional Inherited Members</h2></td></tr>
 <tr class="inherit_header pro_attribs_classFilter_1_1Fusion"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classFilter_1_1Fusion')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classFilter_1_1Fusion.html">Filter::Fusion</a></td></tr>
 <tr class="memitem:a43d3122675414d85c390b40e00bd6216 inherit pro_attribs_classFilter_1_1Fusion"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classFilter_1_1MotionModel.html">MotionModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Fusion.html#a43d3122675414d85c390b40e00bd6216">motion_model_</a></td></tr>
 <tr class="separator:a43d3122675414d85c390b40e00bd6216 inherit pro_attribs_classFilter_1_1Fusion"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f5a360f2829cb2b7d447919d8be4447 inherit pro_attribs_classFilter_1_1Fusion"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Fusion.html#a9f5a360f2829cb2b7d447919d8be4447">states_</a></td></tr>
+<tr class="separator:a9f5a360f2829cb2b7d447919d8be4447 inherit pro_attribs_classFilter_1_1Fusion"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="acebedcb904069e56f0f9b3da818ae995"></a>
@@ -275,6 +278,36 @@ template&lt;typename velType , typename imuType &gt; </div>
 
 </div>
 </div>
+<a id="add6d040e8c8ffdde420a4b02215223ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add6d040e8c8ffdde420a4b02215223ed">&#9670;&nbsp;</a></span>setStates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename velType , typename imuType &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::setStates </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *&#160;</td>
+          <td class="paramname"><em>states_</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classFilter_1_1Fusion.html#af45461be7d16e228f5ff052facf728ee">Filter::Fusion</a>.</p>
+
+</div>
+</div>
 <a id="a7a77296b78e0b86b08fff8cf1df87221"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a7a77296b78e0b86b08fff8cf1df87221">&#9670;&nbsp;</a></span>update()</h2>
 
@@ -302,8 +335,8 @@ template&lt;typename velType , typename imuType &gt; </div>
 </div>
 </div>
 <h2 class="groupheader">Member Data Documentation</h2>
-<a id="a2a47c4e98220aef83442f0a18ff44475"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2a47c4e98220aef83442f0a18ff44475">&#9670;&nbsp;</a></span>A</h2>
+<a id="a4c7b02579cfa550645f39900d58b2487"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c7b02579cfa550645f39900d58b2487">&#9670;&nbsp;</a></span>A</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -314,7 +347,7 @@ template&lt;typename velType , typename imuType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::MatrixXd <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::A</td>
+          <td class="memname">autodiff::MatrixXreal <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::A</td>
         </tr>
       </table>
   </td>
@@ -326,8 +359,8 @@ template&lt;typename velType , typename imuType &gt; </div>
 
 </div>
 </div>
-<a id="a89a922cd0f3c2d022d282da0b0202124"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a89a922cd0f3c2d022d282da0b0202124">&#9670;&nbsp;</a></span>B</h2>
+<a id="ab2bf748636f552b754326f62e5166ef5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2bf748636f552b754326f62e5166ef5">&#9670;&nbsp;</a></span>B</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -338,7 +371,7 @@ template&lt;typename velType , typename imuType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::MatrixXd <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::B</td>
+          <td class="memname">autodiff::MatrixXreal <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::B</td>
         </tr>
       </table>
   </td>
@@ -350,8 +383,8 @@ template&lt;typename velType , typename imuType &gt; </div>
 
 </div>
 </div>
-<a id="a1de30c1f76139ed2d882db46eddee5ed"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1de30c1f76139ed2d882db46eddee5ed">&#9670;&nbsp;</a></span>H</h2>
+<a id="ac6c4bae9c7447834d090527b64949e71"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac6c4bae9c7447834d090527b64949e71">&#9670;&nbsp;</a></span>H</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -362,7 +395,7 @@ template&lt;typename velType , typename imuType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::MatrixXd <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::H</td>
+          <td class="memname">autodiff::MatrixXreal <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::H</td>
         </tr>
       </table>
   </td>
@@ -374,8 +407,8 @@ template&lt;typename velType , typename imuType &gt; </div>
 
 </div>
 </div>
-<a id="a7dce779cdff1148d77d7d9ce4d49ddc7"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7dce779cdff1148d77d7d9ce4d49ddc7">&#9670;&nbsp;</a></span>I</h2>
+<a id="a699c7d661808150e1114bc409412d3c9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a699c7d661808150e1114bc409412d3c9">&#9670;&nbsp;</a></span>I</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -386,7 +419,7 @@ template&lt;typename velType , typename imuType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::MatrixXd <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::I</td>
+          <td class="memname">autodiff::MatrixXreal <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::I</td>
         </tr>
       </table>
   </td>
@@ -422,8 +455,8 @@ template&lt;typename velType , typename imuType &gt; </div>
 
 </div>
 </div>
-<a id="aef93e4cb538c8a4454250d632e1c679b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aef93e4cb538c8a4454250d632e1c679b">&#9670;&nbsp;</a></span>P</h2>
+<a id="a42db80eb317bf269278613d1205de570"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a42db80eb317bf269278613d1205de570">&#9670;&nbsp;</a></span>P</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -434,7 +467,7 @@ template&lt;typename velType , typename imuType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::MatrixXd <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::P</td>
+          <td class="memname">autodiff::MatrixXreal <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::P</td>
         </tr>
       </table>
   </td>
@@ -446,8 +479,8 @@ template&lt;typename velType , typename imuType &gt; </div>
 
 </div>
 </div>
-<a id="a6fc2f6583add67276551e4c9f3b5e0d9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6fc2f6583add67276551e4c9f3b5e0d9">&#9670;&nbsp;</a></span>Q</h2>
+<a id="a5ae6a93f7937c52e78022d6fe8aeb82b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ae6a93f7937c52e78022d6fe8aeb82b">&#9670;&nbsp;</a></span>Q</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -458,7 +491,7 @@ template&lt;typename velType , typename imuType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::MatrixXd <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::Q</td>
+          <td class="memname">autodiff::MatrixXreal <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::Q</td>
         </tr>
       </table>
   </td>
@@ -470,8 +503,8 @@ template&lt;typename velType , typename imuType &gt; </div>
 
 </div>
 </div>
-<a id="aea7d50b4f203ed87bb7164693f24a72f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea7d50b4f203ed87bb7164693f24a72f">&#9670;&nbsp;</a></span>R</h2>
+<a id="a9a3737312af8d5ff8231de529e2f27a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a3737312af8d5ff8231de529e2f27a5">&#9670;&nbsp;</a></span>R</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -482,7 +515,7 @@ template&lt;typename velType , typename imuType &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">Eigen::MatrixXd <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::R</td>
+          <td class="memname">autodiff::MatrixXreal <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::R</td>
         </tr>
       </table>
   </td>
@@ -507,30 +540,6 @@ template&lt;typename velType , typename imuType &gt; </div>
       <table class="memname">
         <tr>
           <td class="memname">std::shared_ptr&lt;<a class="el" href="classVelocitySource.html">VelocitySource</a>&lt;velType&gt; &gt; <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::velocity_source_</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">private</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-</div>
-</div>
-<a id="a8391abd1500aab99388193c485edecb4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8391abd1500aab99388193c485edecb4">&#9670;&nbsp;</a></span>X</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;typename velType , typename imuType &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">Eigen::MatrixXd <a class="el" href="classFilter_1_1Ekf.html">Filter::Ekf</a>&lt; velType, imuType &gt;::X</td>
         </tr>
       </table>
   </td>

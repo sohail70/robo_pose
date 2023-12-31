@@ -93,33 +93,40 @@ $(document).ready(function(){initNavTree('fusion_8hpp_source.html',''); initResi
 <div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include&lt;<a class="code" href="motion__model_8hpp.html">fusion/motion_model.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include&lt;rclcpp/rclcpp.hpp&gt;</span></div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include&lt;Eigen/Dense&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include&lt;<a class="code" href="state__space_8hpp.html">fusion/state_space.hpp</a>&gt;</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceFilter.html">Filter</a>{</div>
 <div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classFilter_1_1Fusion.html">   11</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classFilter_1_1Fusion.html">Fusion</a>{</div>
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">protected</span>:</div>
 <div class="line"><a name="l00013"></a><span class="lineno"><a class="line" href="classFilter_1_1Fusion.html#a43d3122675414d85c390b40e00bd6216">   13</a></span>&#160;            std::unique_ptr&lt;MotionModel&gt; <a class="code" href="classFilter_1_1Fusion.html#a43d3122675414d85c390b40e00bd6216">motion_model_</a>;</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            <span class="comment">// std::unique_ptr&lt;MeasurementModel&gt; measurement_model_;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            <a class="code" href="classFilter_1_1Fusion.html#a135d7867f108ac7f013abb34958fc182">Fusion</a>(std::unique_ptr&lt;MotionModel&gt; );</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classFilter_1_1Fusion.html#ac0c1b90414bb5a93fa25e844cb1066c2">initialize</a>() = 0;</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classFilter_1_1Fusion.html#a901b6b60b77b3609d2f9fd008186177b">predict</a>(<span class="keyword">const</span> rclcpp::Time&amp;) = 0;</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classFilter_1_1Fusion.html#a16f47b561ba639a9425e487e359a547e">update</a>() = 0;</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <span class="keyword">virtual</span> Eigen::MatrixXd <a class="code" href="classFilter_1_1Fusion.html#a40a9dc5b6682e71967cc241d9f90539d">getStates</a>() = 0;</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    };</div>
+<div class="line"><a name="l00014"></a><span class="lineno"><a class="line" href="classFilter_1_1Fusion.html#a9f5a360f2829cb2b7d447919d8be4447">   14</a></span>&#160;            <a class="code" href="classFilter_1_1StateSpace.html">StateSpace</a>* <a class="code" href="classFilter_1_1Fusion.html#a9f5a360f2829cb2b7d447919d8be4447">states_</a>;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            <span class="comment">// std::unique_ptr&lt;MeasurementModel&gt; measurement_model_;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;            <a class="code" href="classFilter_1_1Fusion.html#a135d7867f108ac7f013abb34958fc182">Fusion</a>(std::unique_ptr&lt;MotionModel&gt; );</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classFilter_1_1Fusion.html#ac0c1b90414bb5a93fa25e844cb1066c2">initialize</a>() = 0;</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classFilter_1_1Fusion.html#a901b6b60b77b3609d2f9fd008186177b">predict</a>(<span class="keyword">const</span> rclcpp::Time&amp;) = 0;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classFilter_1_1Fusion.html#a16f47b561ba639a9425e487e359a547e">update</a>() = 0;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;            <span class="keyword">virtual</span> Eigen::MatrixXd <a class="code" href="classFilter_1_1Fusion.html#a40a9dc5b6682e71967cc241d9f90539d">getStates</a>() = 0;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;            <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classFilter_1_1Fusion.html#af45461be7d16e228f5ff052facf728ee">setStates</a>(<a class="code" href="classFilter_1_1StateSpace.html">StateSpace</a>* ) = 0;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;} <span class="comment">//namespace Filter</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;    };</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;} <span class="comment">//namespace Filter</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclassFilter_1_1Fusion_html_af45461be7d16e228f5ff052facf728ee"><div class="ttname"><a href="classFilter_1_1Fusion.html#af45461be7d16e228f5ff052facf728ee">Filter::Fusion::setStates</a></div><div class="ttdeci">virtual void setStates(StateSpace *)=0</div></div>
 <div class="ttc" id="amotion__model_8hpp_html"><div class="ttname"><a href="motion__model_8hpp.html">motion_model.hpp</a></div></div>
 <div class="ttc" id="aclassFilter_1_1Fusion_html_a16f47b561ba639a9425e487e359a547e"><div class="ttname"><a href="classFilter_1_1Fusion.html#a16f47b561ba639a9425e487e359a547e">Filter::Fusion::update</a></div><div class="ttdeci">virtual void update()=0</div></div>
+<div class="ttc" id="aclassFilter_1_1Fusion_html_a9f5a360f2829cb2b7d447919d8be4447"><div class="ttname"><a href="classFilter_1_1Fusion.html#a9f5a360f2829cb2b7d447919d8be4447">Filter::Fusion::states_</a></div><div class="ttdeci">StateSpace * states_</div><div class="ttdef"><b>Definition:</b> fusion.hpp:14</div></div>
 <div class="ttc" id="aclassFilter_1_1Fusion_html_a40a9dc5b6682e71967cc241d9f90539d"><div class="ttname"><a href="classFilter_1_1Fusion.html#a40a9dc5b6682e71967cc241d9f90539d">Filter::Fusion::getStates</a></div><div class="ttdeci">virtual Eigen::MatrixXd getStates()=0</div></div>
 <div class="ttc" id="aclassFilter_1_1Fusion_html"><div class="ttname"><a href="classFilter_1_1Fusion.html">Filter::Fusion</a></div><div class="ttdef"><b>Definition:</b> fusion.hpp:11</div></div>
 <div class="ttc" id="aclassFilter_1_1Fusion_html_a43d3122675414d85c390b40e00bd6216"><div class="ttname"><a href="classFilter_1_1Fusion.html#a43d3122675414d85c390b40e00bd6216">Filter::Fusion::motion_model_</a></div><div class="ttdeci">std::unique_ptr&lt; MotionModel &gt; motion_model_</div><div class="ttdef"><b>Definition:</b> fusion.hpp:13</div></div>
 <div class="ttc" id="aclassFilter_1_1Fusion_html_a135d7867f108ac7f013abb34958fc182"><div class="ttname"><a href="classFilter_1_1Fusion.html#a135d7867f108ac7f013abb34958fc182">Filter::Fusion::Fusion</a></div><div class="ttdeci">Fusion(std::unique_ptr&lt; MotionModel &gt;)</div><div class="ttdef"><b>Definition:</b> fusion.cpp:4</div></div>
 <div class="ttc" id="anamespaceFilter_html"><div class="ttname"><a href="namespaceFilter.html">Filter</a></div><div class="ttdef"><b>Definition:</b> car.cpp:3</div></div>
+<div class="ttc" id="astate__space_8hpp_html"><div class="ttname"><a href="state__space_8hpp.html">state_space.hpp</a></div></div>
 <div class="ttc" id="aclassFilter_1_1Fusion_html_a901b6b60b77b3609d2f9fd008186177b"><div class="ttname"><a href="classFilter_1_1Fusion.html#a901b6b60b77b3609d2f9fd008186177b">Filter::Fusion::predict</a></div><div class="ttdeci">virtual void predict(const rclcpp::Time &amp;)=0</div></div>
+<div class="ttc" id="aclassFilter_1_1StateSpace_html"><div class="ttname"><a href="classFilter_1_1StateSpace.html">Filter::StateSpace</a></div><div class="ttdef"><b>Definition:</b> state_space.hpp:10</div></div>
 <div class="ttc" id="aclassFilter_1_1Fusion_html_ac0c1b90414bb5a93fa25e844cb1066c2"><div class="ttname"><a href="classFilter_1_1Fusion.html#ac0c1b90414bb5a93fa25e844cb1066c2">Filter::Fusion::initialize</a></div><div class="ttdeci">virtual void initialize()=0</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->

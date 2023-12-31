@@ -5,23 +5,29 @@
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <geometry_msgs/msg/quaternion.hpp>
 namespace Filter{
-    template<typename velType , typename imuType>
-    Ekf<velType,imuType>::Ekf(std::unique_ptr<MotionModel> motion_model_ ,
-             std::shared_ptr<VelocitySource<velType>> velocity_source_ ,
-             std::shared_ptr<ImuSource<imuType>> imu_source_):
-    Fusion(std::move(motion_model_)) ,velocity_source_(velocity_source_) , imu_source_(imu_source_)
+
+    Ekf::Ekf()
+    {
+        std::cout<<"default Ctor of Ekf \n";
+    }
+    
+    Ekf::Ekf(std::unique_ptr<MotionModel> motion_model_):
+    Fusion(std::move(motion_model_)) 
     {
         std::cout<<"Ctor of Ekf \n";
     }
 
-    template<typename velType , typename imuType>
-    void Ekf<velType,imuType>::setStates(StateSpace* states_)
+    void Ekf::setStates(StateSpace* states_)
     {
         this->states_ = states_;
     }
-    
-    template<typename velType , typename imuType>
-    void Ekf<velType,imuType>::initialize()
+
+    void Ekf::setMotionModel(std::unique_ptr<MotionModel> motion_model_)
+    {
+        this->motion_model_ = motion_model_ ? std::move(motion_model_) : nullptr;
+    }
+
+    void Ekf::initialize()
     {
         // initialize dimensions of the state space
         int num_states_ = states_->getStates().size(); //[x,y,yaw,x_dot,yaw_dot,x_ddot]
@@ -53,8 +59,7 @@ namespace Filter{
 
     }
 
-    template<typename velType , typename imuType>
-    void Ekf<velType,imuType>::predict(const rclcpp::Time& current_time_)
+    void Ekf::predict(const rclcpp::Time& current_time_)
     {
         A = motion_model_->update(current_time_);
         P = A*P*A.transpose() + Q;
@@ -62,8 +67,7 @@ namespace Filter{
         // std::cout<<"V_x: "<<states_->getStates()["x_dot"]<<" W: "<<states_->getStates()["yaw_dot"]<<" Yaw:"<< states_->getStates()["yaw"] <<" dt:" <<dt.seconds()<<"\n";
     }
 
-    template<typename velType , typename imuType>
-    void Ekf<velType,imuType>::update()
+    void Ekf::update()
     {
         autodiff::VectorXreal& X = states_->getStates();
         // std::cout<<"In the update \n";
@@ -74,14 +78,15 @@ namespace Filter{
         int num_obs_ = 3;
         autodiff::MatrixXreal imu_measurement_(num_obs_ , 1);
 
-        tf2::Quaternion quaternion;
-        tf2::fromMsg(imu_source_->getImuData().orientation, quaternion);
+        // tf2::Quaternion quaternion;
+        // tf2::fromMsg(imu_source_->getImuData().orientation, quaternion);
             
-            // Convert quaternion to euler angles directly
-        double roll, pitch, yaw;
-        tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
+        //     // Convert quaternion to euler angles directly
+        // double roll, pitch, yaw;
+        // tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
 
-        imu_measurement_<<yaw, imu_source_->getImuData().angular_velocity.z ,imu_source_->getImuData().linear_acceleration.x ;
+        // imu_measurement_<<yaw, imu_source_->getImuData().angular_velocity.z ,imu_source_->getImuData().linear_acceleration.x ;
+        imu_measurement_<<0,0,0;
         autodiff::MatrixXreal measurement_residual_ = imu_measurement_ - measurement_prediction_;
         // std::cout<< imu_measurement_<<"  "<< measurement_prediction_ <<" "<<measurement_residual_<<"\n";
         // std::cout<<imu_source_->getImuData().angular_velocity.z<<"\n";
@@ -97,8 +102,7 @@ namespace Filter{
 
     }
 
-    template<typename velType, typename imuType>
-    Eigen::MatrixXd Ekf<velType,imuType>::getStates()
+    Eigen::MatrixXd Ekf::getStates()
     {
         Eigen::MatrixXd X;
         X.setZero(5,1);
@@ -113,6 +117,5 @@ namespace Filter{
     }
 
 
-    template class Ekf<geometry_msgs::msg::Twist, sensor_msgs::msg::Imu>;
 
 } //namespace Filter

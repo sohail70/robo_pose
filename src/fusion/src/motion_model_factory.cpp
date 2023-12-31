@@ -10,12 +10,12 @@ namespace Filter{
 
     std::unique_ptr<MotionModel> MotionModelFactory::createModel(ModelType type_ , StateSpace* states_)
     {
-        std::unordered_map<int, Creator>::iterator it = creators.find(static_cast<int>(type_));
+        std::unordered_map<int, Creator>::iterator it_ = creators.find(static_cast<int>(type_));
 
-        if(it != creators.end())
+        if(it_ != creators.end())
         {
-            it->second()->setStates(states_);
-            return it->second();
+            it_->second()->setStates(states_);
+            return it_->second();
         }
         return nullptr;
 

@@ -98,6 +98,10 @@ TODO: take care of Q matrix . it shouldn't keep goind up if we are not moving I 
 TODO: propgate equation in motion model needs reconsideration. mainly motion model velocity commands may get updated by the output of the ekf if its being updated by or Not. mind the jacobian. changing the equation messes up the jacobian
 TODO: https://automaticaddison.com/sensor-fusion-using-the-robot-localization-package-ros-2/ ---> test it with your pkg and robot_locaziation ros pkg
 TODO: check the config file of ekf.yaml and get ideas --> another thing:https://github.com/cra-ros-pkg/robot_localization/issues/249 , another thing: have the full states specified but in the matricies put zero (i guess H)
+TODO: make it so that the update of ekf happens if the meas data is available
+TODO: the observation sources shouldn't be in the ekf templates! it should be optional so if we have an observation it'd correct the states else we only have predcition step
+TODO: changed the api of ekf and added setMotionModel instead of gettting it in the constructor
+TODO: created the filter node to get the parameters of the sensor topics and states. so create a class memebr var to utilize them. aslo finish the fusion factory and also figure out a elognat way to communicate the sensors data without the template thing
 Ekf is template base so the test_ekf.cpp would give me errors on creating ekf because ekf.hpp is not visiible ---> Template classes need to have their implementation visible during compilation
 solution --> 
 Option 1: Move Entire Template Implementation to Header

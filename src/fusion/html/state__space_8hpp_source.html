@@ -85,8 +85,51 @@ $(document).ready(function(){initNavTree('state__space_8hpp_source.html',''); in
 <div class="title">state_space.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<a href="state__space_8hpp.html">Go to the documentation of this file.</a><div class="fragment"></div><!-- fragment --></div><!-- contents -->
+<a href="state__space_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="preprocessor">#ifndef STATE_SPACE_HPP</span></div>
+<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="preprocessor">#define STATE_SPACE_HPP</span></div>
+<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160; </div>
+<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#include&lt;unordered_map&gt;</span></div>
+<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#include&lt;vector&gt;</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#include&lt;iostream&gt;</span></div>
+<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="preprocessor">#include&lt;autodiff/forward/real.hpp&gt;</span></div>
+<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;autodiff/forward/real/eigen.hpp&gt;</span></div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespaceFilter.html">Filter</a>{</div>
+<div class="line"><a name="l00010"></a><span class="lineno"><a class="line" href="classFilter_1_1StateSpace.html">   10</a></span>&#160;    <span class="keyword">class  </span><a class="code" href="classFilter_1_1StateSpace.html">StateSpace</a></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;    {</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;            <a class="code" href="classFilter_1_1StateSpace.html#a2428562b5d2828dabc84eb8015ed6321">StateSpace</a>(std::vector&lt;std::string&gt; );</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;            <span class="keywordtype">void</span> <a class="code" href="classFilter_1_1StateSpace.html#a9870532d97df166395c5fc1bd97f7322">updateStates</a>(std::vector&lt;double&gt; );</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;            autodiff::VectorXreal&amp; <a class="code" href="classFilter_1_1StateSpace.html#a0c89224f0bb8c85da10c2125ad5c8030">getStates</a>();</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;            std::unordered_map&lt;std::string,int&gt;&amp; <a class="code" href="classFilter_1_1StateSpace.html#aacdefda564e2e49ced6a3db99655da9a">getStateOrder</a>();</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;        <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00019"></a><span class="lineno"><a class="line" href="classFilter_1_1StateSpace.html#a17adbdfa3100d118d7b29b2dc0f49e18">   19</a></span>&#160;            std::unordered_map&lt;std::string,int&gt; <a class="code" href="classFilter_1_1StateSpace.html#a17adbdfa3100d118d7b29b2dc0f49e18">states_name_</a>;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;            <span class="comment">// std::vector&lt;std::string&gt; state_order_; </span></div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classFilter_1_1StateSpace.html#a800229cebf2bace2ae5171f2d8d57701">   21</a></span>&#160;            autodiff::VectorXreal <a class="code" href="classFilter_1_1StateSpace.html#a800229cebf2bace2ae5171f2d8d57701">states_</a>;</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;    };</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;} <span class="comment">//namespace Filter</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#endif</span></div>
+</div><!-- fragment --></div><!-- contents -->
 </div><!-- doc-content -->
+<div class="ttc" id="aclassFilter_1_1StateSpace_html_a800229cebf2bace2ae5171f2d8d57701"><div class="ttname"><a href="classFilter_1_1StateSpace.html#a800229cebf2bace2ae5171f2d8d57701">Filter::StateSpace::states_</a></div><div class="ttdeci">autodiff::VectorXreal states_</div><div class="ttdef"><b>Definition:</b> state_space.hpp:21</div></div>
+<div class="ttc" id="aclassFilter_1_1StateSpace_html_a2428562b5d2828dabc84eb8015ed6321"><div class="ttname"><a href="classFilter_1_1StateSpace.html#a2428562b5d2828dabc84eb8015ed6321">Filter::StateSpace::StateSpace</a></div><div class="ttdeci">StateSpace(std::vector&lt; std::string &gt;)</div><div class="ttdef"><b>Definition:</b> state_space.cpp:4</div></div>
+<div class="ttc" id="anamespaceFilter_html"><div class="ttname"><a href="namespaceFilter.html">Filter</a></div><div class="ttdef"><b>Definition:</b> car.cpp:3</div></div>
+<div class="ttc" id="aclassFilter_1_1StateSpace_html_a9870532d97df166395c5fc1bd97f7322"><div class="ttname"><a href="classFilter_1_1StateSpace.html#a9870532d97df166395c5fc1bd97f7322">Filter::StateSpace::updateStates</a></div><div class="ttdeci">void updateStates(std::vector&lt; double &gt;)</div><div class="ttdef"><b>Definition:</b> state_space.cpp:18</div></div>
+<div class="ttc" id="aclassFilter_1_1StateSpace_html_aacdefda564e2e49ced6a3db99655da9a"><div class="ttname"><a href="classFilter_1_1StateSpace.html#aacdefda564e2e49ced6a3db99655da9a">Filter::StateSpace::getStateOrder</a></div><div class="ttdeci">std::unordered_map&lt; std::string, int &gt; &amp; getStateOrder()</div><div class="ttdef"><b>Definition:</b> state_space.cpp:33</div></div>
+<div class="ttc" id="aclassFilter_1_1StateSpace_html_a0c89224f0bb8c85da10c2125ad5c8030"><div class="ttname"><a href="classFilter_1_1StateSpace.html#a0c89224f0bb8c85da10c2125ad5c8030">Filter::StateSpace::getStates</a></div><div class="ttdeci">autodiff::VectorXreal &amp; getStates()</div><div class="ttdef"><b>Definition:</b> state_space.cpp:28</div></div>
+<div class="ttc" id="aclassFilter_1_1StateSpace_html_a17adbdfa3100d118d7b29b2dc0f49e18"><div class="ttname"><a href="classFilter_1_1StateSpace.html#a17adbdfa3100d118d7b29b2dc0f49e18">Filter::StateSpace::states_name_</a></div><div class="ttdeci">std::unordered_map&lt; std::string, int &gt; states_name_</div><div class="ttdef"><b>Definition:</b> state_space.hpp:19</div></div>
+<div class="ttc" id="aclassFilter_1_1StateSpace_html"><div class="ttname"><a href="classFilter_1_1StateSpace.html">Filter::StateSpace</a></div><div class="ttdef"><b>Definition:</b> state_space.hpp:10</div></div>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>

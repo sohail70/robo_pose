@@ -100,6 +100,15 @@ Inheritance diagram for Filter::Fusion:</div>
 <area shape="rect" href="classFilter_1_1Ekf.html" title=" " alt="" coords="5,80,157,121"/>
 </map>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
+<div class="dynheader">
+Collaboration diagram for Filter::Fusion:</div>
+<div class="dyncontent">
+<div class="center"><img src="classFilter_1_1Fusion__coll__graph.png" border="0" usemap="#Filter_1_1Fusion_coll__map" alt="Collaboration graph"/></div>
+<map name="Filter_1_1Fusion_coll__map" id="Filter_1_1Fusion_coll__map">
+<area shape="rect" title=" " alt="" coords="21,95,125,121"/>
+<area shape="rect" href="classFilter_1_1StateSpace.html" title=" " alt="" coords="5,5,140,32"/>
+</map>
+<center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -113,11 +122,15 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a16f47b561ba639a9425e487e359a547e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40a9dc5b6682e71967cc241d9f90539d"><td class="memItemLeft" align="right" valign="top">virtual Eigen::MatrixXd&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Fusion.html#a40a9dc5b6682e71967cc241d9f90539d">getStates</a> ()=0</td></tr>
 <tr class="separator:a40a9dc5b6682e71967cc241d9f90539d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af45461be7d16e228f5ff052facf728ee"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Fusion.html#af45461be7d16e228f5ff052facf728ee">setStates</a> (<a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *)=0</td></tr>
+<tr class="separator:af45461be7d16e228f5ff052facf728ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a43d3122675414d85c390b40e00bd6216"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classFilter_1_1MotionModel.html">MotionModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Fusion.html#a43d3122675414d85c390b40e00bd6216">motion_model_</a></td></tr>
 <tr class="separator:a43d3122675414d85c390b40e00bd6216"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9f5a360f2829cb2b7d447919d8be4447"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1Fusion.html#a9f5a360f2829cb2b7d447919d8be4447">states_</a></td></tr>
+<tr class="separator:a9f5a360f2829cb2b7d447919d8be4447"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a135d7867f108ac7f013abb34958fc182"></a>
@@ -221,6 +234,34 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="af45461be7d16e228f5ff052facf728ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af45461be7d16e228f5ff052facf728ee">&#9670;&nbsp;</a></span>setStates()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual void Filter::Fusion::setStates </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implemented in <a class="el" href="classFilter_1_1Ekf.html#add6d040e8c8ffdde420a4b02215223ed">Filter::Ekf&lt; velType, imuType &gt;</a>.</p>
+
+</div>
+</div>
 <a id="a16f47b561ba639a9425e487e359a547e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a16f47b561ba639a9425e487e359a547e">&#9670;&nbsp;</a></span>update()</h2>
 
@@ -260,6 +301,28 @@ Protected Attributes</h2></td></tr>
       <table class="memname">
         <tr>
           <td class="memname">std::unique_ptr&lt;<a class="el" href="classFilter_1_1MotionModel.html">MotionModel</a>&gt; Filter::Fusion::motion_model_</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9f5a360f2829cb2b7d447919d8be4447"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f5a360f2829cb2b7d447919d8be4447">&#9670;&nbsp;</a></span>states_</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a>* Filter::Fusion::states_</td>
         </tr>
       </table>
   </td>

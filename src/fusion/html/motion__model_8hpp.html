@@ -89,19 +89,29 @@ $(document).ready(function(){initNavTree('motion__model_8hpp.html',''); initResi
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;Eigen/Dense&gt;</code><br />
 <code>#include &lt;cmath&gt;</code><br />
 <code>#include &lt;rclcpp/rclcpp.hpp&gt;</code><br />
 <code>#include &lt;geometry_msgs/msg/twist.hpp&gt;</code><br />
+<code>#include &lt;<a class="el" href="state__space_8hpp_source.html">fusion/state_space.hpp</a>&gt;</code><br />
+<code>#include &lt;autodiff/forward/real.hpp&gt;</code><br />
+<code>#include &lt;autodiff/forward/real/eigen.hpp&gt;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for motion_model.hpp:</div>
 <div class="dyncontent">
 <div class="center"><img src="motion__model_8hpp__incl.png" border="0" usemap="#include_2fusion_2motion__model_8hpp" alt=""/></div>
 <map name="include_2fusion_2motion__model_8hpp" id="include_2fusion_2motion__model_8hpp">
-<area shape="rect" title=" " alt="" coords="120,5,283,47"/>
-<area shape="rect" title=" " alt="" coords="5,95,85,121"/>
-<area shape="rect" title=" " alt="" coords="110,95,173,121"/>
-<area shape="rect" title=" " alt="" coords="197,95,329,121"/>
-<area shape="rect" title=" " alt="" coords="353,95,575,121"/>
+<area shape="rect" title=" " alt="" coords="436,5,599,47"/>
+<area shape="rect" title=" " alt="" coords="5,177,85,203"/>
+<area shape="rect" title=" " alt="" coords="511,95,614,121"/>
+<area shape="rect" title=" " alt="" coords="638,95,701,121"/>
+<area shape="rect" title=" " alt="" coords="725,95,857,121"/>
+<area shape="rect" title=" " alt="" coords="881,95,1103,121"/>
+<area shape="rect" href="state__space_8hpp.html" title=" " alt="" coords="186,95,358,121"/>
+<area shape="rect" title=" " alt="" coords="345,177,529,203"/>
+<area shape="rect" title=" " alt="" coords="554,169,710,211"/>
+<area shape="rect" title=" " alt="" coords="197,177,321,203"/>
+<area shape="rect" title=" " alt="" coords="110,177,173,203"/>
 </map>
 </div>
 </div><div class="textblock"><div class="dynheader">
@@ -109,18 +119,22 @@ This graph shows which files directly or indirectly include this file:</div>
 <div class="dyncontent">
 <div class="center"><img src="motion__model_8hpp__dep__incl.png" border="0" usemap="#include_2fusion_2motion__model_8hppdep" alt=""/></div>
 <map name="include_2fusion_2motion__model_8hppdep" id="include_2fusion_2motion__model_8hppdep">
-<area shape="rect" title=" " alt="" coords="318,5,481,47"/>
+<area shape="rect" title=" " alt="" coords="379,5,542,47"/>
 <area shape="rect" href="motion__model_8cpp.html" title=" " alt="" coords="5,102,172,129"/>
 <area shape="rect" href="car_8hpp.html" title=" " alt="" coords="197,102,362,129"/>
-<area shape="rect" href="motion__model__factory_8hpp.html" title=" " alt="" coords="257,184,419,225"/>
+<area shape="rect" href="motion__model__factory_8hpp.html" title=" " alt="" coords="254,184,417,225"/>
 <area shape="rect" href="constant__heading__rate_8hpp.html" title=" " alt="" coords="437,95,610,136"/>
-<area shape="rect" href="fusion_8hpp.html" title=" " alt="" coords="641,102,827,129"/>
-<area shape="rect" href="car_8cpp.html" title=" " alt="" coords="140,191,232,218"/>
-<area shape="rect" href="motion__model__factory_8cpp.html" title=" " alt="" coords="229,273,447,300"/>
-<area shape="rect" href="constant__heading__rate_8cpp.html" title=" " alt="" coords="443,184,603,225"/>
-<area shape="rect" href="ekf_8cpp.html" title=" " alt="" coords="723,273,815,300"/>
-<area shape="rect" href="fusion_8cpp.html" title=" " alt="" coords="678,191,790,218"/>
-<area shape="rect" href="ekf_8hpp.html" title=" " alt="" coords="814,191,979,218"/>
+<area shape="rect" href="fusion_8hpp.html" title=" " alt="" coords="637,102,823,129"/>
+<area shape="rect" href="mediator_8hpp.html" title=" " alt="" coords="847,102,1051,129"/>
+<area shape="rect" href="car_8cpp.html" title=" " alt="" coords="137,191,229,218"/>
+<area shape="rect" href="motion__model__factory_8cpp.html" title=" " alt="" coords="227,273,444,300"/>
+<area shape="rect" href="constant__heading__rate_8cpp.html" title=" " alt="" coords="441,184,601,225"/>
+<area shape="rect" href="ekf_8cpp.html" title=" " alt="" coords="685,348,777,375"/>
+<area shape="rect" href="fusion_8cpp.html" title=" " alt="" coords="675,191,787,218"/>
+<area shape="rect" href="ekf_8hpp.html" title=" " alt="" coords="742,273,907,300"/>
+<area shape="rect" href="mediator_8cpp.html" title=" " alt="" coords="862,191,993,218"/>
+<area shape="rect" href="sensor__data_8hpp.html" title=" " alt="" coords="1017,184,1177,225"/>
+<area shape="rect" href="sensor__data_8cpp.html" title=" " alt="" coords="1021,273,1172,300"/>
 </map>
 </div>
 </div>

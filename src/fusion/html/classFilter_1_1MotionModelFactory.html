@@ -97,8 +97,8 @@ $(document).ready(function(){initNavTree('classFilter_1_1MotionModelFactory.html
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a7eb053bee4f55a2678d4bd4f380faa44"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1MotionModelFactory.html#a7eb053bee4f55a2678d4bd4f380faa44">MotionModelFactory</a> ()</td></tr>
 <tr class="separator:a7eb053bee4f55a2678d4bd4f380faa44"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8436bf82c505b8e86a64a66f3b6df307"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classFilter_1_1MotionModel.html">MotionModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1MotionModelFactory.html#a8436bf82c505b8e86a64a66f3b6df307">createModel</a> (<a class="el" href="namespaceFilter.html#a193e1769c5d0782f527a6a59ba04e93e">ModelType</a> type)</td></tr>
-<tr class="separator:a8436bf82c505b8e86a64a66f3b6df307"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed1a9407dd2f03e1ac16bf113a2900a4"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classFilter_1_1MotionModel.html">MotionModel</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classFilter_1_1MotionModelFactory.html#aed1a9407dd2f03e1ac16bf113a2900a4">createModel</a> (<a class="el" href="namespaceFilter.html#a193e1769c5d0782f527a6a59ba04e93e">ModelType</a>, <a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *)</td></tr>
+<tr class="separator:aed1a9407dd2f03e1ac16bf113a2900a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pri-types"></a>
 Private Types</h2></td></tr>
@@ -152,8 +152,8 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a8436bf82c505b8e86a64a66f3b6df307"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8436bf82c505b8e86a64a66f3b6df307">&#9670;&nbsp;</a></span>createModel()</h2>
+<a id="aed1a9407dd2f03e1ac16bf113a2900a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed1a9407dd2f03e1ac16bf113a2900a4">&#9670;&nbsp;</a></span>createModel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -162,8 +162,18 @@ Private Attributes</h2></td></tr>
           <td class="memname">std::unique_ptr&lt; <a class="el" href="classFilter_1_1MotionModel.html">MotionModel</a> &gt; Filter::MotionModelFactory::createModel </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespaceFilter.html#a193e1769c5d0782f527a6a59ba04e93e">ModelType</a>&#160;</td>
-          <td class="paramname"><em>type</em></td><td>)</td>
+          <td class="paramname"><em>type_</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="classFilter_1_1StateSpace.html">StateSpace</a> *&#160;</td>
+          <td class="paramname"><em>states_</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
