@@ -1,13 +1,17 @@
 Filter:
   ros__parameters:
     use_sim_time: true
-    test: "hi"
     model_type: 0 # CONSTANT_HEADING_RATE:0   CAR:1
     filter_type: 0 # EKF:0 UKF:1
     states: ["x" , "y" , "yaw" , "x_dot" , "yaw_dot" , "x_ddot"] 
-    sensor_0_topic: "imu"
+    sensor_0_topic: "imu0"
     sensor_0_states: ["yaw_dot" , "x_ddot"]
-    sensor_1_topic: "odom"
-    sensor_1_states: ["x" , "y" , "yaw"]
+    sensor_0_msg: "sensor_msgs::msg::Imu"
+    sensor_1_topic: "imu1"
+    sensor_1_states: ["yaw_dot" , "x_ddot"]
+    sensor_1_msg: "sensor_msgs::msg::Imu"
+    sensor_2_topic: "odom0"
+    sensor_2_states: ["x" , "y" , "yaw"]
+    sensor_2_msg: "nav_msgs::msg::Odom"
 
     #what if we also needed a measurement model like for lidar which doesn't see the states directly and we need linearization --> future work

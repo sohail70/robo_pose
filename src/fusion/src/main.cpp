@@ -6,7 +6,7 @@ int main(int argc , char* argv[])
 
     rclcpp::NodeOptions options_;
     options_.allow_undeclared_parameters(false);
-    auto node = std::make_shared<Filter::FilterNode>(options_);
+    auto filter_node_ = std::make_shared<Filter::FilterNode>(options_);
 
     rclcpp::Rate loop_rate(10);
     // auto names = node->getStateSpace();
@@ -14,10 +14,11 @@ int main(int argc , char* argv[])
     // {
     //    RCLCPP_INFO(node->get_logger(),"alo %s" , (*i).c_str());
     // }
-    // while(rclcpp::ok()) 
-    // {
-    //     rclcpp::spin_some(node);
-    //     loop_rate.sleep();
-    // }
+    while(rclcpp::ok()) 
+    {
+        RCLCPP_INFO(filter_node_->get_logger(),"working");
+        rclcpp::spin_some(filter_node_);
+        loop_rate.sleep();
+    }
     rclcpp::shutdown();
 }

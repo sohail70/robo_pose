@@ -5,6 +5,7 @@
     <xacro:include filename="gazebo_control.xacro" />
     <!-- <xacro:include filename="control.urdf.xacro" /> -->
     <xacro:include filename="lidar.xacro" />
-    <xacro:include filename="imu.xacro" />
+    <xacro:include filename="imu0.xacro" />
+    <xacro:include filename="imu1.xacro" />
 
 </robot>

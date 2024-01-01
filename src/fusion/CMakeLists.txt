@@ -50,7 +50,7 @@ add_library(
   src/sensor_data.cpp
   src/mediator.cpp
 )
-ament_target_dependencies(sensor_data rclcpp geometry_msgs sensor_msgs )
+ament_target_dependencies(sensor_data rclcpp geometry_msgs sensor_msgs std_msgs nav_msgs)
 
 add_library(
   fusemuse
@@ -59,7 +59,7 @@ add_library(
   src/fusion.cpp
   src/ekf.cpp
 )
-ament_target_dependencies(fusemuse rclcpp)
+ament_target_dependencies(fusemuse rclcpp geometry_msgs sensor_msgs )
 target_link_libraries(fusemuse motion sensor_data Eigen3::Eigen)
 
 
