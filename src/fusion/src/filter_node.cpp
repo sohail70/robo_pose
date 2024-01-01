@@ -21,7 +21,7 @@ namespace Filter{
             this->get_parameter(sensor_states_param, sensor_states);
             this->get_parameter(sensor_topic_param, sensor_topic);
             this->get_parameter(sensor_msg_type_param, msg_type);
-            if (sensor_states.empty() || sensor_topic.empty())
+            if (sensor_states.empty() || sensor_topic.empty() || msg_type.empty())
             {
                 break; 
             }
@@ -32,6 +32,8 @@ namespace Filter{
                 RCLCPP_INFO(this->get_logger() , "--- %s" ,state.c_str() );
             }
             RCLCPP_INFO(this->get_logger() , "topic: %s" ,sensor_topic.c_str() );
+            sensor_states_[sensor_topic] = sensor_states;
+
             //////////////////////
             //create subscription
             if(msg_type == "sensor_msgs::msg::Imu")
@@ -53,8 +55,6 @@ namespace Filter{
             else{
                 RCLCPP_INFO(this->get_logger() , "This type is not implemented yet");
             }
-
-
             ////////////////
             sensor_id++;
         }
@@ -82,6 +82,37 @@ namespace Filter{
     void FilterNode::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg , std::string topic_name_)
     {
         RCLCPP_INFO(this->get_logger() , "imu callback: %s" , topic_name_.c_str());
+
+        std::vector<double> data; data.resize(2);
+        data[0] = msg->angular_velocity.z;
+        data[1] = msg->linear_acceleration.x;
+
+        Observations current_obs_;
+        current_obs_.time_ = msg->header.stamp;
+        // RCLCPP_INFO(this->get_logger() , "Time:%f " , current_obs_.time_.seconds()); //rclcpp::Time store the double variable as seconod so no worries about the nano seconds stuff i guess
+        auto index = states_->getStateOrder();
+        current_obs_.states_.setZero(index.size());
+        for (auto sensor_state_ : sensor_states_[topic_name_])
+        {
+            auto it = index.find(sensor_state_);
+            if (sensor_state_ == "yaw_dot")
+            {
+                current_obs_.states_(it->second) = msg->angular_velocity.z;
+            }
+            else if (sensor_state_ == "x_ddot")
+            {
+                current_obs_.states_(it->second) = msg->linear_acceleration.x;
+            }
+            else{
+
+            }
+        }
+        // for(int i = 0 ; i <current_obs_.states_.size(); i++)
+        // {
+        //     RCLCPP_INFO(this->get_logger() , "obs: %f" , current_obs_.states_(i));
+        // }
+
+        observations_.push(current_obs_);
     }    
 
 

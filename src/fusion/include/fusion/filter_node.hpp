@@ -16,7 +16,7 @@
 #include<geometry_msgs/msg/pose2_d.hpp>
 #include<nav_msgs/msg/odometry.hpp>
 #include<sensor_msgs/msg/imu.hpp>
-#include<queue.hpp>
+#include<queue>
 namespace Filter{
     class FilterNode: public rclcpp::Node{
         public:
@@ -32,6 +32,7 @@ namespace Filter{
             std::unique_ptr<FilterFactory> filter_factory_;
             std::unique_ptr<Fusion> filter_;
 
+            std::unordered_map<std::string , std::vector<std::string>> sensor_states_;
             std::vector<rclcpp::SubscriptionBase::SharedPtr> sensor_subs_;
             // rclcpp::Subscription<sensor_msgs::msg::Imu>::SharedPtr imu_callback_;
             // rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_callback_;

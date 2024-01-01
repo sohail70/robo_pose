@@ -5,7 +5,7 @@ Filter:
     filter_type: 0 # EKF:0 UKF:1
     states: ["x" , "y" , "yaw" , "x_dot" , "yaw_dot" , "x_ddot"] 
     sensor_0_topic: "imu0"
-    sensor_0_states: ["yaw_dot" , "x_ddot"]
+    sensor_0_states: ["x_ddot" , "yaw_dot"]
     sensor_0_msg: "sensor_msgs::msg::Imu"
     sensor_1_topic: "imu1"
     sensor_1_states: ["yaw_dot" , "x_ddot"]
