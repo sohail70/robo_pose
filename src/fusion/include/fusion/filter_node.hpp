@@ -16,7 +16,7 @@
 #include<geometry_msgs/msg/pose2_d.hpp>
 #include<nav_msgs/msg/odometry.hpp>
 #include<sensor_msgs/msg/imu.hpp>
-
+#include<queue.hpp>
 namespace Filter{
     class FilterNode: public rclcpp::Node{
         public:
@@ -39,7 +39,17 @@ namespace Filter{
 
             void imuCallback(const sensor_msgs::msg::Imu::SharedPtr  , std::string );
             void odomCallback(const nav_msgs::msg::Odometry::SharedPtr , std::string);
-            
+
+            struct Observations{
+                rclcpp::Time time_;
+                autodiff::VectorXreal states_;
+                bool operator<(const Observations& other) const{
+                    return time_<other.time_; //lower time has priority
+                }
+            };
+            std::priority_queue<Observations>  observations_; 
+
+
 
     };
 } // namespace Filter
