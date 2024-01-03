@@ -9,7 +9,7 @@ namespace Filter{
 
     void ConstantHeadingRate::init()
     {
-        previous_time_ = rclcpp::Clock().now();
+        // previous_time_ = rclcpp::Clock().now();
     }
 
     autodiff::VectorXreal ConstantHeadingRate::propagate(const autodiff::VectorXreal& state)
@@ -21,9 +21,9 @@ namespace Filter{
         newState(0) = state(index["x"]) + state(index["x_dot"]) * cos(state(index["yaw"])) * dt; // Update x
         newState(1) = state(index["y"]) + state(index["x_dot"]) * sin(state(index["yaw"])) * dt; // Update y
         newState(2) = state(index["yaw"]) + state(index["yaw_dot"]) * dt;                 // Update yaw angle
-        newState(3) = state(index["x_dot"]) + state(index["x_ddot"])*dt;                                 
+        newState(3) = state(index["x_dot"]);// + state(index["x_ddot"])*dt;                                 
         newState(4) = state(index["yaw_dot"]);                                
-        newState(5) = state(index["x_ddot"]);
+        // newState(5) = state(index["x_ddot"]);
         return newState;
     }
 
@@ -42,7 +42,7 @@ namespace Filter{
 
     Eigen::MatrixXd ConstantHeadingRate::update(const rclcpp::Time& current_time_)
     {
-
+        static rclcpp::Time previous_time_ = current_time_;
         dt_ = current_time_ - previous_time_;
         autodiff::VectorXreal& state_ = states_->getStates();
         autodiff::VectorXreal newState; 
@@ -58,7 +58,7 @@ namespace Filter{
         for(int i = 0 ; i<state_.size() ; i++)
             state_(i) = newState(i).val();
         normalizeAngle(states_->getStates()[states_->getStateOrder()["yaw"]].val());
-
+        // RCLCPP_INFO_STREAM(rclcpp::get_logger("STATE") , state_);
 
         return J;  //retrun nazari seg fault mide!!!!
     }
@@ -79,7 +79,7 @@ namespace Filter{
         states_->getStates()[states_->getStateOrder()["yaw_dot"]] = twist_.angular.z;
     }
 
-    void ConstantHeadingRate::setStates(StateSpace* states_)
+    void ConstantHeadingRate::setStates(std::shared_ptr<StateSpace> states_)
     {
         this->states_ = states_;
     }

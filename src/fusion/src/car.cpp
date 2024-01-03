@@ -21,7 +21,7 @@ namespace Filter{
     void Car::setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& twist_)
     {}
 
-    void Car::setStates(StateSpace* states_)
+    void Car::setStates(std::shared_ptr<StateSpace> states_)
     {}
 
     Eigen::MatrixXd Car::getJacobian()

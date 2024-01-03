@@ -31,7 +31,7 @@ namespace Filter{
                 AngularVelocity angular_velocity_;
                 rclcpp::Duration dt_;
                 rclcpp::Time previous_time_;
-                StateSpace* states_;
+                std::shared_ptr<StateSpace> states_;
             public:
                 MotionModel();
                 virtual ~MotionModel();
@@ -41,7 +41,7 @@ namespace Filter{
                 virtual void setVelocity(const Filter::Velocity& ) = 0;
                 virtual void setAngularVelocity(const Filter::AngularVelocity& ) = 0;
                 virtual void setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& ) = 0;
-                virtual void setStates(StateSpace* states_) = 0;
+                virtual void setStates(std::shared_ptr<StateSpace> states_) = 0;
                 virtual Eigen::MatrixXd getJacobian() = 0;
                 virtual rclcpp::Duration getDt() = 0;
         };

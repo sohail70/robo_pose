@@ -104,6 +104,11 @@ TODO: changed the api of ekf and added setMotionModel instead of gettting it in 
 TODO: created the filter node to get the parameters of the sensor topics and states. so create a class memebr var to utilize them. aslo finish the fusion factory and also figure out a elognat way to communicate the sensors data without the template thing
 TODO: enqueu the observations
 TODO: make the H matrix like a num_states*num_states matrix then make some of the diags 1 based on the sensors state and then createa full states observation and make the one that you don't zero --> this way the states that is not being observed won't get updated
+TODO: each specific measurement maybe should have its own H matrix instead of creating a constant H matrix and just make it zero and one based on what state the sensor provides Or not!
+TODO: inverse of a matrix with zero on its diagonal would be nan i used a work around and defined R to be fully diag but thats not correct. find a way to just find an inverse of a sub matrix using eigen
+TODO: also now you don't have cmd_vel subscriber! add it or go with the odom --> you can use use_control config file to subscribe to cmd_vel and then use the mediator to communicate!
+TODO: bad thing about map is you might accidentally add to it! like for example in the getState of ekf so the best thing to do is either do not depend on map size or make the getstateorder func in state space a copy not a reference!
+TODO: take care of adding or removing a state from the config file right now i removed x_ddot!
 Ekf is template base so the test_ekf.cpp would give me errors on creating ekf because ekf.hpp is not visiible ---> Template classes need to have their implementation visible during compilation
 solution --> 
 Option 1: Move Entire Template Implementation to Header
@@ -124,3 +129,21 @@ autodiff probelm with member class functions for jacobian--> https://github.com/
 important thing about the jacobian is when you update the states after the jacobian functino you have to do it one by one and USE val() function or else it gives wrong jacobina calculations!
 
 https://answers.ros.org/question/370980/3d-pose-with-imu-and-odometry-using-robot-localization/
+
+
+
+
+gdb : 
+https://juraph.com/miscellaneous/ros2_and_gdb/
+
+
+
+
+for debuging run this in the terminal:
+first build the project : colcon build --cmake-args -DCMAKE_BUILD_TYPE=Debug
+ros2 run --prefix  'gdbserver localhost:3000'  fusion fusion --ros-args --params-file src/fusion/params/ekf.yaml
+and then go the main.cpp and hit play button
+
+
+or for a direct gdb:
+ros2 run --prefix 'gdb -ex run --args' fusion fusion --ros-args --params-file src/fusion/params/ekf.yaml   

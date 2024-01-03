@@ -8,14 +8,15 @@ namespace Filter{
        creators[static_cast<int>(ModelType::CAR)] = [](){return std::make_unique<Car>();};
     }
 
-    std::unique_ptr<MotionModel> MotionModelFactory::createModel(ModelType type_ , StateSpace* states_)
+    std::unique_ptr<MotionModel> MotionModelFactory::createModel(ModelType type_ , std::shared_ptr<StateSpace> states_)
     {
         std::unordered_map<int, Creator>::iterator it_ = creators.find(static_cast<int>(type_));
 
         if(it_ != creators.end())
         {
-            it_->second()->setStates(states_);
-            return it_->second();
+            auto model_ = it_->second();
+            model_->setStates(states_);
+            return model_;
         }
         return nullptr;
 

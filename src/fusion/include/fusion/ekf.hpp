@@ -21,10 +21,10 @@ namespace Filter{
             Ekf(std::unique_ptr<MotionModel> );
             virtual void initialize() override;
             virtual void predict(const rclcpp::Time& ) override;
-            virtual void update() override;
+            virtual void update(const Observations& ) override;
             virtual void setMotionModel(std::unique_ptr<MotionModel> ) override;
             virtual Eigen::MatrixXd getStates() override;
-            virtual void setStates(StateSpace* ) override;
+            virtual void setStates(std::shared_ptr<StateSpace> ) override;
 
     };
 } //namespace Filter

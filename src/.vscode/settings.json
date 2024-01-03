@@ -73,6 +73,7 @@
         "numeric": "cpp",
         "optional": "cpp",
         "shared_mutex": "cpp",
-        "variant": "cpp"
+        "variant": "cpp",
+        "cinttypes": "cpp"
     }
 }

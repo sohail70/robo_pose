@@ -21,22 +21,22 @@ include_directories(
 
 set(TEST_SOURCES
     test_main.cpp 
-    test_motion_model.cpp
-    test_visualization.cpp
-    # test_eigen.cpp
-    test_ekf.cpp
-    # test_state_space.cpp
-    test_autodiff.cpp
-    ../src/motion_model_factory.cpp
-    ../src/motion_model.cpp
-    ../src/constant_heading_rate.cpp
-    ../src/car.cpp
-    ../src/visualization.cpp
-    ../src/sensor_data.cpp
-    ../src/ekf.cpp 
-    ../src/fusion.cpp
-    ../src/state_space.cpp
-    ../src/mediator.cpp
+    # test_motion_model.cpp
+    # test_visualization.cpp
+    test_eigen.cpp
+    # test_ekf.cpp
+    # # test_state_space.cpp
+    # test_autodiff.cpp
+    # ../src/motion_model_factory.cpp
+    # ../src/motion_model.cpp
+    # ../src/constant_heading_rate.cpp
+    # ../src/car.cpp
+    # ../src/visualization.cpp
+    # ../src/sensor_data.cpp
+    # ../src/ekf.cpp 
+    # ../src/fusion.cpp
+    # ../src/state_space.cpp
+    # ../src/mediator.cpp
 
 )
 

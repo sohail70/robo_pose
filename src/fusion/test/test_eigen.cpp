@@ -64,5 +64,16 @@ TEST(Eigen, simple)
     //           << "y = " << y << "\n"
     //           << "y' = " << y.derivatives()[0] << "\n";
     /////////////////////////////////////////////////
+    std::cout<<"Computing psuedo inverse becaues zero in the diagonal causes nans \n";
+    Eigen::MatrixXd mat;
+    mat.setZero(6,6);
+    mat(0,0) = 2;
+    mat(1,1) = 0;
+    mat(2,2) = 1;
+    mat(3,3) = 0;
+    mat(4,4) = 1;
+    mat(5,5) = 0;
+    // Eigen::MatrixXd mat2 = mat.block<3,3>(3,3);
+    std::cout<<mat.completeOrthogonalDecomposition().pseudoInverse();
 
 }

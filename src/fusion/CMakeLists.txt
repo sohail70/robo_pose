@@ -60,7 +60,7 @@ add_library(
   src/ekf.cpp
 )
 ament_target_dependencies(fusemuse rclcpp geometry_msgs sensor_msgs )
-target_link_libraries(fusemuse motion sensor_data Eigen3::Eigen)
+target_link_libraries(fusemuse motion sensor_data Eigen3::Eigen visualization)
 
 
 

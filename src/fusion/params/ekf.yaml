@@ -1,14 +1,16 @@
 Filter:
   ros__parameters:
-    use_sim_time: true
+    use_sim_time: true #has effect on this->now() time in a ros2 node if its true you need to run gazebo for the time counter to go up
+    rate: 100
     model_type: 0 # CONSTANT_HEADING_RATE:0   CAR:1
     filter_type: 0 # EKF:0 UKF:1
-    states: ["x" , "y" , "yaw" , "x_dot" , "yaw_dot" , "x_ddot"] 
+    use_control: false
+    states: ["x" , "y" , "yaw" , "x_dot" , "yaw_dot"] 
     sensor_0_topic: "imu0"
-    sensor_0_states: ["x_ddot" , "yaw_dot"]
+    sensor_0_states: ["yaw_dot"]
     sensor_0_msg: "sensor_msgs::msg::Imu"
     sensor_1_topic: "imu1"
-    sensor_1_states: ["yaw_dot" , "x_ddot"]
+    sensor_1_states: ["yaw_dot"]
     sensor_1_msg: "sensor_msgs::msg::Imu"
     sensor_2_topic: "odom0"
     sensor_2_states: ["x" , "y" , "yaw"]
