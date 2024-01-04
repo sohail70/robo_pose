@@ -13,7 +13,7 @@ namespace Filter{
             StateSpace(std::vector<std::string> );
             void updateStates(std::vector<double> );
             autodiff::VectorXreal& getStates();
-            std::unordered_map<std::string,int>& getStateOrder();
+            const std::unordered_map<std::string,int>& getStateOrder();
 
         public:
             std::unordered_map<std::string,int> states_name_;

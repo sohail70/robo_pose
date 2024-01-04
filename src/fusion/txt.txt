@@ -110,6 +110,10 @@ TODO: also now you don't have cmd_vel subscriber! add it or go with the odom -->
 TODO: bad thing about map is you might accidentally add to it! like for example in the getState of ekf so the best thing to do is either do not depend on map size or make the getstateorder func in state space a copy not a reference!
 TODO: take care of adding or removing a state from the config file right now i removed x_ddot!
 Ekf is template base so the test_ekf.cpp would give me errors on creating ekf because ekf.hpp is not visiible ---> Template classes need to have their implementation visible during compilation
+TODO: using the constant acc for velocity estimation and using imu is yeilding bad result due to not being able to stop the robot after giving stop command because acc is 0 when the robot is mvoing with constant vel and in rest so distingusing between the two is important 
+      maybe i can use the cmd_vel topic just
+
+
 solution --> 
 Option 1: Move Entire Template Implementation to Header
 Option 2: Explicitly Instantiate Templates at the cpp file -->template class Ekf<geometry_msgs::msg::Twist, sensor_msgs::msg::Imu>;
@@ -147,3 +151,25 @@ and then go the main.cpp and hit play button
 
 or for a direct gdb:
 ros2 run --prefix 'gdb -ex run --args' fusion fusion --ros-args --params-file src/fusion/params/ekf.yaml   
+
+-----------
+make the unordered map const and here is a conversation between me and chatgpt:
+"
+why index.at("x_dot") works but index["x_dot"] doens't???
+mind you the index is const unordered map
+ChatGPT
+Ah, I see where the confusion lies. The difference between index.at("x_dot") and index["x_dot"] in a const unordered map lies in how they handle non-existing keys.
+
+index.at("x_dot"): This method is safe and will throw an std::out_of_range exception if the key doesn't exist in the map. This is good for explicitly handling cases where the key might not be present.
+
+index["x_dot"]: This method is not available in a const-qualified context of the unordered map. In a const map, operator[] is disabled for inserting or modifying elements because it can potentially create a new element if the key doesn't exist, which isn't allowed in a const-qualified context.
+"
+
+kholase inke vaghti const ref bargardoni az getStateOrder bayad az index.at use kuni chun in safe hast ke age nabood chizi ijad nakune! --> compiler's intelligence leaves at awe sometimes!
+
+
+good info on only imu --> https://answers.ros.org/question/232794/can-i-use-robot_localization-package-with-only-imu-data-if-i-couldhow-to-config-the-package/
+so if you wanna use only imu you should add bias error as state!
+
+info regarding lidar localization ==> also really good debuging approach is in there
+https://github.com/cra-ros-pkg/robot_localization/issues/370

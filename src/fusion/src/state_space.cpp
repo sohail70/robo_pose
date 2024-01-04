@@ -13,7 +13,6 @@ namespace Filter{
             states_name_[state_name_] = index;
             index++;
         }
-        RCLCPP_INFO(rclcpp::get_logger("CONSTRUCTOR") , "SIZE: %i" , states_name_.size());
 
     }
 
@@ -26,14 +25,13 @@ namespace Filter{
             index++;
         }
     }
-
+    // TODO: This should be const ref but for now im using it to update the states_ in the constant heading rate function and ekf so it'd be best to use updatesStates to update things!
     autodiff::VectorXreal& StateSpace::getStates()
     {
         return states_;
     }
 
-    std::unordered_map<std::string,int>& StateSpace::getStateOrder() {
-        RCLCPP_INFO(rclcpp::get_logger("GETSTATEORDER FUNCTION") , "SIZE: %i" , states_name_.size());
+    const std::unordered_map<std::string,int>& StateSpace::getStateOrder() {
         return states_name_;
     }
 

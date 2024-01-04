@@ -1,9 +1,6 @@
 #include<fusion/ekf.hpp>
 #include<fusion/constant_heading_rate.hpp>
 
-#include<tf2/LinearMath/Quaternion.h>
-#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
-#include <geometry_msgs/msg/quaternion.hpp>
 namespace Filter{
 
     Ekf::Ekf()
@@ -47,10 +44,10 @@ namespace Filter{
         // the following number i get from /odom topic of the diff drive controller  which is 6by6 cov matrix for x,y,z,roll,pitch.yaw and in the twist their dots also can be found. i got what ever is related to my state space
         Q(0,0) = 1.0e-5;
         Q(1,1) = 1.0e-5;
-        Q(2,2) = 1.0e-3;
-        Q(3,3) = 1.0e-5;
-        Q(4,4) = 1.0e-3;
-        // Q(5,5) = 1.0e-8;
+        Q(2,2) = 100;
+        Q(3,3) = 0.0;
+        Q(4,4) = 100;
+        Q(5,5) = 1.0e-8;
         // H = Eigen::MatrixXd(num_obs_ , num_states_);
         // H<< 0,0,1,0,0,0,0,0,0,1; //we extract the yaw dot from imu . lets not use the oienation (yaw) becase i think that data is redudnat and not available directly! but im not sure
         // H<<0,0,1,0,0,0 ,0,0,0,0,1,0 ,0,0,0,0,0,1; //we extract the yaw dot from imu . lets not use the oienation (yaw) becase i think that data is redudnat and not available directly! but im not sure
@@ -64,7 +61,7 @@ namespace Filter{
         // R(2,2) = 4.0e-8;
         // R(3,3) = 4.0e-8;
         R(4,4) = 4.0e-8;
-        // R(5,5) = 4.0e-8;
+        R(5,5) = 10.0e-8;
         // P = Eigen::MatrixXd(num_states_ , num_states_);
         P.setZero(num_states_,num_states_);
         I = Eigen::MatrixXd::Identity(num_states_ , num_states_);
@@ -88,7 +85,7 @@ namespace Filter{
     {
         autodiff::VectorXreal& X = states_->getStates();
         auto H = observation_.H;
-        auto real_measurement = observation_.states_;
+        auto real_measurement_ = observation_.states_;
         // std::cout<<"In the update \n";
         autodiff::MatrixXreal measurement_prediction_ = H*X;
         // std::cout<<H<<"\n \n \n ";
@@ -106,7 +103,7 @@ namespace Filter{
 
         // imu_measurement_<<yaw, imu_source_->getImuData().angular_velocity.z ,imu_source_->getImuData().linear_acceleration.x ;
         // imu_measurement_<<0,0,0;
-        autodiff::MatrixXreal measurement_residual_ = real_measurement - measurement_prediction_;
+        autodiff::MatrixXreal measurement_residual_ = real_measurement_ - measurement_prediction_;
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("A") , H);
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("B") , X);
         // std::cout<< imu_measurement_<<"  "<< measurement_prediction_ <<" "<<measurement_residual_<<"\n";
@@ -117,7 +114,7 @@ namespace Filter{
  
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("C") , innovation_covariance_);
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("C") , kalman_gain_);
-        // std::cout<< imu_measurement_<<"  "<< measurement_prediction_ <<" "<<measurement_residual_<<"\n";
+        // std::cout<<"real ---: \n" <<real_measurement_<<"pred --- \n "<< measurement_prediction_ <<"res -- \n "<<measurement_residual_<<"\n";
         // std::cout<<innovation_covariance_<<"\n";
         // std::cout<<"KALMAN GAIN:\n"<<kalman_gain_<<"\n";
         // std::cout<<"K*res:\n"<<kalman_gain_*measurement_residual_<<"\n";
@@ -129,18 +126,28 @@ namespace Filter{
 
     }
 
-    Eigen::MatrixXd Ekf::getStates()
+    autodiff::VectorXreal Ekf::getStates()
     {
-        Eigen::MatrixXd X;
-        X.setZero(5,1);
-        X<<states_->getStates()[states_->getStateOrder()["x"]].val(),
-           states_->getStates()[states_->getStateOrder()["y"]].val(),
-           states_->getStates()[states_->getStateOrder()["yaw"]].val(),
-           states_->getStates()[states_->getStateOrder()["x_dot"]].val(),
-           states_->getStates()[states_->getStateOrder()["yaw_dot"]].val();
-        //    states_->getStates()[states_->getStateOrder()["x_ddot"]].val();
+        // const auto index = states_->getStateOrder();
+        // Eigen::MatrixXd X(index.size() , 1);
+        // for(int i = 0 ; i <index.size() ; i++)
+        // {
+        //     X(i , 1) = 
+        // }
+        // for( auto name: index)
+        // {
+        //     X(index.at(name.first) ,0) = states_->getStates()[name]
+        // }
+        // X<<states_->getStates()[states_->getStateOrder().at("x")].val(),
+        //    states_->getStates()[states_->getStateOrder().at("y")].val(),
+        //    states_->getStates()[states_->getStateOrder().at("yaw")].val(),
+        //    states_->getStates()[states_->getStateOrder().at("x_dot")].val(),
+        //    states_->getStates()[states_->getStateOrder().at("yaw_dot")].val();
+        // //    states_->getStates()[states_->getStateOrder().at("x_ddot")].val();
         
-        return X;
+        // return X;
+
+        return states_->getStates();
     }
 
 

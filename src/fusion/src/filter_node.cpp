@@ -118,7 +118,7 @@ namespace Filter{
         H.setZero(states_->states_.size() , states_->states_.size());
         current_obs_.states_.setZero(states_->states_.size());
         // current_obs_.states_.setZero(index.size());
-        RCLCPP_INFO(rclcpp::get_logger("B") , "SIZE: %i" , index.size());
+        // RCLCPP_INFO(rclcpp::get_logger("B") , "SIZE: %i" , index.size());
         for (auto sensor_state_ : sensor_states_[topic_name_])
         {
             auto it = index.find(sensor_state_);
@@ -129,6 +129,18 @@ namespace Filter{
             else if (sensor_state_ == "x_ddot")
             {
                 current_obs_.states_(it->second) = msg->linear_acceleration.x;
+            }
+            else if ( sensor_state_ =="roll" || sensor_state_ =="pitch" || sensor_state_ == "yaw" ){
+                tf2::Quaternion quaternion;
+                tf2::fromMsg(msg->orientation, quaternion);
+                double roll, pitch, yaw;
+                tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
+                if(sensor_state_ =="roll")
+                    current_obs_.states_(it->second) = roll;
+                else if(sensor_state_ =="pitch")
+                    current_obs_.states_(it->second) = pitch;
+                else if(sensor_state_ =="yaw")
+                    current_obs_.states_(it->second) = yaw;
             }
             else{
 
@@ -141,8 +153,8 @@ namespace Filter{
         //     RCLCPP_INFO(this->get_logger() , "obs: %f" , current_obs_.states_(i));
         // }
         current_obs_.H = H;
-        RCLCPP_INFO_STREAM(this->get_logger() , H);
-        RCLCPP_INFO_STREAM(this->get_logger() , index.size());
+        // RCLCPP_INFO_STREAM(this->get_logger() , H);
+        // RCLCPP_INFO_STREAM(this->get_logger() , index.size());
         observations_.push(current_obs_);
     }    
 
@@ -178,11 +190,11 @@ namespace Filter{
             // RCLCPP_INFO(this->get_logger() , "No obs is in queue %i" , observations_.size());
         }
 
-        Eigen::MatrixXd states_ = filter_->getStates();
+        autodiff::VectorXreal states_ = filter_->getStates();
 
-        pose_.x = states_(0,0);
-        pose_.y = states_(1,0);
-        pose_.theta = states_(2,0);
+        pose_.x = states_(0).val();
+        pose_.y = states_(1).val();
+        pose_.theta = states_(2).val();
         // RCLCPP_INFO(this->get_logger() , "x,y,theta: %f , %f, %f" , pose_.x , pose_.y , pose_.theta);
         visualization_->addArrow(pose_);
         visualization_->publishArrow();

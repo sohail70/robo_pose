@@ -9,6 +9,10 @@
 #include<fusion/state_space.hpp>
 #include<fusion/measurement_model.hpp>
 #include<fusion/observations.hpp>
+#include<tf2/LinearMath/Quaternion.h>
+#include <tf2_geometry_msgs/tf2_geometry_msgs.h>
+#include <geometry_msgs/msg/quaternion.hpp>
+
 namespace Filter{
     class Fusion{
         protected:
@@ -22,7 +26,7 @@ namespace Filter{
             virtual void predict(const rclcpp::Time&) = 0;
             virtual void update(const Observations&) = 0;
             virtual void setMotionModel(std::unique_ptr<MotionModel> ) = 0;
-            virtual Eigen::MatrixXd getStates() = 0;
+            virtual autodiff::VectorXreal getStates() = 0;
             virtual void setStates(std::shared_ptr<StateSpace> ) = 0;
 
 
