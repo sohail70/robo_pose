@@ -112,6 +112,15 @@ TODO: take care of adding or removing a state from the config file right now i r
 Ekf is template base so the test_ekf.cpp would give me errors on creating ekf because ekf.hpp is not visiible ---> Template classes need to have their implementation visible during compilation
 TODO: using the constant acc for velocity estimation and using imu is yeilding bad result due to not being able to stop the robot after giving stop command because acc is 0 when the robot is mvoing with constant vel and in rest so distingusing between the two is important 
       maybe i can use the cmd_vel topic just
+TODO: maybe i should make some codes in the callbacks async. maybe use a timer for them
+TODO: implement logger()
+TODO: maybe visulization should be on another thread (in the timer of the filter node!)
+TODO: take care of Q and R and also add intial position for the states
+TODO: error handling!
+TODO: how to get rid of too many data in the queue? should i delete the old data faster thank the current rate because its highly depandant on the filters rate!
+TODO: implement the odom topic. relying only on imu is not gonna work
+TODO: Its unstable
+
 
 
 solution --> 
@@ -173,3 +182,7 @@ so if you wanna use only imu you should add bias error as state!
 
 info regarding lidar localization ==> also really good debuging approach is in there
 https://github.com/cra-ros-pkg/robot_localization/issues/370
+
+
+regarding stability of ekf:
+https://answers.ros.org/question/373453/robot_localization-imu-yaw-velocity-causes-vertical-drift/

@@ -42,12 +42,12 @@ namespace Filter{
         RCLCPP_INFO(rclcpp::get_logger("EKF") , "2");
         Q.setZero(num_states_ , num_states_);
         // the following number i get from /odom topic of the diff drive controller  which is 6by6 cov matrix for x,y,z,roll,pitch.yaw and in the twist their dots also can be found. i got what ever is related to my state space
-        Q(0,0) = 1.0e-5;
-        Q(1,1) = 1.0e-5;
-        Q(2,2) = 100;
-        Q(3,3) = 0.0;
-        Q(4,4) = 100;
-        Q(5,5) = 1.0e-8;
+        Q(0,0) = 0.05;
+        Q(1,1) = 0.05;
+        Q(2,2) = 0.05;
+        Q(3,3) = 0.05;
+        Q(4,4) = 0.05;
+        Q(5,5) = 0.05;
         // H = Eigen::MatrixXd(num_obs_ , num_states_);
         // H<< 0,0,1,0,0,0,0,0,0,1; //we extract the yaw dot from imu . lets not use the oienation (yaw) becase i think that data is redudnat and not available directly! but im not sure
         // H<<0,0,1,0,0,0 ,0,0,0,0,1,0 ,0,0,0,0,0,1; //we extract the yaw dot from imu . lets not use the oienation (yaw) becase i think that data is redudnat and not available directly! but im not sure
@@ -55,11 +55,11 @@ namespace Filter{
 
         // R = Eigen::MatrixXd(num_obs_ , num_obs_);
         // R.setZero(num_obs_ , num_obs_); //for yaw and yaw_rate
-        R.setZero(num_states_ , num_states_); //for yaw and yaw_rate
-        // R(0,0) = 4.0e-8;
-        // R(1,1) = 4.0e-8;
-        // R(2,2) = 4.0e-8;
-        // R(3,3) = 4.0e-8;
+        R.setZero(num_states_ , num_states_);
+        R(0,0) = 4.0e-8;
+        R(1,1) = 4.0e-8;
+        R(2,2) = 4.0e-8;
+        R(3,3) = 4.0e-8;
         R(4,4) = 4.0e-8;
         R(5,5) = 10.0e-8;
         // P = Eigen::MatrixXd(num_states_ , num_states_);
@@ -119,10 +119,10 @@ namespace Filter{
         // std::cout<<"KALMAN GAIN:\n"<<kalman_gain_<<"\n";
         // std::cout<<"K*res:\n"<<kalman_gain_*measurement_residual_<<"\n";
         X = X + kalman_gain_*measurement_residual_;
-        // P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
-        P = (I-kalman_gain_*H)*P;
+        P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
+        // P = (I-kalman_gain_*H)*P;
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("A") , X);
-
+        // std::cout<<"P: \n"<<P<<"\n --- \n";
 
     }
 

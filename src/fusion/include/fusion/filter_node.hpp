@@ -20,6 +20,14 @@
 #include<fusion/visualization.hpp>
 #include<queue>
 namespace Filter{
+    struct ThreadParams{
+        // rclcpp::Node::SharedPtr node_;
+        std::shared_ptr<Visualization::Visualization> visualization_;
+        // std::mutex visualization_mutex_;
+        // std::condition_variable cv_;
+        // bool ready;
+    };
+
     class FilterNode: public rclcpp::Node{
         public:
             FilterNode(rclcpp::NodeOptions );
@@ -33,7 +41,6 @@ namespace Filter{
             // std::unique_ptr<MessageHub> hub_;
             std::unique_ptr<FilterFactory> filter_factory_;
             std::unique_ptr<Fusion> filter_;
-            std::shared_ptr<Visualization::Visualization> visualization_;
 
             std::unordered_map<std::string , std::vector<std::string>> sensor_states_;
             std::vector<rclcpp::SubscriptionBase::SharedPtr> sensor_subs_;
@@ -46,6 +53,28 @@ namespace Filter{
 
             std::priority_queue<Observations>  observations_; 
             MotionModel* local_motion_model_;
+
+
+            std::shared_ptr<Visualization::Visualization> visualization_;
+            ThreadParams params_;
+            std::thread rviz_marker_;
+            void rviz_marker(ThreadParams* params_) {
+                rclcpp::Rate loop_rate(100);
+                geometry_msgs::msg::Pose2D pose_;
+                while (rclcpp::ok())
+                {
+                    autodiff::VectorXreal states_ = filter_->getStates();
+                    pose_.x = states_(0).val();
+                    pose_.y = states_(1).val();
+                    pose_.theta = states_(2).val();
+                    // RCLCPP_INFO(this->get_logger() , "x,y,theta: %f , %f, %f" , pose_.x , pose_.y , pose_.theta);
+                    // RCLCPP_INFO(this->get_logger() , "state theta 1: %f" , pose_.theta);
+                    params_->visualization_->addArrow(pose_);
+                    params_->visualization_->publishArrow();
+                    params_->visualization_->initialize();
+                    loop_rate.sleep();
+                }
+            }
 
 
 
