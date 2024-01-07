@@ -9,7 +9,7 @@ namespace Filter{
         public:
             ConstantHeadingRate();
             virtual void init() override;
-            virtual Eigen::MatrixXd update(const rclcpp::Time&) override;
+            virtual Eigen::MatrixXd update(const rclcpp::Time& , const rclcpp::Duration& ) override;
             virtual autodiff::VectorXreal propagate(const autodiff::VectorXreal&) override;
             virtual void setVelocity(const Filter::Velocity& ) override;
             virtual void setAngularVelocity(const Filter::AngularVelocity& ) override;

@@ -36,7 +36,7 @@ namespace Filter{
                 MotionModel();
                 virtual ~MotionModel();
                 virtual void init() = 0;
-                virtual Eigen::MatrixXd update(const rclcpp::Time& ) = 0;
+                virtual Eigen::MatrixXd update(const rclcpp::Time&  , const rclcpp::Duration&) = 0;
                 virtual autodiff::VectorXreal propagate(const autodiff::VectorXreal&)=0;
                 virtual void setVelocity(const Filter::Velocity& ) = 0;
                 virtual void setAngularVelocity(const Filter::AngularVelocity& ) = 0;

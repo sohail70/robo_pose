@@ -19,6 +19,12 @@
 #include<fusion/observations.hpp>
 #include<fusion/visualization.hpp>
 #include<queue>
+#include<nav_msgs/msg/odometry.hpp>
+#include<std_msgs/msg/float64.hpp>
+#include<geometry_msgs/msg/transform_stamped.hpp>
+#include<tf2_ros/transform_listener.h>
+#include<tf2_ros/buffer.h>
+
 namespace Filter{
     struct ThreadParams{
         // rclcpp::Node::SharedPtr node_;
@@ -54,12 +60,20 @@ namespace Filter{
             std::priority_queue<Observations>  observations_; 
             MotionModel* local_motion_model_;
 
+            rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr filtered_odom_pub_;
+            nav_msgs::msg::Odometry filtered_odom_;
+            rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr yaw_odom_pub_;
+            rclcpp::Publisher<std_msgs::msg::Float64>::SharedPtr yaw_filter_pub_;
+
+
+            rclcpp::Time previous_update_time_;
+            // rclcpp::Duration dt_;
 
             std::shared_ptr<Visualization::Visualization> visualization_;
             ThreadParams params_;
             std::thread rviz_marker_;
             void rviz_marker(ThreadParams* params_) {
-                rclcpp::Rate loop_rate(100);
+                rclcpp::Rate loop_rate(200);
                 geometry_msgs::msg::Pose2D pose_;
                 while (rclcpp::ok())
                 {
@@ -76,8 +90,8 @@ namespace Filter{
                 }
             }
 
-
-
+            std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
+            std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
     };
 } // namespace Filter
 

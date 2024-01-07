@@ -68,12 +68,12 @@ namespace Filter{
 
     }
 
-    void Ekf::predict(const rclcpp::Time& current_time_)
+    void Ekf::predict(const rclcpp::Time& current_time_ , const rclcpp::Duration& dt_)
     {
         // RCLCPP_INFO(rclcpp::get_logger("a") , "address %p" , static_cast<void*>(this));
 
         if(motion_model_)
-            A = motion_model_->update(current_time_);
+            A = motion_model_->update(current_time_ , dt_);
         else
             RCLCPP_INFO(rclcpp::get_logger("A") , "asda");
         P = A*P*A.transpose() + Q;
@@ -108,21 +108,26 @@ namespace Filter{
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("B") , X);
         // std::cout<< imu_measurement_<<"  "<< measurement_prediction_ <<" "<<measurement_residual_<<"\n";
         // std::cout<<imu_source_->getImuData().angular_velocity.z<<"\n";
+
+        
         autodiff::MatrixXreal innovation_covariance_ = H*P*H.transpose() + R;
-        autodiff::MatrixXreal kalman_gain_ = P*H.transpose()*innovation_covariance_.completeOrthogonalDecomposition().pseudoInverse(); //.inverse() doesn't work because we have 0 in the diagonal due to my design choice of having the full states in the H matrix!
-        // innovation_covariance_.cwiseInverse
+        // autodiff::MatrixXreal kalman_gain_ = P*H.transpose()*innovation_covariance_.completeOrthogonalDecomposition().pseudoInverse(); //.inverse() doesn't work because we have 0 in the diagonal due to my design choice of having the full states in the H matrix!
+        autodiff::MatrixXreal kalman_gain_ = P*H.transpose()*innovation_covariance_.inverse();
  
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("C") , innovation_covariance_);
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("C") , kalman_gain_);
         // std::cout<<"real ---: \n" <<real_measurement_<<"pred --- \n "<< measurement_prediction_ <<"res -- \n "<<measurement_residual_<<"\n";
+        std::cout<<"real ---: \n" <<real_measurement_<<"\n";
         // std::cout<<innovation_covariance_<<"\n";
         // std::cout<<"KALMAN GAIN:\n"<<kalman_gain_<<"\n";
         // std::cout<<"K*res:\n"<<kalman_gain_*measurement_residual_<<"\n";
+        std::cout<<"X_BEFORE: \n" <<X<<"\n";
         X = X + kalman_gain_*measurement_residual_;
         P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
         // P = (I-kalman_gain_*H)*P;
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("A") , X);
         // std::cout<<"P: \n"<<P<<"\n --- \n";
+        std::cout<<"X: \n" <<X<<"\n";
 
     }
 

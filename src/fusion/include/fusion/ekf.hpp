@@ -20,7 +20,7 @@ namespace Filter{
             Ekf();
             Ekf(std::unique_ptr<MotionModel> );
             virtual void initialize() override;
-            virtual void predict(const rclcpp::Time& ) override;
+            virtual void predict(const rclcpp::Time&  , const rclcpp::Duration&) override;
             virtual void update(const Observations& ) override;
             virtual void setMotionModel(std::unique_ptr<MotionModel> ) override;
             virtual autodiff::VectorXreal getStates() override;

@@ -23,7 +23,7 @@ namespace Filter{
             Fusion();
             Fusion(std::unique_ptr<MotionModel> );
             virtual void initialize() = 0;
-            virtual void predict(const rclcpp::Time&) = 0;
+            virtual void predict(const rclcpp::Time& , const rclcpp::Duration&) = 0;
             virtual void update(const Observations&) = 0;
             virtual void setMotionModel(std::unique_ptr<MotionModel> ) = 0;
             virtual autodiff::VectorXreal getStates() = 0;

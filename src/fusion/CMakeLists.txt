@@ -14,6 +14,7 @@ find_package(geometry_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
 find_package(control_msgs REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(autodiff REQUIRED)
@@ -59,7 +60,7 @@ add_library(
   src/fusion.cpp
   src/ekf.cpp
 )
-ament_target_dependencies(fusemuse rclcpp geometry_msgs sensor_msgs )
+ament_target_dependencies(fusemuse rclcpp geometry_msgs sensor_msgs tf2_ros )
 target_link_libraries(fusemuse motion sensor_data Eigen3::Eigen visualization)
 
 

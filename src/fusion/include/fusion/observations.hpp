@@ -8,7 +8,7 @@ namespace Filter{
         autodiff::VectorXreal states_;
         autodiff::MatrixXreal H;
         bool operator<(const Observations& other) const{
-            return time_<other.time_; //lower time has priority
+            return time_>other.time_; //lower time has priority
         }
     };
 } //namespace Filter

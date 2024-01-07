@@ -40,10 +40,11 @@ namespace Filter{
   
     }
 
-    Eigen::MatrixXd ConstantHeadingRate::update(const rclcpp::Time& current_time_)
+    Eigen::MatrixXd ConstantHeadingRate::update(const rclcpp::Time& current_time_ , const rclcpp::Duration& dt)
     {
         static rclcpp::Time previous_time_ = current_time_;
-        dt_ = current_time_ - previous_time_;
+        // dt_ = current_time_ - previous_time_;
+        dt_ = dt;
         autodiff::VectorXreal& state_ = states_->getStates();
         autodiff::VectorXreal newState; 
         
