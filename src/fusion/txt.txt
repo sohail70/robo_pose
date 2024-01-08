@@ -122,6 +122,8 @@ TODO: implement the odom topic. relying only on imu is not gonna work
 TODO: Its unstable
 TODO: fix the delay using https://answers.ros.org/question/221036/robot_localization-lag/
 TODO: gazebo clock speed which is 10 gonna hurt your simulation --> https://answers.ros.org/question/391570/robot-localization-ekf-capped-at-10hz/  AND https://github.com/cra-ros-pkg/robot_localization/pull/615
+TODO: I tested it with a bag file test1 and test2 in rl pkg and it works ok so lets not waste anymore time on the lag issue. but another way to be sure is to use it in an slam pkg like cartogrpher as an odometry source instead of the real odom plugin and rotate in place to see if there is any lag or something
+TODO: I can get the jacobian. create a way for people to create their own motion model and you take the jacobian yourself based on what they wrote
 
 solution --> 
 Option 1: Move Entire Template Implementation to Header

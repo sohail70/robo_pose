@@ -126,8 +126,9 @@ namespace Visualization{
         marker_pub_->publish(line_list_);
     }
     
-    void Visualization::publishArrow() {
-        arrow_.header.stamp = this->now();
+    void Visualization::publishArrow(const rclcpp::Time& t_) {
+        // arrow_.header.stamp = this->now();
+        arrow_.header.stamp = t_;
         marker_pub_->publish(arrow_);
     }
 

@@ -64,6 +64,8 @@ namespace Filter{
         R(5,5) = 10.0e-8;
         // P = Eigen::MatrixXd(num_states_ , num_states_);
         P.setZero(num_states_,num_states_);
+        // P.setOnes(num_states_,num_states_);
+        // P = P*0.00000001;
         I = Eigen::MatrixXd::Identity(num_states_ , num_states_);
 
     }

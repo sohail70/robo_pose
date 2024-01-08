@@ -27,7 +27,7 @@ namespace Visualization{
             void publishPoints();
             void publishLineStrip();
             void publishLineList();
-            void publishArrow();
+            void publishArrow(const rclcpp::Time&);
             
         public:
             rclcpp::Publisher<visualization_msgs::msg::Marker>::SharedPtr marker_pub_;

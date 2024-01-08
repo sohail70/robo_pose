@@ -29,6 +29,7 @@ namespace Filter{
     struct ThreadParams{
         // rclcpp::Node::SharedPtr node_;
         std::shared_ptr<Visualization::Visualization> visualization_;
+        rclcpp::Time time_;
         // std::mutex visualization_mutex_;
         // std::condition_variable cv_;
         // bool ready;
@@ -83,8 +84,9 @@ namespace Filter{
                     pose_.theta = states_(2).val();
                     // RCLCPP_INFO(this->get_logger() , "x,y,theta: %f , %f, %f" , pose_.x , pose_.y , pose_.theta);
                     // RCLCPP_INFO(this->get_logger() , "state theta 1: %f" , pose_.theta);
+                    auto t_ = params_->time_;
                     params_->visualization_->addArrow(pose_);
-                    params_->visualization_->publishArrow();
+                    params_->visualization_->publishArrow(t_);
                     params_->visualization_->initialize();
                     loop_rate.sleep();
                 }
@@ -92,8 +94,12 @@ namespace Filter{
 
             std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
             std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
+
+            std::unordered_map<std::string, std::function<void(const sensor_msgs::msg::Imu::SharedPtr,
+                                                               Observations &,
+                                                               std::unordered_map<std::string, int>)>> imu_state_action_;
+            void initializeStateAction();
     };
 } // namespace Filter
-
 
 #endif
