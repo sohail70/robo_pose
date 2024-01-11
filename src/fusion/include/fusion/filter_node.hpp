@@ -24,6 +24,7 @@
 #include<geometry_msgs/msg/transform_stamped.hpp>
 #include<tf2_ros/transform_listener.h>
 #include<tf2_ros/buffer.h>
+#include<tf2_ros/transform_broadcaster.h>
 
 namespace Filter{
     struct ThreadParams{
@@ -38,6 +39,7 @@ namespace Filter{
     class FilterNode: public rclcpp::Node{
         public:
             FilterNode(rclcpp::NodeOptions );
+            ~FilterNode();
             void initialize();
             std::shared_ptr<StateSpace> getStateSpace();
 
@@ -94,11 +96,20 @@ namespace Filter{
 
             std::shared_ptr<tf2_ros::Buffer> tf_buffer_;
             std::shared_ptr<tf2_ros::TransformListener> tf_listener_;
+            geometry_msgs::msg::TransformStamped odom_base_link_transform_;
+            std::shared_ptr<tf2_ros::TransformBroadcaster> odom_base_link_broadcaster_;
+
 
             std::unordered_map<std::string, std::function<void(const sensor_msgs::msg::Imu::SharedPtr,
                                                                Observations &,
                                                                std::unordered_map<std::string, int>)>> imu_state_action_;
+            std::unordered_map<std::string, std::function<void(const nav_msgs::msg::Odometry::SharedPtr , 
+                                                               Observations &,
+                                                               std::unordered_map<std::string, int>)>> odom_state_action_;
             void initializeStateAction();
+
+            std::string odom_frame_;
+            std::string base_link_frame_;
     };
 } // namespace Filter
 

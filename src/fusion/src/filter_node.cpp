@@ -2,6 +2,10 @@
 // #include<chorno>
 using namespace std::chrono_literals;
 namespace Filter{
+    FilterNode::~FilterNode(){
+        if(rviz_marker_.joinable())
+            rviz_marker_.join();
+    }
     FilterNode::FilterNode(rclcpp::NodeOptions options_):Node("Filter",options_)
     {
         this->declare_parameter<std::vector<std::string>>("states");
@@ -9,6 +13,8 @@ namespace Filter{
         this->declare_parameter<int>("model_type");
         this->declare_parameter<int>("filter_type");
         this->declare_parameter<double>("rate");
+        this->declare_parameter<std::string>("odom_frame");
+        this->declare_parameter<std::string>("base_link_frame");
         int sensor_id = 0;
         while(true)
         {
@@ -72,12 +78,14 @@ namespace Filter{
             sensor_subs_.push_back(cmd_vel_sub_);
         }
 
+        this->get_parameter("odom_frame" , odom_frame_);
+        this->get_parameter("base_link_frame" , base_link_frame_);
 
 
         initialize();
         initializeStateAction();
 
-        filtered_odom_pub_ = this->create_publisher<nav_msgs::msg::Odometry>("filtered_odom" , rclcpp::QoS(1));
+        filtered_odom_pub_ = this->create_publisher<nav_msgs::msg::Odometry>("odom_filtered" , rclcpp::QoS(1));
         yaw_odom_pub_ = this->create_publisher<std_msgs::msg::Float64>("yaw_odom" , rclcpp::QoS(1));
         yaw_filter_pub_ = this->create_publisher<std_msgs::msg::Float64>("yaw_filter" , rclcpp::QoS(1));
 
@@ -101,6 +109,8 @@ namespace Filter{
 
         tf_buffer_ = std::make_shared<tf2_ros::Buffer>(this->get_clock());
         tf_listener_ = std::make_shared<tf2_ros::TransformListener>(*tf_buffer_);
+        
+        odom_base_link_broadcaster_ = std::make_shared<tf2_ros::TransformBroadcaster>(this);
     }
 
     void FilterNode::initialize()
@@ -129,17 +139,22 @@ namespace Filter{
 
     void FilterNode::initializeStateAction()
     {
-        imu_state_action_["yaw_dot"] = [this](const sensor_msgs::msg::Imu::SharedPtr msg_ ,
+        imu_state_action_["yaw_dot"] = [](const sensor_msgs::msg::Imu::SharedPtr msg_ ,
                                           Observations& current_obs_,
                                           std::unordered_map<std::string,int> index_)
-                                        {
-                                            current_obs_.states_(index_.at("yaw_dot")) = msg_->angular_velocity.z;
-                                            RCLCPP_INFO(this->get_logger() , "IMU lambda");
-                                        };
+                                        { current_obs_.states_(index_.at("yaw_dot")) = msg_->angular_velocity.z;};
         imu_state_action_["x_ddot"] = [](const sensor_msgs::msg::Imu::SharedPtr msg_ ,
                                           Observations& current_obs_,
                                           std::unordered_map<std::string,int> index_)
-                                        {current_obs_.states_(index_.at("x_ddot")) = msg_->linear_acceleration.x ;};
+                                        {current_obs_.states_(index_.at("x_ddot")) = msg_->linear_acceleration.x;};
+        imu_state_action_["y_ddot"] = [](const sensor_msgs::msg::Imu::SharedPtr msg_ ,
+                                          Observations& current_obs_,
+                                          std::unordered_map<std::string,int> index_)
+                                        {current_obs_.states_(index_.at("y_ddot")) = msg_->linear_acceleration.y;};
+        imu_state_action_["z_ddot"] = [](const sensor_msgs::msg::Imu::SharedPtr msg_ ,
+                                          Observations& current_obs_,
+                                          std::unordered_map<std::string,int> index_)
+                                        {current_obs_.states_(index_.at("z_ddot")) = msg_->linear_acceleration.z;};
         imu_state_action_["roll"] = [](const sensor_msgs::msg::Imu::SharedPtr msg_ , Observations& current_obs_,
                                           std::unordered_map<std::string,int> index_)
                                         {
@@ -167,6 +182,73 @@ namespace Filter{
                                             tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
                                             current_obs_.states_(index_.at("yaw")) = yaw;
                                         };
+
+        odom_state_action_["x"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                    {current_obs_.states_(index_.at("x")) = msg_->pose.pose.position.x ;};
+        odom_state_action_["y"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                    {current_obs_.states_(index_.at("y")) = msg_->pose.pose.position.y ;};
+        odom_state_action_["z"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                    {current_obs_.states_(index_.at("z")) = msg_->pose.pose.position.z ;};
+        odom_state_action_["roll"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                        {
+                                            tf2::Quaternion quaternion;
+                                            tf2::fromMsg(msg_->pose.pose.orientation, quaternion);
+                                            double roll, pitch, yaw;
+                                            tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
+                                            current_obs_.states_(index_.at("roll")) = roll;
+                                        };
+        odom_state_action_["pitch"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                        {       
+                                            tf2::Quaternion quaternion;
+                                            tf2::fromMsg(msg_->pose.pose.orientation, quaternion);
+                                            double roll, pitch, yaw;
+                                            tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
+                                            current_obs_.states_(index_.at("pitch")) = pitch;
+                                        };
+        odom_state_action_["yaw"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                        {
+                                            tf2::Quaternion quaternion;
+                                            tf2::fromMsg(msg_->pose.pose.orientation, quaternion);
+                                            double roll, pitch, yaw;
+                                            tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
+                                            current_obs_.states_(index_.at("yaw")) = yaw;
+                                        };
+        odom_state_action_["x_dot"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                        {current_obs_.states_(index_.at("x_dot")) = msg_->twist.twist.linear.x ;};
+        odom_state_action_["y_dot"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                        {current_obs_.states_(index_.at("y_dot")) = msg_->twist.twist.linear.y ;};
+        odom_state_action_["z_dot"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                        {current_obs_.states_(index_.at("z_dot")) = msg_->twist.twist.linear.z ;};
+        odom_state_action_["roll_dot"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                        {current_obs_.states_(index_.at("roll_dot")) = msg_->twist.twist.angular.x ;};
+        odom_state_action_["pitch_dot"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                        {current_obs_.states_(index_.at("pitch_dot")) = msg_->twist.twist.angular.y ;};
+        odom_state_action_["yaw_dot"] = [](const nav_msgs::msg::Odometry::SharedPtr msg_, 
+                                                               Observations & current_obs_,
+                                                               std::unordered_map<std::string, int> index_)
+                                        {current_obs_.states_(index_.at("yaw_dot")) = msg_->twist.twist.angular.z ;};
     }
 
     void FilterNode::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg_ , std::string topic_name_)
@@ -215,6 +297,86 @@ namespace Filter{
         RCLCPP_INFO(this->get_logger() , "YAW_DOT IN IMU %f" , msg_->angular_velocity.z );
 
     }
+
+    void FilterNode::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg_, std::string topic_name_)
+    {
+        // RCLCPP_INFO(this->get_logger() , "odom callback: %s" , topic_name_.c_str());
+        Observations current_obs_;
+        autodiff::MatrixXreal H;
+        auto cTime_ = this->now();
+        std::cout<<"Current Time0: "<<cTime_.nanoseconds()<<"\n";
+        std::cout<<"Message Time1: "<<msg_->header.stamp.sec<<" -- "<<msg_->header.stamp.nanosec<<"\n";
+        rclcpp::Duration time_diff_ = cTime_ - msg_->header.stamp;
+        std::cout<<"Time difference : "<< time_diff_.seconds()<<"\n";
+        current_obs_.time_ = msg_->header.stamp;
+        auto index_ = states_->getStateOrder();
+        H.setZero(states_->states_.size(), states_->states_.size());
+        current_obs_.states_.setZero(states_->states_.size());
+        for (auto sensor_state_ : sensor_states_[topic_name_])
+        {
+            auto it = index_.find(sensor_state_);
+            if(odom_state_action_.find(sensor_state_) != odom_state_action_.end())
+            {
+                odom_state_action_.at(sensor_state_)(msg_ ,current_obs_ , index_ );
+                H(it->second , it->second) = 1;
+            }
+            else
+            {
+
+            }
+
+        }
+        // for(int i = 0 ; i <current_obs_.states_.size(); i++)
+        // {
+        //     RCLCPP_INFO(this->get_logger() , "obs: %f" , current_obs_.states_(i));
+        // }
+        current_obs_.H = H;
+        // RCLCPP_INFO_STREAM(this->get_logger() , H);
+        // RCLCPP_INFO_STREAM(this->get_logger() , index.size());
+        observations_.push(current_obs_);
+            
+        // ///////publishing yaw data from odom in a topic//////////
+        tf2::Quaternion quaternion_;
+        tf2::fromMsg(msg_->pose.pose.orientation, quaternion_);
+        double roll_, pitch_, yaw_;
+        tf2::Matrix3x3(quaternion_).getRPY(roll_, pitch_, yaw_);
+        std_msgs::msg::Float64 d_;
+        d_.data = yaw_;
+        RCLCPP_INFO_STREAM(this->get_logger() , yaw_);
+        yaw_odom_pub_->publish(d_);
+
+        RCLCPP_INFO(this->get_logger() , "YAW IN ODOM %f" ,yaw_ );
+        RCLCPP_INFO(this->get_logger() , "YAW_DOT IN ODOM %f" , msg_->twist.twist.angular.z );
+
+
+        ///////////////////////////////
+        // if (observations_.empty())
+        // {
+        //     RCLCPP_INFO(this->get_logger(), "No obs is in queue %i", observations_.size());
+        // }
+
+        // geometry_msgs::msg::Pose2D pose_;
+        // while(!observations_.empty())
+        // {
+        //     // if(observations_.top().time_ > this->now())
+        //     //     break;
+        //     rclcpp::Time cur =msg->header.stamp;
+        //     rclcpp::Duration dt_ = cur - previous_update_time_;
+        //     filter_->predict(cTime_ , dt_);
+        //     filter_->update(observations_.top());
+        //     // RCLCPP_INFO(this->get_logger() , "some obs is in queue %i" , observations_.size());
+        //     previous_update_time_ = cur;
+        //     RCLCPP_INFO(this->get_logger() , "dt: %f" , dt_.seconds());
+        //     observations_.pop();
+        // }
+
+        // autodiff::VectorXreal states_ = filter_->getStates();
+        // std_msgs::msg::Float64 dd;
+        // dd.data = states_(2).val();
+        // yaw_filter_pub_->publish(dd);
+    }
+
+
     // void FilterNode::imuCallback(const sensor_msgs::msg::Imu::SharedPtr msg , std::string topic_name_)
     // {
     //     // RCLCPP_INFO(this->get_logger() , "imu callback: %s" , topic_name_.c_str());
@@ -278,127 +440,127 @@ namespace Filter{
 
     // }
 
-    void FilterNode::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg, std::string topic_name_)
-    {
-        // RCLCPP_INFO(this->get_logger() , "odom callback: %s" , topic_name_.c_str());
-        Observations current_obs_;
-        autodiff::MatrixXreal H;
-        auto cTime_ = this->now();
-        std::cout<<"Current Time0: "<<cTime_.nanoseconds()<<"\n";
-        std::cout<<"Message Time1: "<<msg->header.stamp.sec<<" -- "<<msg->header.stamp.nanosec<<"\n";
-        rclcpp::Duration time_diff_ = cTime_ - msg->header.stamp;
-        std::cout<<"Time difference : "<< time_diff_.seconds()<<"\n";
-        current_obs_.time_ = msg->header.stamp;
-        auto index = states_->getStateOrder();
-        H.setZero(states_->states_.size(), states_->states_.size());
-        current_obs_.states_.setZero(states_->states_.size());
-        for (auto sensor_state_ : sensor_states_[topic_name_])
-        {
-            auto it = index.find(sensor_state_);
-            if (sensor_state_ == "x")
-            {
-                current_obs_.states_(it->second) = msg->pose.pose.position.x;
-            }
-            else if (sensor_state_ == "y")
-            {
-                current_obs_.states_(it->second) = msg->pose.pose.position.y;
-            }
-            else if (sensor_state_ == "z")
-            {
-                current_obs_.states_(it->second) = msg->pose.pose.position.z;
-            }
-            else if (sensor_state_ == "roll" || sensor_state_ == "pitch" || sensor_state_ == "yaw")
-            {
-                tf2::Quaternion quaternion;
-                tf2::fromMsg(msg->pose.pose.orientation, quaternion);
-                double roll, pitch, yaw;
-                tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
-                if (sensor_state_ == "roll")
-                    current_obs_.states_(it->second) = roll;
-                else if (sensor_state_ == "pitch")
-                    current_obs_.states_(it->second) = pitch;
-                else if (sensor_state_ == "yaw")
-                    current_obs_.states_(it->second) = yaw;
-            }
-            else if (sensor_state_ == "x_dot")
-            {
-                current_obs_.states_(it->second) = msg->twist.twist.linear.x;
-            }
-            else if (sensor_state_ == "y_dot")
-            {
-                current_obs_.states_(it->second) = msg->twist.twist.linear.y;
-            }
-            else if (sensor_state_ == "z_dot")
-            {
-                current_obs_.states_(it->second) = msg->twist.twist.linear.z;
-            }
-            else if (sensor_state_ == "roll_dot")
-            {
-                current_obs_.states_(it->second) = msg->twist.twist.angular.x;
-            }
-            else if (sensor_state_ == "pitch_dot")
-            {
-                current_obs_.states_(it->second) = msg->twist.twist.angular.y;
-            }
-            else if (sensor_state_ == "yaw_dot")
-            {
-                current_obs_.states_(it->second) = msg->twist.twist.angular.z;
-            }
-            else
-            {
-            }
+    // void FilterNode::odomCallback(const nav_msgs::msg::Odometry::SharedPtr msg, std::string topic_name_)
+    // {
+    //     // RCLCPP_INFO(this->get_logger() , "odom callback: %s" , topic_name_.c_str());
+    //     Observations current_obs_;
+    //     autodiff::MatrixXreal H;
+    //     auto cTime_ = this->now();
+    //     std::cout<<"Current Time0: "<<cTime_.nanoseconds()<<"\n";
+    //     std::cout<<"Message Time1: "<<msg->header.stamp.sec<<" -- "<<msg->header.stamp.nanosec<<"\n";
+    //     rclcpp::Duration time_diff_ = cTime_ - msg->header.stamp;
+    //     std::cout<<"Time difference : "<< time_diff_.seconds()<<"\n";
+    //     current_obs_.time_ = msg->header.stamp;
+    //     auto index = states_->getStateOrder();
+    //     H.setZero(states_->states_.size(), states_->states_.size());
+    //     current_obs_.states_.setZero(states_->states_.size());
+    //     for (auto sensor_state_ : sensor_states_[topic_name_])
+    //     {
+    //         auto it = index.find(sensor_state_);
+    //         if (sensor_state_ == "x")
+    //         {
+    //             current_obs_.states_(it->second) = msg->pose.pose.position.x;
+    //         }
+    //         else if (sensor_state_ == "y")
+    //         {
+    //             current_obs_.states_(it->second) = msg->pose.pose.position.y;
+    //         }
+    //         else if (sensor_state_ == "z")
+    //         {
+    //             current_obs_.states_(it->second) = msg->pose.pose.position.z;
+    //         }
+    //         else if (sensor_state_ == "roll" || sensor_state_ == "pitch" || sensor_state_ == "yaw")
+    //         {
+    //             tf2::Quaternion quaternion;
+    //             tf2::fromMsg(msg->pose.pose.orientation, quaternion);
+    //             double roll, pitch, yaw;
+    //             tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
+    //             if (sensor_state_ == "roll")
+    //                 current_obs_.states_(it->second) = roll;
+    //             else if (sensor_state_ == "pitch")
+    //                 current_obs_.states_(it->second) = pitch;
+    //             else if (sensor_state_ == "yaw")
+    //                 current_obs_.states_(it->second) = yaw;
+    //         }
+    //         else if (sensor_state_ == "x_dot")
+    //         {
+    //             current_obs_.states_(it->second) = msg->twist.twist.linear.x;
+    //         }
+    //         else if (sensor_state_ == "y_dot")
+    //         {
+    //             current_obs_.states_(it->second) = msg->twist.twist.linear.y;
+    //         }
+    //         else if (sensor_state_ == "z_dot")
+    //         {
+    //             current_obs_.states_(it->second) = msg->twist.twist.linear.z;
+    //         }
+    //         else if (sensor_state_ == "roll_dot")
+    //         {
+    //             current_obs_.states_(it->second) = msg->twist.twist.angular.x;
+    //         }
+    //         else if (sensor_state_ == "pitch_dot")
+    //         {
+    //             current_obs_.states_(it->second) = msg->twist.twist.angular.y;
+    //         }
+    //         else if (sensor_state_ == "yaw_dot")
+    //         {
+    //             current_obs_.states_(it->second) = msg->twist.twist.angular.z;
+    //         }
+    //         else
+    //         {
+    //         }
 
-            H(it->second , it->second) = 1;
-        }
-        // for(int i = 0 ; i <current_obs_.states_.size(); i++)
-        // {
-        //     RCLCPP_INFO(this->get_logger() , "obs: %f" , current_obs_.states_(i));
-        // }
-        current_obs_.H = H;
-        // RCLCPP_INFO_STREAM(this->get_logger() , H);
-        // RCLCPP_INFO_STREAM(this->get_logger() , index.size());
-        observations_.push(current_obs_);
+    //         H(it->second , it->second) = 1;
+    //     }
+    //     // for(int i = 0 ; i <current_obs_.states_.size(); i++)
+    //     // {
+    //     //     RCLCPP_INFO(this->get_logger() , "obs: %f" , current_obs_.states_(i));
+    //     // }
+    //     current_obs_.H = H;
+    //     // RCLCPP_INFO_STREAM(this->get_logger() , H);
+    //     // RCLCPP_INFO_STREAM(this->get_logger() , index.size());
+    //     observations_.push(current_obs_);
             
-        // ///////publishing yaw data from odom in a topic//////////
-        tf2::Quaternion quaternion;
-        tf2::fromMsg(msg->pose.pose.orientation, quaternion);
-        double roll, pitch, yaw;
-        tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
-        std_msgs::msg::Float64 d;
-        d.data = yaw;
-        RCLCPP_INFO_STREAM(this->get_logger() , yaw);
-        yaw_odom_pub_->publish(d);
+    //     // ///////publishing yaw data from odom in a topic//////////
+    //     tf2::Quaternion quaternion;
+    //     tf2::fromMsg(msg->pose.pose.orientation, quaternion);
+    //     double roll, pitch, yaw;
+    //     tf2::Matrix3x3(quaternion).getRPY(roll, pitch, yaw);
+    //     std_msgs::msg::Float64 d;
+    //     d.data = yaw;
+    //     RCLCPP_INFO_STREAM(this->get_logger() , yaw);
+    //     yaw_odom_pub_->publish(d);
 
-        RCLCPP_INFO(this->get_logger() , "YAW IN ODOM %f" ,yaw );
-        RCLCPP_INFO(this->get_logger() , "YAW_DOT IN ODOM %f" , msg->twist.twist.angular.z );
+    //     RCLCPP_INFO(this->get_logger() , "YAW IN ODOM %f" ,yaw );
+    //     RCLCPP_INFO(this->get_logger() , "YAW_DOT IN ODOM %f" , msg->twist.twist.angular.z );
 
 
-        ///////////////////////////////
-        // if (observations_.empty())
-        // {
-        //     RCLCPP_INFO(this->get_logger(), "No obs is in queue %i", observations_.size());
-        // }
+    //     ///////////////////////////////
+    //     // if (observations_.empty())
+    //     // {
+    //     //     RCLCPP_INFO(this->get_logger(), "No obs is in queue %i", observations_.size());
+    //     // }
 
-        // geometry_msgs::msg::Pose2D pose_;
-        // while(!observations_.empty())
-        // {
-        //     // if(observations_.top().time_ > this->now())
-        //     //     break;
-        //     rclcpp::Time cur =msg->header.stamp;
-        //     rclcpp::Duration dt_ = cur - previous_update_time_;
-        //     filter_->predict(cTime_ , dt_);
-        //     filter_->update(observations_.top());
-        //     // RCLCPP_INFO(this->get_logger() , "some obs is in queue %i" , observations_.size());
-        //     previous_update_time_ = cur;
-        //     RCLCPP_INFO(this->get_logger() , "dt: %f" , dt_.seconds());
-        //     observations_.pop();
-        // }
+    //     // geometry_msgs::msg::Pose2D pose_;
+    //     // while(!observations_.empty())
+    //     // {
+    //     //     // if(observations_.top().time_ > this->now())
+    //     //     //     break;
+    //     //     rclcpp::Time cur =msg->header.stamp;
+    //     //     rclcpp::Duration dt_ = cur - previous_update_time_;
+    //     //     filter_->predict(cTime_ , dt_);
+    //     //     filter_->update(observations_.top());
+    //     //     // RCLCPP_INFO(this->get_logger() , "some obs is in queue %i" , observations_.size());
+    //     //     previous_update_time_ = cur;
+    //     //     RCLCPP_INFO(this->get_logger() , "dt: %f" , dt_.seconds());
+    //     //     observations_.pop();
+    //     // }
 
-        // autodiff::VectorXreal states_ = filter_->getStates();
-        // std_msgs::msg::Float64 dd;
-        // dd.data = states_(2).val();
-        // yaw_filter_pub_->publish(dd);
-    }
+    //     // autodiff::VectorXreal states_ = filter_->getStates();
+    //     // std_msgs::msg::Float64 dd;
+    //     // dd.data = states_(2).val();
+    //     // yaw_filter_pub_->publish(dd);
+    // }
 
     void FilterNode::controlCallback(const geometry_msgs::msg::Twist::SharedPtr msg)
     {
@@ -417,6 +579,10 @@ namespace Filter{
         if(observations_.empty())
         {
             RCLCPP_INFO(this->get_logger() , "No obs is in queue %i" , observations_.size());
+            // auto cur_time_ = this->now();
+            // auto dt_ = cur_time_ - previous_update_time_;
+            // filter_->predict(cur_time_,dt_ );
+            // previous_update_time_ = cur_time_;
         }
         params_.time_ = this->now();
         geometry_msgs::msg::Pose2D pose_;
@@ -433,45 +599,61 @@ namespace Filter{
             RCLCPP_INFO(this->get_logger(), "dt: %f", dt_.seconds());
             observations_.pop();
             ///////lookup transform for now its for debugging purpose////////////////////
-            try
-            {
-                geometry_msgs::msg::TransformStamped transform = tf_buffer_->lookupTransform(
-                    "odom", "base_link", tf2::TimePointZero);
+            // try
+            // {
+            //     geometry_msgs::msg::TransformStamped transform = tf_buffer_->lookupTransform(
+            //         "odom", "base_link", tf2::TimePointZero);
 
-                // RCLCPP_INFO(this->get_logger(), "Base link pose in odom frame: %f %f %f",
-                //             transform.transform.translation.x,
-                //             transform.transform.translation.y,
-                //             transform.transform.translation.z);
-                double roll, pitch, yaw;
-                tf2::Quaternion quat;
-                tf2::fromMsg(transform.transform.rotation, quat);
-                tf2::Matrix3x3(quat).getRPY(roll, pitch, yaw);
+            //     // RCLCPP_INFO(this->get_logger(), "Base link pose in odom frame: %f %f %f",
+            //     //             transform.transform.translation.x,
+            //     //             transform.transform.translation.y,
+            //     //             transform.transform.translation.z);
+            //     double roll, pitch, yaw;
+            //     tf2::Quaternion quat;
+            //     tf2::fromMsg(transform.transform.rotation, quat);
+            //     tf2::Matrix3x3(quat).getRPY(roll, pitch, yaw);
 
-                RCLCPP_INFO(this->get_logger(), "Yaw angle of base_link w.r.t. odom: %f", yaw);
-            }
-            catch (tf2::TransformException &ex)
-            {
-                RCLCPP_ERROR(this->get_logger(), "Transform lookup failed: %s", ex.what());
-            }
+            //     RCLCPP_INFO(this->get_logger(), "Yaw angle of base_link w.r.t. odom: %f", yaw);
+            // }
+            // catch (tf2::TransformException &ex)
+            // {
+            //     RCLCPP_ERROR(this->get_logger(), "Transform lookup failed: %s", ex.what());
+            // }
         }
 
         ///////////////////publishing filtered data into a topic///////////// 
-        // autodiff::VectorXreal states_ = filter_->getStates();
-        // filtered_odom_.header.frame_id = "odom_filtered";
-        // filtered_odom_.header.stamp = this->now();
-        // filtered_odom_.pose.pose.position.x = states_(0).val();
-        // filtered_odom_.pose.pose.position.y = states_(1).val();
+        autodiff::VectorXreal sta_ = filter_->getStates();
+        filtered_odom_.header.frame_id = odom_frame_;
+        filtered_odom_.child_frame_id = base_link_frame_;
+        filtered_odom_.header.stamp = this->now();
+        filtered_odom_.pose.pose.position.x = sta_(0).val();
+        filtered_odom_.pose.pose.position.y = sta_(1).val();
 
-        // tf2::Quaternion quaternion_;
-        // quaternion_.setRPY(0.0,0.0,states_(2).val());
-        // geometry_msgs::msg::Quaternion orientation_msg_;
-        // tf2::convert(quaternion_ , orientation_msg_);
-        // filtered_odom_.pose.pose.orientation = orientation_msg_;
-        // filtered_odom_pub_->publish(filtered_odom_);
+
+        tf2::Quaternion quaternion_;
+        quaternion_.setRPY(0.0,0.0,sta_(2).val());
+        // int maxIndex = 0;
+        // for (int i = 1; i < 4; ++i) {
+        //     if (std::fabs(quaternion_[i]) > std::fabs(quaternion_[maxIndex])) {
+        //         maxIndex = i;
+        //     }
+        // }
+
+        //     RCLCPP_INFO(this->get_logger() , "MAX INDEX %i" , maxIndex);
+        // https://stackoverflow.com/questions/72219304/eliminating-sign-flips-in-quaternion-data-from-sensors
+        // if (quaternion_[maxIndex] < 0.0) {
+        //     quaternion_[maxIndex] = -quaternion_[maxIndex];
+        // }
+
+
+        geometry_msgs::msg::Quaternion orientation_msg_;
+        tf2::convert(quaternion_ , orientation_msg_);
+        filtered_odom_.pose.pose.orientation = orientation_msg_;
+        filtered_odom_pub_->publish(filtered_odom_);
         // /////////////////////publishing yaw in a topic//////////////////
-        autodiff::VectorXreal states_ = filter_->getStates();
+        autodiff::VectorXreal st_ = filter_->getStates();
         std_msgs::msg::Float64 d;
-        d.data = states_(2).val();
+        d.data = st_(2).val();
         yaw_filter_pub_->publish(d);
 
         // ////////////////////visualization//////////////////
@@ -489,9 +671,26 @@ namespace Filter{
 
         RCLCPP_INFO_STREAM(rclcpp::get_logger("rate logger") , 1/(cur_time_-pre_time_).seconds()); // *
         pre_time_ = cur_time_;
-        // rviz_marker_.join();
 
-            
+        ///////////////Send filtered states tf//////////////////////
+        autodiff::VectorXreal s_ = filter_->getStates();
+        tf2::Quaternion quat;
+        auto index = states_->getStateOrder();
+        quat.setRPY(index.count("roll")  ? s_(index.at("roll")).val()  : 0 ,
+                    index.count("pitch") ? s_(index.at("pitch")).val() : 0 ,
+                    index.count("yaw")   ? s_(index.at("yaw")).val()   : 0 );
+        odom_base_link_transform_.header.frame_id = odom_frame_;
+        odom_base_link_transform_.child_frame_id = base_link_frame_;
+        rclcpp::Duration duration(0, 10000000000); //10000 ms
+        odom_base_link_transform_.header.stamp = this->now();// - duration;
+        odom_base_link_transform_.transform.translation.x = index.count("x") ? s_(index.at("x")).val() : 0;
+        odom_base_link_transform_.transform.translation.y = index.count("y") ? s_(index.at("y")).val() : 0;
+        odom_base_link_transform_.transform.translation.z = index.count("z") ? s_(index.at("z")).val() : 0;
+        odom_base_link_transform_.transform.rotation.x = quat.getX();  
+        odom_base_link_transform_.transform.rotation.y = quat.getY();  
+        odom_base_link_transform_.transform.rotation.z = quat.getZ();  
+        odom_base_link_transform_.transform.rotation.w = quat.getW();  
+        odom_base_link_broadcaster_->sendTransform(odom_base_link_transform_);
     }
     std::shared_ptr<StateSpace> FilterNode::getStateSpace()
     {

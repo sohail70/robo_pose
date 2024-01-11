@@ -120,10 +120,14 @@ TODO: error handling!
 TODO: how to get rid of too many data in the queue? should i delete the old data faster thank the current rate because its highly depandant on the filters rate!
 TODO: implement the odom topic. relying only on imu is not gonna work
 TODO: Its unstable
-TODO: fix the delay using https://answers.ros.org/question/221036/robot_localization-lag/
+TODO: fix the delay using https://answers.ros.org/question/221036/robot_localization-lag/ --> weridly enough if you show odometry in rviz its fast in use sim time false mode but the tf seems to be ahead of time!
 TODO: gazebo clock speed which is 10 gonna hurt your simulation --> https://answers.ros.org/question/391570/robot-localization-ekf-capped-at-10hz/  AND https://github.com/cra-ros-pkg/robot_localization/pull/615
 TODO: I tested it with a bag file test1 and test2 in rl pkg and it works ok so lets not waste anymore time on the lag issue. but another way to be sure is to use it in an slam pkg like cartogrpher as an odometry source instead of the real odom plugin and rotate in place to see if there is any lag or something
 TODO: I can get the jacobian. create a way for people to create their own motion model and you take the jacobian yourself based on what they wrote
+TODO: i think a(k+1) = a(k) is not correct is it because it means constant acceleration which clearly is so may be increase the Q on this element so that it trust the measurement 
+TODO: whats the point of the prediction if its in the observation not empty if condition. i want it in case the measurement are having trouble getting to the filter. but at the same time i don't want the P cov to explode! so when P is huge the estimation is unreliable so may be i can add sensor_time out like for 10 seconds and that the limit it can do without having measurment. this is 
+      double edged sword because the model is gonna predict based on the last measurement information
+
 
 solution --> 
 Option 1: Move Entire Template Implementation to Header

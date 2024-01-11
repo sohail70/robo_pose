@@ -1,15 +1,43 @@
+import os
 import launch
 import launch_ros
-import os
+from launch import LaunchDescription
+from launch_ros.actions import Node
+from launch.actions import DeclareLaunchArgument, ExecuteProcess
+from launch.substitutions import LaunchConfiguration
+from ament_index_python.packages import get_package_share_directory
 from launch.substitutions import Command , LaunchConfiguration
 
 def generate_launch_description():
     pkg_share = launch_ros.substitutions.FindPackageShare(package="fusion").find("fusion")
     default_model_path = os.path.join(pkg_share , "urdf/robot.urdf.xacro ")
-    # default_model_path = os.path.join(pkg_share , "urdf/t32.urdf.xacro")
-    gazebo_share = launch_ros.substitutions.FindPackageShare(package="gazebo_ros").find("gazebo_ros")
-    args = launch.actions.DeclareLaunchArgument("world" , default_value=os.path.join(pkg_share , "worlds" , "willowgarage.world"))
-    gazebo = launch.actions.IncludeLaunchDescription(os.path.join(gazebo_share , "launch" , "gazebo.launch.py"))
+    world_arg = DeclareLaunchArgument('world', default_value='worlds/willowgarage.world', description='Gazebo world file')
+    package_name = 'fusion'  # Replace with your actual package name
+    config_file_name = 'params.yaml'
+    pkg_dir = get_package_share_directory(package_name)
+    config = os.path.join(pkg_dir, 'params', 'gazebo_config.yaml')
+    gazebo_arg = DeclareLaunchArgument('gazebo', default_value=config, description='Path to Gazebo configuration file')
+
+    environment_variables = {
+        'GAZEBO_MODEL_PATH': os.path.join(get_package_share_directory('fusion'), 'worlds/willowgarage.world')
+    }
+    # Define Gazebo launch process
+    gazebo_cmd = [
+        'gazebo',
+        '--verbose',
+        LaunchConfiguration('world'),
+        '-s', 'libgazebo_ros_init.so',
+        '-s', 'libgazebo_ros_factory.so',
+        '--pause',
+        '--ros-args',
+        '--params-file', LaunchConfiguration('gazebo')
+    ]
+    gazebo = ExecuteProcess(
+        cmd=gazebo_cmd,
+        output='screen',
+        additional_env=environment_variables
+    )
+
     use_sim_time = LaunchConfiguration('use_sim_time', default='true')
 
 
@@ -44,30 +72,19 @@ def generate_launch_description():
                                                 "-R" , "0.0" , "-P" , "0.0" , "-Y" , "0.0",
                                             ]
                                           )
+    # Create the launch description
+    ld = LaunchDescription()
 
-
-    diff_drive_spawner = launch_ros.actions.Node(package="controller_manager" , executable="spawner" , arguments=['diff_cont'] , remappings=[('diff_cont/cmd_vel_unstamped', 'cmd_vel')])
-    joint_broad_spawner = launch_ros.actions.Node(package="controller_manager" , executable="spawner" , arguments=['joint_broad'], remappings=[('diff_cont/cmd_vel_unstamped', 'cmd_vel')])
-
-
-
-
-
-
-    ld = launch.LaunchDescription()
-    ld.add_action(launch.actions.DeclareLaunchArgument(name='gui' , default_value='True' , description="Flag to enable joint_state_publisher_gui"))
+    ld.add_action(launch.actions.DeclareLaunchArgument(name='gui' , default_value='False' , description="Flag to enable joint_state_publisher_gui"))
     ld.add_action(launch.actions.DeclareLaunchArgument(name='model', default_value=default_model_path , description='Absolute path to robot urdf file'))
-    ld.add_action(args)
+
+    ld.add_action(world_arg)
+    ld.add_action(gazebo_arg)
     ld.add_action(gazebo)
-    # ld.add_action(joint_state_publisher) #in va paeeni age bashan robot dar gazebo nemiad!!!!
-    # ld.add_action(joint_state_publisher_gui)
+    ld.add_action(joint_state_publisher) #in va paeeni age bashan robot dar gazebo nemiad!!!!
+    ld.add_action(joint_state_publisher_gui)
     ld.add_action(robot_state_publisher)
     ld.add_action(spawn_robot)
     
-    #if you are using control.urdf.xacro in your urdf file use the following, otherwise comment them
-    ld.add_action(diff_drive_spawner)
-    ld.add_action(joint_broad_spawner)
-
-    # ld.add_action(cartographer)
 
     return ld

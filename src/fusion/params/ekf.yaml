@@ -1,19 +1,21 @@
 Filter:
   ros__parameters:
-    use_sim_time: false #has effect on this->now() time in a ros2 node if its true you need to run gazebo for the time counter to go up
-    rate: 50.0
+    use_sim_time: true #has effect on this->now() time in a ros2 node if its true you need to run gazebo for the time counter to go up
+    odom_frame: "odom"
+    base_link_frame: "base_link"
+    rate: 100.0
     model_type: 0 # CONSTANT_HEADING_RATE:0   CAR:1
     filter_type: 0 # EKF:0 UKF:1
     use_control: false # I'm only using it to set linear x to zero when the robot is stationary (for imu only case)
     states: ["x" , "y" , "yaw" , "x_dot" , "yaw_dot" , "x_ddot"] 
-    sensor_0_topic: "/imu0"
+    sensor_0_topic: "imu/data"
     sensor_0_states: [ "yaw_dot"]
     sensor_0_msg: "sensor_msgs::msg::Imu"
     # sensor_1_topic: "imu1"
     # sensor_1_states: ["yaw" , "yaw_dot" , "x_ddot"]
     # sensor_1_msg: "sensor_msgs::msg::Imu"
-    # sensor_1_topic: "/jackal_velocity_controller/odom"
-    # sensor_1_states: ["x","y","x_dot" , "yaw_dot"]
-    # sensor_1_msg: "nav_msgs::msg::Odom"
+    sensor_1_topic: "odom"
+    sensor_1_states: ["x","y","yaw", "x_dot" , "yaw_dot"]
+    sensor_1_msg: "nav_msgs::msg::Odom"
 
     #what if we also needed a measurement model like for lidar which doesn't see the states directly and we need linearization --> future work
