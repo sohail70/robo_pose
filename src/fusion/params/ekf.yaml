@@ -3,6 +3,7 @@ Filter:
     use_sim_time: true #has effect on this->now() time in a ros2 node if its true you need to run gazebo for the time counter to go up
     odom_frame: "odom"
     base_link_frame: "base_link"
+    publish_tf: false
     rate: 50.0
     model_type: 0 # CONSTANT_HEADING_RATE:0   CAR:1
     model_plugin: "model::Model"

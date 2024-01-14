@@ -383,3 +383,19 @@ X:
 
 ros2 pkg create --build-type ament_cmake model --dependencies autodiff Eigen3 fusion pluginlib --library-name model
 https://docs.ros.org/en/galactic/Tutorials/Beginner-Client-Libraries/Pluginlib.html
+
+
+
+
+whats wrong with this piece of code:
+
+        if(!model_plugin.empty())
+        {
+            std::shared_ptr<MotionModel> load = model_factory_->createModelFromPlugin(model_plugin, states_);
+            model_ = std::unique_ptr<MotionModel>(load.get());
+            std::cout<<"Model Address 1: "<<model_.get()<<"\n";
+        }
+
+The problem here is that load is a std::shared_ptr<MotionModel>, and when you call load.get(), you get a raw pointer (MotionModel*) pointing to the object. Then, when you use std::unique_ptr<MotionModel>(load.get()), you create a new std::unique_ptr that thinks it owns the object, but the original std::shared_ptr still owns it. When the std::shared_ptr goes out of scope or is explicitly destroyed, it deletes the object, leaving the std::unique_ptr with a dangling pointer, leading to undefined behavior.
+
+kholase you can not convert shared_ptr to unique ptr but vice versa is possible

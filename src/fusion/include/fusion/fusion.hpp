@@ -16,7 +16,7 @@
 namespace Filter{
     class Fusion{
         protected:
-            std::shared_ptr<MotionModel> motion_model_;
+            std::unique_ptr<MotionModel> motion_model_;
             std::shared_ptr<StateSpace> states_;
             // std::unique_ptr<MeasurementModel> measurement_model_;
         public:
@@ -25,7 +25,7 @@ namespace Filter{
             virtual void initialize() = 0;
             virtual void predict(const rclcpp::Time& , const rclcpp::Duration&) = 0;
             virtual void update(const Observations&) = 0;
-            virtual void setMotionModel(std::shared_ptr<MotionModel> ) = 0;
+            virtual void setMotionModel(std::unique_ptr<MotionModel> ) = 0;
             virtual autodiff::VectorXreal getStates() = 0;
             virtual void setStates(std::shared_ptr<StateSpace> ) = 0;
 

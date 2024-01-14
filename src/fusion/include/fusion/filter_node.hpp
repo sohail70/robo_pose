@@ -46,7 +46,7 @@ namespace Filter{
         private:
             std::shared_ptr<StateSpace> states_;
             std::unique_ptr<MotionModelFactory> model_factory_;
-            std::shared_ptr<MotionModel> model_;
+            std::unique_ptr<MotionModel> model_;
             // std::unique_ptr<MessageHub> hub_;
             std::unique_ptr<FilterFactory> filter_factory_;
             std::unique_ptr<Fusion> filter_;
@@ -110,6 +110,7 @@ namespace Filter{
 
             std::string odom_frame_;
             std::string base_link_frame_;
+            bool publish_tf_;
     };
 } // namespace Filter
 

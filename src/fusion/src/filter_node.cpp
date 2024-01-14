@@ -10,6 +10,7 @@ namespace Filter{
     {
         this->declare_parameter<std::vector<std::string>>("states");
         this->declare_parameter<bool>("use_control");
+        this->declare_parameter<bool>("publish_tf");
         this->declare_parameter<int>("model_type");
         this->declare_parameter<int>("filter_type");
         this->declare_parameter<double>("rate");
@@ -81,6 +82,7 @@ namespace Filter{
 
         this->get_parameter("odom_frame" , odom_frame_);
         this->get_parameter("base_link_frame" , base_link_frame_);
+        this->get_parameter("publish_tf" , publish_tf_);
 
 
         initialize();
@@ -131,18 +133,15 @@ namespace Filter{
         states_ = std::make_shared<StateSpace>(config_states_);
         model_factory_ = std::make_unique<MotionModelFactory>();
         if(!model_plugin.empty())
-        {
             model_ = model_factory_->createModelFromPlugin(model_plugin, states_);
-            // model_ = std::unique_ptr<MotionModel>(load.get());
-            // model_->setStates(states_);
-            // model_->propagate(states_->getStates());
-        }
         else
             model_ = model_factory_->createModel( static_cast<ModelType>(model_type),  states_);
+
+        std::cout<<"Model Address 2: "<<model_.get()<<"\n";
         local_motion_model_ = model_.get();
         // hub_ = std::make_unique<Filter::MessageHub>(model_.get());
         filter_factory_ = std::make_unique<FilterFactory>();
-        filter_ = filter_factory_->createFilter(static_cast<FilterType>(filter_type) , model_ , states_);
+        filter_ = filter_factory_->createFilter(static_cast<FilterType>(filter_type) , std::move(model_) , states_);
         filter_->initialize();
 
     }
@@ -684,24 +683,27 @@ namespace Filter{
         pre_time_ = cur_time_;
 
         ///////////////Send filtered states tf//////////////////////
-        autodiff::VectorXreal s_ = filter_->getStates();
-        tf2::Quaternion quat;
-        auto index = states_->getStateOrder();
-        quat.setRPY(index.count("roll")  ? s_(index.at("roll")).val()  : 0 ,
-                    index.count("pitch") ? s_(index.at("pitch")).val() : 0 ,
-                    index.count("yaw")   ? s_(index.at("yaw")).val()   : 0 );
-        odom_base_link_transform_.header.frame_id = odom_frame_;
-        odom_base_link_transform_.child_frame_id = base_link_frame_;
-        rclcpp::Duration duration(0, 10000000000); //10000 ms
-        odom_base_link_transform_.header.stamp = this->now();// - duration;
-        odom_base_link_transform_.transform.translation.x = index.count("x") ? s_(index.at("x")).val() : 0;
-        odom_base_link_transform_.transform.translation.y = index.count("y") ? s_(index.at("y")).val() : 0;
-        odom_base_link_transform_.transform.translation.z = index.count("z") ? s_(index.at("z")).val() : 0;
-        odom_base_link_transform_.transform.rotation.x = quat.getX();  
-        odom_base_link_transform_.transform.rotation.y = quat.getY();  
-        odom_base_link_transform_.transform.rotation.z = quat.getZ();  
-        odom_base_link_transform_.transform.rotation.w = quat.getW();  
-        odom_base_link_broadcaster_->sendTransform(odom_base_link_transform_);
+        if(publish_tf_)
+        {
+            autodiff::VectorXreal s_ = filter_->getStates();
+            tf2::Quaternion quat;
+            auto index = states_->getStateOrder();
+            quat.setRPY(index.count("roll")  ? s_(index.at("roll")).val()  : 0 ,
+                        index.count("pitch") ? s_(index.at("pitch")).val() : 0 ,
+                        index.count("yaw")   ? s_(index.at("yaw")).val()   : 0 );
+            odom_base_link_transform_.header.frame_id = odom_frame_;
+            odom_base_link_transform_.child_frame_id = base_link_frame_;
+            rclcpp::Duration duration(0, 10000000000); //10000 ms
+            odom_base_link_transform_.header.stamp = this->now();// - duration;
+            odom_base_link_transform_.transform.translation.x = index.count("x") ? s_(index.at("x")).val() : 0;
+            odom_base_link_transform_.transform.translation.y = index.count("y") ? s_(index.at("y")).val() : 0;
+            odom_base_link_transform_.transform.translation.z = index.count("z") ? s_(index.at("z")).val() : 0;
+            odom_base_link_transform_.transform.rotation.x = quat.getX();  
+            odom_base_link_transform_.transform.rotation.y = quat.getY();  
+            odom_base_link_transform_.transform.rotation.z = quat.getZ();  
+            odom_base_link_transform_.transform.rotation.w = quat.getW();  
+            odom_base_link_broadcaster_->sendTransform(odom_base_link_transform_);
+        }
     }
     std::shared_ptr<StateSpace> FilterNode::getStateSpace()
     {

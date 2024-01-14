@@ -16,7 +16,7 @@ namespace Filter
             public:
                 MotionModelFactory();
                 std::unique_ptr<MotionModel> createModel( ModelType , std::shared_ptr<StateSpace> );
-                std::shared_ptr<MotionModel> createModelFromPlugin( std::string , std::shared_ptr<StateSpace> );
+                std::unique_ptr<MotionModel> createModelFromPlugin( std::string , std::shared_ptr<StateSpace> );
             private:
                 using Creator = std::function<std::unique_ptr<MotionModel>()>;
                 std::unordered_map<int , Creator> creators;
