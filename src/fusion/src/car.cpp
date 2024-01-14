@@ -6,30 +6,10 @@ namespace Filter{
         std::cout<<"Ctor of Car \n";
     }
 
-    void Car::init()
-    {}
-
     autodiff::VectorXreal Car::propagate(const autodiff::VectorXreal&)
     {}
 
-    void Car::setVelocity(const Filter::Velocity& velocity_)
-    {}
+    // Eigen::MatrixXd Car::getJacobian()
+    // {}
 
-    void Car::setAngularVelocity(const Filter::AngularVelocity& angular_velocity_)
-    {}
-
-    void Car::setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& twist_)
-    {}
-
-    void Car::setStates(std::shared_ptr<StateSpace> states_)
-    {}
-
-    Eigen::MatrixXd Car::getJacobian()
-    {}
-
-    Eigen::MatrixXd Car::update(const rclcpp::Time& , const rclcpp::Duration& ) 
-    {}
-
-    rclcpp::Duration Car::getDt()
-    {}
 } //namespace Filter

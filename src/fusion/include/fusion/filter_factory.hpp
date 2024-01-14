@@ -10,7 +10,7 @@ namespace Filter{
     {
         public:
             FilterFactory();
-            std::unique_ptr<Fusion> createFilter(FilterType  , std::unique_ptr<MotionModel> , std::shared_ptr<StateSpace> );
+            std::unique_ptr<Fusion> createFilter(FilterType  , std::shared_ptr<MotionModel> , std::shared_ptr<StateSpace> );
         private:
             using Creator = std::function<std::unique_ptr<Fusion>()>;
             std::unordered_map<int,Creator> filters_;

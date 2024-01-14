@@ -22,7 +22,7 @@ namespace Filter{
             virtual void initialize() override;
             virtual void predict(const rclcpp::Time&  , const rclcpp::Duration&) override;
             virtual void update(const Observations& ) override;
-            virtual void setMotionModel(std::unique_ptr<MotionModel> ) override;
+            virtual void setMotionModel(std::shared_ptr<MotionModel> ) override;
             virtual autodiff::VectorXreal getStates() override;
             virtual void setStates(std::shared_ptr<StateSpace> ) override;
 

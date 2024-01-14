@@ -21,4 +21,23 @@ namespace Filter{
         return nullptr;
 
     }
+
+    std::shared_ptr<MotionModel> MotionModelFactory::createModelFromPlugin(std::string plugin_class_name_, std::shared_ptr<StateSpace> states_)
+    {
+        pluginlib::ClassLoader<Filter::MotionModel> loader("fusion", "Filter::MotionModel");
+        // std::unique_ptr<Filter::MotionModel> model_(loader.createClassInstance(plugin_class_name_));
+        // try
+        // {
+            auto model_ = loader.createSharedInstance(plugin_class_name_);
+            // model_ = std::unique_ptr<MotionModel>(load);
+        // }
+        // catch (pluginlib::PluginlibException &ex)
+        // {
+        //     printf("The plugin failed to load for some reason. Error: %s\n", ex.what());
+        // }
+       
+        model_->setStates(states_);
+        // model_->propagate(states_->getStates()); //it works and goes to plugin
+        return model_;
+    }
 } //namespace Filter

@@ -23,7 +23,7 @@ namespace Visualization{
             void removeLineSegment(int );
             void addArrow(geometry_msgs::msg::Pose );
             void addArrow(geometry_msgs::msg::Pose2D );
-            void initialize();
+            void clear();
             void publishPoints();
             void publishLineStrip();
             void publishLineList();

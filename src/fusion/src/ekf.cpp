@@ -20,9 +20,9 @@ namespace Filter{
         // RCLCPP_INFO(rclcpp::get_logger("EKF") , "EKF: %i" ,  this->states_->getStates().size() );
     }
 
-    void Ekf::setMotionModel(std::unique_ptr<MotionModel> motion_model_)
+    void Ekf::setMotionModel(std::shared_ptr<MotionModel> motion_model_)
     {
-        this->motion_model_ = motion_model_ ? std::move(motion_model_) : nullptr;
+        this->motion_model_ = motion_model_ ? (motion_model_) : nullptr;
         // RCLCPP_INFO(rclcpp::get_logger("a") , "address %p" , static_cast<void*>(this));
     }
 
@@ -73,7 +73,6 @@ namespace Filter{
     void Ekf::predict(const rclcpp::Time& current_time_ , const rclcpp::Duration& dt_)
     {
         // RCLCPP_INFO(rclcpp::get_logger("a") , "address %p" , static_cast<void*>(this));
-
         if(motion_model_)
             A = motion_model_->update(current_time_ , dt_);
         else

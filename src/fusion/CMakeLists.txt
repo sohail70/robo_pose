@@ -11,6 +11,7 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
+find_package(pluginlib REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(tf2 REQUIRED)
@@ -24,34 +25,33 @@ include_directories(
 )
 
 add_library(
-  motion
+  motion SHARED #shared to nazari .a mide yani static lib- i had to make it shared so that i do not get linker error in the load.cpp in the simple_model pkg
   src/state_space.cpp
   src/motion_model_factory.cpp 
   src/motion_model.cpp 
   src/constant_heading_rate.cpp
   src/car.cpp
 )
-ament_target_dependencies(motion rclcpp)
-target_link_libraries(motion Eigen3::Eigen autodiff::autodiff)
-add_executable(fusion src/main.cpp)
-ament_target_dependencies(fusion rclcpp)
-target_link_libraries(fusion fusemuse motion sensor_data Eigen3::Eigen)
+set_target_properties(motion PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-install(TARGETS fusion DESTINATION lib/${PROJECT_NAME})
-install(DIRECTORY launch urdf worlds params DESTINATION share/${PROJECT_NAME})
+ament_target_dependencies(motion PUBLIC rclcpp pluginlib)
+target_link_libraries(motion PUBLIC Eigen3::Eigen autodiff::autodiff)
+add_executable(fusion src/main.cpp)
+ament_target_dependencies(fusion PUBLIC rclcpp)
+target_link_libraries(fusion PUBLIC fusemuse motion sensor_data Eigen3::Eigen)
 
 add_library(
   visualization
   src/visualization.cpp
 )
-ament_target_dependencies(visualization rclcpp std_msgs visualization_msgs geometry_msgs)
+ament_target_dependencies(visualization PUBLIC rclcpp std_msgs visualization_msgs geometry_msgs)
 
 add_library(
   sensor_data
   src/sensor_data.cpp
   src/mediator.cpp
 )
-ament_target_dependencies(sensor_data rclcpp geometry_msgs sensor_msgs std_msgs nav_msgs)
+ament_target_dependencies(sensor_data PUBLIC rclcpp geometry_msgs sensor_msgs std_msgs nav_msgs)
 
 add_library(
   fusemuse
@@ -60,9 +60,16 @@ add_library(
   src/fusion.cpp
   src/ekf.cpp
 )
-ament_target_dependencies(fusemuse rclcpp geometry_msgs sensor_msgs tf2_ros )
-target_link_libraries(fusemuse motion sensor_data Eigen3::Eigen visualization)
+ament_target_dependencies(fusemuse PUBLIC rclcpp geometry_msgs sensor_msgs tf2_ros )
+target_link_libraries(fusemuse PUBLIC motion sensor_data Eigen3::Eigen visualization)
 
+
+# set(fusion_INCLUDE_DIR "${CMAKE_CURRENT_LIST_DIR}/include")
+# message("fusion_INCLUDE_DIR is set to: ${fusion_INCLUDE_DIR}")
+install(TARGETS fusion  DESTINATION lib/${PROJECT_NAME})
+install(DIRECTORY launch urdf worlds params DESTINATION share/${PROJECT_NAME})
+install(DIRECTORY include/fusion DESTINATION include) #necessary for ament_export_include_directories and export is neccary for the simple model pkg so that ament_target_dependencies have the include directory information
+install(TARGETS motion  DESTINATION lib)
 
 
 if(BUILD_TESTING)
@@ -76,4 +83,7 @@ if(BUILD_TESTING)
   ament_lint_auto_find_test_dependencies()
 endif()
 
+ament_export_include_directories(include)
+ament_export_libraries(motion)
+ament_export_dependencies(Eigen3 autodiff)
 ament_package()

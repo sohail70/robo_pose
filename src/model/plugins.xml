@@ -1,0 +1,6 @@
+<library path="model">
+  <class type="model::Model" base_class_type="Filter::MotionModel">
+    <description>This is a model plugin.</description>
+  </class>
+
+</library>

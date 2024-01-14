@@ -127,7 +127,9 @@ TODO: I can get the jacobian. create a way for people to create their own motion
 TODO: i think a(k+1) = a(k) is not correct is it because it means constant acceleration which clearly is so may be increase the Q on this element so that it trust the measurement 
 TODO: whats the point of the prediction if its in the observation not empty if condition. i want it in case the measurement are having trouble getting to the filter. but at the same time i don't want the P cov to explode! so when P is huge the estimation is unreliable so may be i can add sensor_time out like for 10 seconds and that the limit it can do without having measurment. this is 
       double edged sword because the model is gonna predict based on the last measurement information
+TODO: get rid of eigen and use only autodiff lib. is it possible?
 
+TODO: you used amet_target export depednenices checkl if the simple model cmake can se this. so remove eigen3 and autodiff see what happens
 
 solution --> 
 Option 1: Move Entire Template Implementation to Header
@@ -375,3 +377,9 @@ X:
 8.93159e-05
     25.9071
 0.000139085
+
+
+
+
+ros2 pkg create --build-type ament_cmake model --dependencies autodiff Eigen3 fusion pluginlib --library-name model
+https://docs.ros.org/en/galactic/Tutorials/Beginner-Client-Libraries/Pluginlib.html

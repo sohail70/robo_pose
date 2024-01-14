@@ -64,7 +64,7 @@ namespace Visualization{
         points_.points.erase(points_.points.begin()+index_);
     }
 
-    void Visualization::initialize()
+    void Visualization::clear()
     {
         points_.points.clear();
         line_strip_.points.clear();

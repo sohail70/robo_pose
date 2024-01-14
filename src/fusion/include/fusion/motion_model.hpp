@@ -2,13 +2,13 @@
 #define MOTION_MODEL_HPP
 
 #include<iostream>
-#include<Eigen/Dense>
+// #include<Eigen/Dense>
 #include<cmath>
 #include<rclcpp/rclcpp.hpp>
 #include<geometry_msgs/msg/twist.hpp>
 #include<fusion/state_space.hpp>
 #include<autodiff/forward/real.hpp>
-#include <autodiff/forward/real/eigen.hpp>
+#include<autodiff/forward/real/eigen.hpp>
 
 namespace Filter{
     struct Position{
@@ -35,15 +35,14 @@ namespace Filter{
             public:
                 MotionModel();
                 virtual ~MotionModel();
-                virtual void init() = 0;
-                virtual Eigen::MatrixXd update(const rclcpp::Time&  , const rclcpp::Duration&) = 0;
                 virtual autodiff::VectorXreal propagate(const autodiff::VectorXreal&)=0;
-                virtual void setVelocity(const Filter::Velocity& ) = 0;
-                virtual void setAngularVelocity(const Filter::AngularVelocity& ) = 0;
-                virtual void setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& ) = 0;
-                virtual void setStates(std::shared_ptr<StateSpace> states_) = 0;
-                virtual Eigen::MatrixXd getJacobian() = 0;
-                virtual rclcpp::Duration getDt() = 0;
+                // virtual Eigen::MatrixXd getJacobian() = 0;
+
+                autodiff::MatrixXreal update(const rclcpp::Time&  , const rclcpp::Duration&);
+                void setVelAndAngVelFromTwist(const geometry_msgs::msg::Twist& );
+                void setStates(std::shared_ptr<StateSpace> states_);
+                void normalizeAngle(double& );
+
         };
 } //namespace Filter
 #endif

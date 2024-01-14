@@ -6,7 +6,9 @@
                 "${workspaceFolder}/**",
                 "/opt/ros/galactic/include/**",
                 "/usr/include/**",
-                "${workspaceFolder}/fusion/include/fusion"
+                "${workspaceFolder}/fusion/include/fusion",
+                "${workspaceFolder}/model/include",
+                "${workspaceFolder}/fusion/include"
             ],
             "defines": [],
             "compilerPath": "/usr/bin/gcc",

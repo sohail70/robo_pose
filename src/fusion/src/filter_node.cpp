@@ -15,6 +15,7 @@ namespace Filter{
         this->declare_parameter<double>("rate");
         this->declare_parameter<std::string>("odom_frame");
         this->declare_parameter<std::string>("base_link_frame");
+        this->declare_parameter<std::string>("model_plugin");
         int sensor_id = 0;
         while(true)
         {
@@ -118,20 +119,30 @@ namespace Filter{
         std::vector<std::string> config_states_;
         int model_type;
         int filter_type;
+        std::string model_plugin;
         this->get_parameter("states" , config_states_);
         this->get_parameter("model_type" , model_type);
         this->get_parameter("filter_type" , filter_type);
+        this->get_parameter("model_plugin" , model_plugin);
         for(auto cs : config_states_)
         {
             RCLCPP_INFO(this->get_logger() , "S: %s" , cs.c_str());
         }
         states_ = std::make_shared<StateSpace>(config_states_);
         model_factory_ = std::make_unique<MotionModelFactory>();
-        model_ = model_factory_->createModel( static_cast<ModelType>(model_type),  states_);
+        if(!model_plugin.empty())
+        {
+            model_ = model_factory_->createModelFromPlugin(model_plugin, states_);
+            // model_ = std::unique_ptr<MotionModel>(load.get());
+            // model_->setStates(states_);
+            // model_->propagate(states_->getStates());
+        }
+        else
+            model_ = model_factory_->createModel( static_cast<ModelType>(model_type),  states_);
         local_motion_model_ = model_.get();
         // hub_ = std::make_unique<Filter::MessageHub>(model_.get());
         filter_factory_ = std::make_unique<FilterFactory>();
-        filter_ = filter_factory_->createFilter(static_cast<FilterType>(filter_type) , std::move(model_) , states_);
+        filter_ = filter_factory_->createFilter(static_cast<FilterType>(filter_type) , model_ , states_);
         filter_->initialize();
 
     }

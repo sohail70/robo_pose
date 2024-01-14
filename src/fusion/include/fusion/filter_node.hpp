@@ -46,7 +46,7 @@ namespace Filter{
         private:
             std::shared_ptr<StateSpace> states_;
             std::unique_ptr<MotionModelFactory> model_factory_;
-            std::unique_ptr<MotionModel> model_;
+            std::shared_ptr<MotionModel> model_;
             // std::unique_ptr<MessageHub> hub_;
             std::unique_ptr<FilterFactory> filter_factory_;
             std::unique_ptr<Fusion> filter_;
@@ -87,9 +87,9 @@ namespace Filter{
                     // RCLCPP_INFO(this->get_logger() , "x,y,theta: %f , %f, %f" , pose_.x , pose_.y , pose_.theta);
                     // RCLCPP_INFO(this->get_logger() , "state theta 1: %f" , pose_.theta);
                     auto t_ = params_->time_;
+                    params_->visualization_->clear();
                     params_->visualization_->addArrow(pose_);
                     params_->visualization_->publishArrow(t_);
-                    params_->visualization_->initialize();
                     loop_rate.sleep();
                 }
             }
