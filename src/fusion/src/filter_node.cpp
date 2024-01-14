@@ -137,7 +137,6 @@ namespace Filter{
         else
             model_ = model_factory_->createModel( static_cast<ModelType>(model_type),  states_);
 
-        std::cout<<"Model Address 2: "<<model_.get()<<"\n";
         local_motion_model_ = model_.get();
         // hub_ = std::make_unique<Filter::MessageHub>(model_.get());
         filter_factory_ = std::make_unique<FilterFactory>();

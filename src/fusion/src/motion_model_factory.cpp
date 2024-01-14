@@ -24,12 +24,12 @@ namespace Filter{
 
     std::unique_ptr<MotionModel> MotionModelFactory::createModelFromPlugin(std::string plugin_class_name_, std::shared_ptr<StateSpace> states_)
     {
-        pluginlib::ClassLoader<Filter::MotionModel> loader("fusion", "Filter::MotionModel");
+        loader_ = std::make_unique<pluginlib::ClassLoader<Filter::MotionModel>>("fusion", "Filter::MotionModel");
         std::unique_ptr<Filter::MotionModel> model_;
         try
         {
-            auto load = loader.createUniqueInstance(plugin_class_name_);
-            model_.reset(load.release());
+            auto load_ = loader_->createUniqueInstance(plugin_class_name_);
+            model_.reset(load_.release());
         }
         catch (pluginlib::PluginlibException &ex)
         {

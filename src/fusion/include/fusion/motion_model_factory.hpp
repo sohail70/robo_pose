@@ -20,6 +20,7 @@ namespace Filter
             private:
                 using Creator = std::function<std::unique_ptr<MotionModel>()>;
                 std::unordered_map<int , Creator> creators;
+                std::unique_ptr<pluginlib::ClassLoader<Filter::MotionModel>> loader_;
         };
     
 } // namespace Filter
