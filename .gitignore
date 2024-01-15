@@ -1,0 +1,9 @@
+src/.vscode
+.vscode
+build
+install 
+log
+
+src/fusion/include/matplotlib-cpp
+src/fusion/html/*
+

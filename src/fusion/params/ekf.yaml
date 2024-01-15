@@ -16,7 +16,7 @@ Filter:
     sensor_1_topic: "imu1"
     sensor_1_states: ["yaw_dot" , "x_ddot"]
     sensor_1_msg: "sensor_msgs::msg::Imu"
-    sensor_2_topic: "odom"
+    sensor_2_topic: "odom" 
     sensor_2_states: ["x_dot"]
     sensor_2_msg: "nav_msgs::msg::Odom"
 
