@@ -5,5 +5,5 @@ install
 log
 
 src/fusion/include/matplotlib-cpp
-src/fusion/html/*
+src/fusion/html
 
