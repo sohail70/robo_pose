@@ -14,7 +14,7 @@ The Fusemuse ROS2 Package is a comprehensive collection of tools and utilities d
 
 Here is an overview of the entire package:
 
-![Fusemuse ROS2 Package](https://drive.google.com/file/d/1YoiWyYLB_H4QnVc5sR48ACLma5Rwx07V/view?usp=sharing)
+![Fusemuse ROS2 Package](https://drive.usercontent.google.com/download?id=1YoiWyYLB_H4QnVc5sR48ACLma5Rwx07V&export=view&authuser=0)
 
 ### Installation
 
