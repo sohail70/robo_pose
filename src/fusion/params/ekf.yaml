@@ -13,11 +13,11 @@ Filter:
     sensor_0_topic: "imu0"
     sensor_0_states: ["yaw_dot"]
     sensor_0_msg: "sensor_msgs::msg::Imu"
-    # sensor_1_topic: "imu1"
-    # sensor_1_states: ["yaw" , "yaw_dot" , "x_ddot"]
-    # sensor_1_msg: "sensor_msgs::msg::Imu"
-    sensor_1_topic: "odom"
-    sensor_1_states: ["x_dot"]
-    sensor_1_msg: "nav_msgs::msg::Odom"
+    sensor_1_topic: "imu1"
+    sensor_1_states: ["yaw_dot" , "x_ddot"]
+    sensor_1_msg: "sensor_msgs::msg::Imu"
+    sensor_2_topic: "odom"
+    sensor_2_states: ["x_dot"]
+    sensor_2_msg: "nav_msgs::msg::Odom"
 
     #what if we also needed a measurement model like for lidar which doesn't see the states directly and we need linearization --> future work

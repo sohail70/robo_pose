@@ -128,7 +128,7 @@ namespace Filter{
         this->get_parameter("model_plugin" , model_plugin);
         for(auto cs : config_states_)
         {
-            RCLCPP_INFO(this->get_logger() , "S: %s" , cs.c_str());
+            RCLCPP_INFO(this->get_logger() , "State: %s" , cs.c_str());
         }
         states_ = std::make_shared<StateSpace>(config_states_);
         model_factory_ = std::make_unique<MotionModelFactory>();
@@ -283,7 +283,7 @@ namespace Filter{
         // RCLCPP_INFO(rclcpp::get_logger("B") , "SIZE: %i" , index.size());
         for (auto sensor_state_ : sensor_states_[topic_name_])
         {
-            RCLCPP_INFO(this->get_logger() ," HERE : %s" , sensor_state_.c_str());
+            // RCLCPP_INFO(this->get_logger() ," HERE : %s" , sensor_state_.c_str());
             auto it_ = index_.find(sensor_state_);
             if(imu_state_action_.find(sensor_state_) != imu_state_action_.end())
             {
@@ -303,7 +303,7 @@ namespace Filter{
         // RCLCPP_INFO_STREAM(this->get_logger() , H);
         // RCLCPP_INFO_STREAM(this->get_logger() , index.size());
         observations_.push(current_obs_);
-        RCLCPP_INFO(this->get_logger() , "YAW_DOT IN IMU %f" , msg_->angular_velocity.z );
+        // RCLCPP_INFO(this->get_logger() , "YAW_DOT IN IMU %f" , msg_->angular_velocity.z );
 
     }
 
@@ -312,11 +312,11 @@ namespace Filter{
         // RCLCPP_INFO(this->get_logger() , "odom callback: %s" , topic_name_.c_str());
         Observations current_obs_;
         autodiff::MatrixXreal H;
-        auto cTime_ = this->now();
-        std::cout<<"Current Time0: "<<cTime_.nanoseconds()<<"\n";
-        std::cout<<"Message Time1: "<<msg_->header.stamp.sec<<" -- "<<msg_->header.stamp.nanosec<<"\n";
-        rclcpp::Duration time_diff_ = cTime_ - msg_->header.stamp;
-        std::cout<<"Time difference : "<< time_diff_.seconds()<<"\n";
+        // auto cTime_ = this->now();
+        // std::cout<<"Current Time0: "<<cTime_.nanoseconds()<<"\n";
+        // std::cout<<"Message Time1: "<<msg_->header.stamp.sec<<" -- "<<msg_->header.stamp.nanosec<<"\n";
+        // rclcpp::Duration time_diff_ = cTime_ - msg_->header.stamp;
+        // std::cout<<"Time difference : "<< time_diff_.seconds()<<"\n";
         current_obs_.time_ = msg_->header.stamp;
         auto index_ = states_->getStateOrder();
         H.setZero(states_->states_.size(), states_->states_.size());
@@ -351,11 +351,11 @@ namespace Filter{
         tf2::Matrix3x3(quaternion_).getRPY(roll_, pitch_, yaw_);
         std_msgs::msg::Float64 d_;
         d_.data = yaw_;
-        RCLCPP_INFO_STREAM(this->get_logger() , yaw_);
+        // RCLCPP_INFO_STREAM(this->get_logger() , yaw_);
         yaw_odom_pub_->publish(d_);
 
-        RCLCPP_INFO(this->get_logger() , "YAW IN ODOM %f" ,yaw_ );
-        RCLCPP_INFO(this->get_logger() , "YAW_DOT IN ODOM %f" , msg_->twist.twist.angular.z );
+        // RCLCPP_INFO(this->get_logger() , "YAW IN ODOM %f" ,yaw_ );
+        // RCLCPP_INFO(this->get_logger() , "YAW_DOT IN ODOM %f" , msg_->twist.twist.angular.z );
 
 
         ///////////////////////////////
@@ -605,7 +605,7 @@ namespace Filter{
             filter_->update(observations_.top());
             // RCLCPP_INFO(this->get_logger() , "some obs is in queue %i" , observations_.size());
             previous_update_time_ = cur_obs_time_;
-            RCLCPP_INFO(this->get_logger(), "dt: %f", dt_.seconds());
+            // RCLCPP_INFO(this->get_logger(), "dt: %f", dt_.seconds());
             observations_.pop();
             ///////lookup transform for now its for debugging purpose////////////////////
             // try
@@ -678,7 +678,7 @@ namespace Filter{
         // visualization_->initialize();
 
 
-        RCLCPP_INFO_STREAM(rclcpp::get_logger("rate logger") , 1/(cur_time_-pre_time_).seconds()); // *
+        // RCLCPP_INFO_STREAM(rclcpp::get_logger("rate logger") , 1/(cur_time_-pre_time_).seconds()); // *
         pre_time_ = cur_time_;
 
         ///////////////Send filtered states tf//////////////////////

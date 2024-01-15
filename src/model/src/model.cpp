@@ -10,7 +10,7 @@ Model::Model() : Filter::MotionModel()
 
 autodiff::VectorXreal Model::propagate(const autodiff::VectorXreal &state)
 {
-    std::cout<<"PROPAGATE OF PLUGIN \n";
+    // std::cout<<"PROPAGATE OF PLUGIN \n";
     autodiff::VectorXreal newState(state.size());
     autodiff::real dt = autodiff::real(dt_.seconds());
     const auto index = states_->getStateOrder();

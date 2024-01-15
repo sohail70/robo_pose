@@ -5,7 +5,6 @@
 namespace Visualization{
     Visualization::Visualization(): Node("VisualizationNode")
     {
-        std::cout<<"Hey \n";
         std_msgs::msg::ColorRGBA color;
         color.a = 1; color.g = 1;
 

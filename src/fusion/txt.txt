@@ -130,6 +130,7 @@ TODO: whats the point of the prediction if its in the observation not empty if c
 TODO: get rid of eigen and use only autodiff lib. is it possible?
 
 TODO: you used amet_target export depednenices checkl if the simple model cmake can se this. so remove eigen3 and autodiff see what happens
+TODO: initial possition and Q and initial covairance of P set it in the param. put covariance for the odom_filetered topic
 
 solution --> 
 Option 1: Move Entire Template Implementation to Header
@@ -399,3 +400,9 @@ whats wrong with this piece of code:
 The problem here is that load is a std::shared_ptr<MotionModel>, and when you call load.get(), you get a raw pointer (MotionModel*) pointing to the object. Then, when you use std::unique_ptr<MotionModel>(load.get()), you create a new std::unique_ptr that thinks it owns the object, but the original std::shared_ptr still owns it. When the std::shared_ptr goes out of scope or is explicitly destroyed, it deletes the object, leaving the std::unique_ptr with a dangling pointer, leading to undefined behavior.
 
 kholase you can not convert shared_ptr to unique ptr but vice versa is possible
+
+
+
+
+what should be the Q: https://stackoverflow.com/questions/36736376/kalman-filter-process-noise-covariance
+basically if your real dynamics are not the same as the motion model that you are using the Q is gonna compensate for it by the amount you are lacking! good example is in the above link

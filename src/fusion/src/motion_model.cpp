@@ -34,7 +34,7 @@ namespace Filter{
         for(int i = 0 ; i<state_.size() ; i++)
             state_(i) = newState(i).val();
         normalizeAngle(states_->getStates()[states_->getStateOrder().at("yaw")].val());
-        RCLCPP_INFO_STREAM(rclcpp::get_logger("STATE") , state_);
+        // RCLCPP_INFO_STREAM(rclcpp::get_logger("STATE") , state_);
 
         return J;  //retrun nazari seg fault mide!!!!
     }

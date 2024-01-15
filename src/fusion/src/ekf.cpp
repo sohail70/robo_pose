@@ -5,7 +5,7 @@ namespace Filter{
 
     Ekf::Ekf()
     {
-        std::cout<<"default Ctor of Ekf \n";
+        std::cout<<"Ctor of Ekf \n";
     }
     
     Ekf::Ekf(std::unique_ptr<MotionModel> motion_model_):
@@ -29,17 +29,14 @@ namespace Filter{
     void Ekf::initialize()
     {
         // initialize dimensions of the state space
-        if (this->states_) {
-            RCLCPP_INFO(rclcpp::get_logger("EKF"), "EKF: %i", this->states_->getStates().size());
-        } else {
+        if (!this->states_) 
             RCLCPP_ERROR(rclcpp::get_logger("EKF"), "State space pointer is null!");
-        }        
+
         int num_states_ = states_->getStates().size(); //[x,y,yaw,x_dot,yaw_dot,x_ddot]
         int num_inputs_ = 2;
         //for now 2 data is good --> i might have to figure out how to incorporate a_x and a_y data as well which might gives me maybe x and y by double integrating or just use a_x and integrate it once to get x_dot --> the realtion ship is maybe nonlinear and i need to take care of it
         int num_obs_ = 3; // my imu gives 9 data (3 for orientation - 3 for angular velocity and 3 for accelration in x,y,z direction but im using only yaw data - yaw_dot or angular velocity in z direction)
        
-        RCLCPP_INFO(rclcpp::get_logger("EKF") , "2");
         Q.setZero(num_states_ , num_states_);
         // the following number i get from /odom topic of the diff drive controller  which is 6by6 cov matrix for x,y,z,roll,pitch.yaw and in the twist their dots also can be found. i got what ever is related to my state space
         Q(0,0) = 0.05;
@@ -118,17 +115,17 @@ namespace Filter{
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("C") , innovation_covariance_);
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("C") , kalman_gain_);
         // std::cout<<"real ---: \n" <<real_measurement_<<"pred --- \n "<< measurement_prediction_ <<"res -- \n "<<measurement_residual_<<"\n";
-        std::cout<<"real ---: \n" <<real_measurement_<<"\n";
+        // std::cout<<"real ---: \n" <<real_measurement_<<"\n";
         // std::cout<<innovation_covariance_<<"\n";
         // std::cout<<"KALMAN GAIN:\n"<<kalman_gain_<<"\n";
         // std::cout<<"K*res:\n"<<kalman_gain_*measurement_residual_<<"\n";
-        std::cout<<"X_BEFORE: \n" <<X<<"\n";
+        // std::cout<<"X_BEFORE: \n" <<X<<"\n";
         X = X + kalman_gain_*measurement_residual_;
         P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
         // P = (I-kalman_gain_*H)*P;
         // RCLCPP_INFO_STREAM(rclcpp::get_logger("A") , X);
         // std::cout<<"P: \n"<<P<<"\n --- \n";
-        std::cout<<"X: \n" <<X<<"\n";
+        // std::cout<<"X: \n" <<X<<"\n";
 
     }
 
