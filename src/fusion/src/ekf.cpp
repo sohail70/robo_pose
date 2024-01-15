@@ -48,6 +48,21 @@ namespace Filter{
         // RCLCPP_INFO(rclcpp::get_logger("a") , "address %p" , static_cast<void*>(this));
     }
 
+    void Ekf::setProcessNoise(std::vector<double> Q_)
+    {
+        int num_states_ = states_->getStates().size();
+        int counter_ = 0;
+        Q.setZero(num_states_ , num_states_);
+        for(int i = 0 ; i <num_states_ ; i++)
+        {
+            for(int j = 0 ; j<num_states_ ; j++)
+            {
+                Q(i,j) = Q_.at(counter_);
+                counter_++;
+            }
+        }
+        // std::cout<<"Q:" <<Q<<"\n";
+    }
     void Ekf::initialize()
     {
         // initialize dimensions of the state space
@@ -55,18 +70,18 @@ namespace Filter{
             RCLCPP_ERROR(rclcpp::get_logger("EKF"), "State space pointer is null!");
 
         int num_states_ = states_->getStates().size(); //[x,y,yaw,x_dot,yaw_dot,x_ddot]
-        int num_inputs_ = 2;
+        // int num_inputs_ = 2;
         //for now 2 data is good --> i might have to figure out how to incorporate a_x and a_y data as well which might gives me maybe x and y by double integrating or just use a_x and integrate it once to get x_dot --> the realtion ship is maybe nonlinear and i need to take care of it
-        int num_obs_ = 3; // my imu gives 9 data (3 for orientation - 3 for angular velocity and 3 for accelration in x,y,z direction but im using only yaw data - yaw_dot or angular velocity in z direction)
+        // int num_obs_ = 3; // my imu gives 9 data (3 for orientation - 3 for angular velocity and 3 for accelration in x,y,z direction but im using only yaw data - yaw_dot or angular velocity in z direction)
        
-        Q.setZero(num_states_ , num_states_);
-        // the following number i get from /odom topic of the diff drive controller  which is 6by6 cov matrix for x,y,z,roll,pitch.yaw and in the twist their dots also can be found. i got what ever is related to my state space
-        Q(0,0) = 0.05;
-        Q(1,1) = 0.05;
-        Q(2,2) = 0.05;
-        Q(3,3) = 0.05;
-        Q(4,4) = 0.05;
-        Q(5,5) = 0.05;
+        // Q.setZero(num_states_ , num_states_);
+        // // the following number i get from /odom topic of the diff drive controller  which is 6by6 cov matrix for x,y,z,roll,pitch.yaw and in the twist their dots also can be found. i got what ever is related to my state space
+        // Q(0,0) = 0.05;
+        // Q(1,1) = 0.05;
+        // Q(2,2) = 0.05;
+        // Q(3,3) = 0.05;
+        // Q(4,4) = 0.05;
+        // Q(5,5) = 0.05;
         // H = Eigen::MatrixXd(num_obs_ , num_states_);
         // H<< 0,0,1,0,0,0,0,0,0,1; //we extract the yaw dot from imu . lets not use the oienation (yaw) becase i think that data is redudnat and not available directly! but im not sure
         // H<<0,0,1,0,0,0 ,0,0,0,0,1,0 ,0,0,0,0,0,1; //we extract the yaw dot from imu . lets not use the oienation (yaw) becase i think that data is redudnat and not available directly! but im not sure

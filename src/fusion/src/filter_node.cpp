@@ -39,6 +39,9 @@ namespace Filter{
         this->declare_parameter<std::string>("odom_frame");
         this->declare_parameter<std::string>("base_link_frame");
         this->declare_parameter<std::string>("model_plugin");
+        // this->declare_parameter<std::vector<double>>("Q_diag");
+        this->declare_parameter<std::vector<double>>("Q_full");
+
         int sensor_id = 0;
         while(true)
         {
@@ -102,6 +105,8 @@ namespace Filter{
             sensor_subs_.push_back(cmd_vel_sub_);
         }
 
+
+
         this->get_parameter("odom_frame" , odom_frame_);
         this->get_parameter("base_link_frame" , base_link_frame_);
         this->get_parameter("publish_tf" , publish_tf_);
@@ -144,10 +149,12 @@ namespace Filter{
         int model_type;
         int filter_type;
         std::string model_plugin;
+        std::vector<double> Q_;
         this->get_parameter("states" , config_states_);
         this->get_parameter("model_type" , model_type);
         this->get_parameter("filter_type" , filter_type);
         this->get_parameter("model_plugin" , model_plugin);
+        this->get_parameter("Q_full" , Q_);
         for(auto cs : config_states_)
         {
             RCLCPP_INFO(this->get_logger() , "State: %s" , cs.c_str());
@@ -163,6 +170,7 @@ namespace Filter{
         // hub_ = std::make_unique<Filter::MessageHub>(model_.get());
         filter_factory_ = std::make_unique<FilterFactory>();
         filter_ = filter_factory_->createFilter(static_cast<FilterType>(filter_type) , std::move(model_) , states_);
+        filter_->setProcessNoise(Q_);
         filter_->initialize();
 
     }

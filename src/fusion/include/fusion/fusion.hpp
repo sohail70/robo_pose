@@ -50,6 +50,7 @@ namespace Filter{
             virtual void setMotionModel(std::unique_ptr<MotionModel> ) = 0;
             virtual autodiff::VectorXreal getStates() = 0;
             virtual void setStates(std::shared_ptr<StateSpace> ) = 0;
+            virtual void setProcessNoise(std::vector<double> ) = 0;
 
 
     };

@@ -47,6 +47,7 @@ namespace Filter{
             virtual void setMotionModel(std::unique_ptr<MotionModel> ) override;
             virtual autodiff::VectorXreal getStates() override;
             virtual void setStates(std::shared_ptr<StateSpace> ) override;
+            virtual void setProcessNoise(std::vector<double> ) override;
 
     };
 } //namespace Filter
