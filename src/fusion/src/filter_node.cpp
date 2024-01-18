@@ -31,7 +31,8 @@ namespace Filter{
     FilterNode::FilterNode(rclcpp::NodeOptions options_):Node("Filter",options_)
     {
         this->declare_parameter<std::vector<std::string>>("states");
-        this->declare_parameter<bool>("use_control");
+        this->declare_parameter<std::vector<double>>("initial_states");
+        this->declare_parameter<bool>("use_cmd");
         this->declare_parameter<bool>("publish_tf");
         this->declare_parameter<int>("model_type");
         this->declare_parameter<int>("filter_type");
@@ -95,9 +96,9 @@ namespace Filter{
             sensor_id++;
         }
 
-        bool use_control;
-        this->get_parameter("use_control" , use_control);
-        if(use_control)
+        bool use_cmd;
+        this->get_parameter("use_cmd" , use_cmd);
+        if(use_cmd)
         {
             auto cmd_vel_sub_ = this->create_subscription<geometry_msgs::msg::Twist>("cmd_vel" , 1 , [this](const geometry_msgs::msg::Twist::SharedPtr msg){
                 controlCallback(msg);
@@ -150,16 +151,19 @@ namespace Filter{
         int filter_type;
         std::string model_plugin;
         std::vector<double> Q_;
+        std::vector<double> initial_states;
         this->get_parameter("states" , config_states_);
         this->get_parameter("model_type" , model_type);
         this->get_parameter("filter_type" , filter_type);
         this->get_parameter("model_plugin" , model_plugin);
         this->get_parameter("Q_full" , Q_);
+        this->get_parameter("initial_states" , initial_states);
         for(auto cs : config_states_)
         {
             RCLCPP_INFO(this->get_logger() , "State: %s" , cs.c_str());
         }
         states_ = std::make_shared<StateSpace>(config_states_);
+        states_->updateStates(initial_states);
         model_factory_ = std::make_unique<MotionModelFactory>();
         if(!model_plugin.empty())
             model_ = model_factory_->createModelFromPlugin(model_plugin, states_);

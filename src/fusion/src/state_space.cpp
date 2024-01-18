@@ -41,9 +41,9 @@ namespace Filter{
     void StateSpace::updateStates(std::vector<double> values_)
     {
         int index = 0;
-        for(auto&  value_ : values_)
+        for(auto&  name_ : states_name_)
         {
-            states_[index] = values_[index];
+            states_[name_.second] = values_[name_.second];
             index++;
         }
     }
