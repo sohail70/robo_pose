@@ -1,8 +1,8 @@
-# Fusemuse ROS2 Package
+# robo_pose ROS2 Package
 
 ## Overview
 
-The Fusemuse ROS2 Package is a comprehensive collection of tools and utilities designed to streamline the integration and collaboration of various models and components within a unified framework. This library aims to facilitate the seamless fusion of diverse elements, making it easier to develop, deploy, and manage complex robotic applications.
+The robo_pose ROS2 Package supports the integration of different models and components within a unified framework. By incorporating filters like EKF, it contributes to improved robot localization, offering simplicity in the development and deployment of robotic applications.
 
 ## Current Features
 
