@@ -15,16 +15,16 @@ The robo_pose ROS2 Package supports the integration of different models and comp
 
 Here is an overview of the entire package:
 
-![Fusemuse ROS2 Package](https://drive.usercontent.google.com/download?id=1YoiWyYLB_H4QnVc5sR48ACLma5Rwx07V&export=view&authuser=0)
+![robo_pose ROS2 Package](https://drive.usercontent.google.com/download?id=1YoiWyYLB_H4QnVc5sR48ACLma5Rwx07V&export=view&authuser=0)
 
 ### Installation
 
-To install the Fusemuse ROS2 Package, follow these steps:
+To install the robo_pose ROS2 Package, follow these steps:
 
 1. Clone the repository to your ROS2 workspace:
 
     ```bash
-    git@github.com:sohail70/fusemuse.git
+    git@github.com:sohail70/robo_pose.git
     ```
 
 2. Build the package using colcon:
