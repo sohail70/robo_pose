@@ -50,7 +50,7 @@ namespace Filter{
             MotionModel* motion_model_;
     };
 
-}; // namespace Filter
+} // namespace Filter
 
 
 

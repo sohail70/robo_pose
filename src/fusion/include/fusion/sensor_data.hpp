@@ -55,22 +55,6 @@ class RosCmdVelSource : public VelocitySource<geometry_msgs::msg::Twist>
 
 };
 
-// class RosJointStateVelocitySource: public VelocitySource<double>
-// {
-//     private:
-//         rclcpp::Subscription<geometry_msgs::msg::JointState>::SharedPtr joint_state_sub_;
-//         sensor_msgs::msg::JointState joint_state_;
-//         rclcpp::Node::SharedPtr node_;
-//         void jointStateCallback(const sensor_msgs::msg::JointState::SharedPtr );
-//     public:
-//         RosJointStateVelocitySource();
-//         virtual const double& getVelocity() const;
-//         rclcpp::Node::SharedPtr getRosNode();
-
-
-// };
-
-
 template<typename imuType>
 class ImuSource{
     protected:

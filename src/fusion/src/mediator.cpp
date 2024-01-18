@@ -37,4 +37,4 @@ namespace Filter{
             break;
         }
     }
-};// namespace Filter
+} // namespace Filter

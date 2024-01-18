@@ -36,7 +36,6 @@ namespace Filter{
             autodiff::MatrixXreal H; //Measuring Matrix 
             autodiff::MatrixXreal R; //Measurment Noise covariance Matrix
             autodiff::MatrixXreal I; //Identiy Matrix
-            // Eigen::MatrixXd X; //State Space
            
         public:
             Ekf();
@@ -48,6 +47,7 @@ namespace Filter{
             virtual autodiff::VectorXreal getStates() override;
             virtual void setStates(std::shared_ptr<StateSpace> ) override;
             virtual void setProcessNoise(std::vector<double> ) override;
+            virtual void setMeasurementNoise(std::vector<double> ) override;
 
     };
 } //namespace Filter

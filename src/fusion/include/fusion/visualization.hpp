@@ -58,19 +58,8 @@ namespace Visualization{
             visualization_msgs::msg::Marker line_list_;
             visualization_msgs::msg::Marker arrow_;
 
-            // static int id;
     };
-    // int Visualization::id = 0;
 
-
-    // class LineStrip: public rclcpp::Node{
-
-    // };
-
-    // class LineList{
-
-
-    // };
 
 } //namespace Visualization
 

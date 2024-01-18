@@ -33,10 +33,7 @@ namespace Filter{
             Car();
             // virtual Eigen::MatrixXd getJacobian() override;
             virtual autodiff::VectorXreal propagate(const autodiff::VectorXreal&) override;
-
-
         private:
-
     };
 } //namespace Filter
 #endif

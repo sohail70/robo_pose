@@ -36,17 +36,10 @@ namespace Filter{
             void updateStates(std::vector<double> );
             autodiff::VectorXreal& getStates();
             const std::unordered_map<std::string,int>& getStateOrder();
-
-        public:
+        private:
             std::unordered_map<std::string,int> states_name_;
-            // std::vector<std::string> state_order_; 
             autodiff::VectorXreal states_;
-
-
     };
-
-
-
 } //namespace Filter
 
 

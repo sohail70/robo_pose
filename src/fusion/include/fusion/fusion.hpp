@@ -51,8 +51,7 @@ namespace Filter{
             virtual autodiff::VectorXreal getStates() = 0;
             virtual void setStates(std::shared_ptr<StateSpace> ) = 0;
             virtual void setProcessNoise(std::vector<double> ) = 0;
-
-
+            virtual void setMeasurementNoise(std::vector<double> ) = 0;
     };
 
 } //namespace Filter

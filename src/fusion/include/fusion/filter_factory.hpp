@@ -36,7 +36,6 @@ namespace Filter{
         private:
             using Creator = std::function<std::unique_ptr<Fusion>()>;
             std::unordered_map<int,Creator> filters_;
-
     };
 
 

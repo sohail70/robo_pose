@@ -33,24 +33,8 @@
 #include<autodiff/forward/real/eigen.hpp>
 
 namespace Filter{
-    struct Position{
-        double x, y, z;
-    };
-    struct Angle{
-        double roll, pitch, yaw;
-    };
-    struct Velocity{
-        double x_dot,y_dot,z_dot;
-    };
-    struct AngularVelocity{
-        double roll_dot, pitch_dot , yaw_dot;
-    };
     class MotionModel{
             protected:
-                Position position_;
-                Angle angle_;
-                Velocity velocity_;
-                AngularVelocity angular_velocity_;
                 rclcpp::Duration dt_;
                 rclcpp::Time previous_time_;
                 std::shared_ptr<StateSpace> states_;
