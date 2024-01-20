@@ -124,9 +124,9 @@ namespace Filter{
         this->get_parameter("rate" , rate_);
         // timer_ = this->create_wall_timer(std::chrono::nanoseconds(static_cast<long long>((1.0 / rate_) * 1.0e+9)), std::bind(&FilterNode::timerCallback, this));
 
-        const std::chrono::duration<double> timespan{1.0 / rate_};
+        const std::chrono::duration<double> timespan_{1.0 / rate_};
         timer_ = rclcpp::GenericTimer<rclcpp::VoidCallbackType>::make_shared(
-            this->get_clock(), std::chrono::duration_cast<std::chrono::nanoseconds>(timespan),
+            this->get_clock(), std::chrono::duration_cast<std::chrono::nanoseconds>(timespan_),
             std::bind(&FilterNode::timerCallback, this), this->get_node_base_interface()->get_context());
         this->get_node_timers_interface()->add_timer(timer_, nullptr);
 

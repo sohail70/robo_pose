@@ -430,6 +430,10 @@ ros2 run --prefix 'valgrind --tool=callgrind' fusion fusion --ros-args --params-
 now after some time use ctrl+c and check the callgrind.out file
 
 
+the default build type of cmake is debug so as the colcon build. so you should specify RelWithDebugInfo
+
+
+
 namespace Filter{
 
     Ekf::Ekf()
