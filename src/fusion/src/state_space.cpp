@@ -57,4 +57,4 @@ namespace Filter{
         return states_name_;
     }
 
-};
+} //namespace Filter

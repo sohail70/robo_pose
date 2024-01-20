@@ -30,7 +30,7 @@ namespace Filter{
     }
     FilterNode::FilterNode(rclcpp::NodeOptions options_):Node("Filter",options_)
     {
-        // this->declare_parameter<std::vector<std::string>>("states");
+        this->declare_parameter<std::vector<std::string>>("states");
         this->declare_parameter<std::vector<double>>("initial_states");
         this->declare_parameter<bool>("use_cmd");
         this->declare_parameter<bool>("publish_tf");
@@ -40,7 +40,6 @@ namespace Filter{
         this->declare_parameter<std::string>("odom_frame");
         this->declare_parameter<std::string>("base_link_frame");
         this->declare_parameter<std::string>("model_plugin");
-        // this->declare_parameter<std::vector<double>>("Q_diag");
         this->declare_parameter<std::vector<double>>("Q");
         this->declare_parameter<std::vector<double>>("R");
 
@@ -147,25 +146,31 @@ namespace Filter{
 
     void FilterNode::initialize()
     {
-        // std::vector<std::string> config_states_;
-        std::vector<std::string> config_states_{"x","y","z",
-                                                "roll","pitch","yaw",
-                                                "x_dot","y_dot","z_dot",
-                                                "roll_dot","pitch_dot","yaw_dot",
-                                                "x_ddot","y_ddot","z_ddot"};
+        std::vector<std::string> config_states_;
         int model_type;
         int filter_type;
         std::string model_plugin;
         std::vector<double> Q_;
         std::vector<double> R_;
         std::vector<double> initial_states;
-        // this->get_parameter("states" , config_states_);
+        this->get_parameter("states" , config_states_);
         this->get_parameter("model_type" , model_type);
         this->get_parameter("filter_type" , filter_type);
         this->get_parameter("model_plugin" , model_plugin);
         this->get_parameter("Q" , Q_);
         this->get_parameter("R" , R_);
         this->get_parameter("initial_states" , initial_states);
+
+        if(config_states_.at(0).empty())
+        {
+            std::cout<<"No state is being set so using default states \n";
+            config_states_ = std::vector<std::string>{"x","y","z",
+                                                      "roll","pitch","yaw",
+                                                      "x_dot","y_dot","z_dot",
+                                                      "roll_dot","pitch_dot","yaw_dot",
+                                                      "x_ddot","y_ddot","z_ddot"};
+        }
+
         for(auto cs : config_states_)
         {
             RCLCPP_INFO(this->get_logger() , "State: %s" , cs.c_str());
