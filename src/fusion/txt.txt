@@ -412,6 +412,15 @@ uplodaing pic and using it in github: https://stackoverflow.com/questions/520635
 
 
 
+
+c++ and python code at the same pkg:
+https://answers.ros.org/question/298740/ros2-c-and-python-in-same-package-is-it-possible/
+
+
+don't use a folder named scripts in your folder structure because gazebo won't be able to launch
+https://github.com/ros-simulation/gazebo_ros_pkgs/issues/1050
+
+
 namespace Filter{
 
     Ekf::Ekf()

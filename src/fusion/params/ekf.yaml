@@ -9,29 +9,28 @@ Filter:
     model_plugin: "model::Model"
     filter_type: 0 # EKF:0 UKF:1
     use_cmd: false # I'm only using it to set linear x to zero when the robot is stationary (for imu only case)
-    states: ["x" , "y" , "yaw" , "x_dot" , "yaw_dot" , "x_ddot"] 
+    states: ["x" , "y" , "yaw" , "x_dot" , "yaw_dot" ] 
     initial_states: [0.0,0.0,0.0,0.0,0.0,0.0]
 
     # Q_diag: [0.05 , 0.05 , 0.05 , 0.05, 0.05 ,0.05]
-    Q_full: [0.05 , 0.0  , 0.0  , 0.0  , 0.0  , 0.0 ,
-             0.0  , 0.05 , 0.0  , 0.0  , 0.0  , 0.0 ,
-             0.0  , 0.0  , 0.05 , 0.0  , 0.0  , 0.0 ,
-             0.0  , 0.0  , 0.0  , 0.05 , 0.0  , 0.0 ,
-             0.0  , 0.0  , 0.0  , 0.0  , 0.05 , 0.0 ,
-             0.0  , 0.0  , 0.0  , 0.0  , 0.0  , 0.05,]
+    Q_full: [0.05 , 0.0  , 0.0  , 0.0  , 0.0  ,
+             0.0  , 0.05 , 0.0  , 0.0  , 0.0  ,
+             0.0  , 0.0  , 0.05 , 0.0  , 0.0  ,
+             0.0  , 0.0  , 0.0  , 0.05 , 0.0  ,
+             0.0  , 0.0  , 0.0  , 0.0  , 0.05 ,]
+           
              
-    R_full: [4.0e-8 , 0.0    , 0.0    , 0.0    , 0.0    , 0.0 ,
-             0.0    , 4.0e-8 , 0.0    , 0.0    , 0.0    , 0.0 ,
-             0.0    , 0.0    , 4.0e-8 , 0.0    , 0.0    , 0.0 ,
-             0.0    , 0.0    , 0.0    , 4.0e-8 , 0.0    , 0.0 ,
-             0.0    , 0.0    , 0.0    , 0.0    , 4.0e-8 , 0.0 ,
-             0.0    , 0.0    , 0.0    , 0.0    , 0.0    , 4.0e-8,]
+    R_full: [4.0e-8 , 0.0    , 0.0    , 0.0    , 0.0    , 
+             0.0    , 4.0e-8 , 0.0    , 0.0    , 0.0    , 
+             0.0    , 0.0    , 4.0e-8 , 0.0    , 0.0    , 
+             0.0    , 0.0    , 0.0    , 4.0e-8 , 0.0    , 
+             0.0    , 0.0    , 0.0    , 0.0    , 4.0e-8 ,] 
 
     sensor_0_topic: "imu0"
     sensor_0_states: ["yaw_dot"]
     sensor_0_msg: "sensor_msgs::msg::Imu"
     sensor_1_topic: "imu1"
-    sensor_1_states: ["yaw_dot" , "x_ddot"]
+    sensor_1_states: ["yaw_dot" ]
     sensor_1_msg: "sensor_msgs::msg::Imu"
     sensor_2_topic: "odom" 
     sensor_2_states: ["x_dot"]

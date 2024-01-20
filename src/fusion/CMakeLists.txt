@@ -7,7 +7,9 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
+find_package(ament_cmake_python REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
@@ -70,6 +72,14 @@ install(TARGETS fusion  DESTINATION lib/${PROJECT_NAME})
 install(DIRECTORY launch urdf worlds params DESTINATION share/${PROJECT_NAME})
 install(DIRECTORY include/fusion DESTINATION include) #necessary for ament_export_include_directories and export is neccary for the simple model pkg so that ament_target_dependencies have the include directory information
 install(TARGETS motion  DESTINATION lib)
+
+
+
+ament_python_install_package(script)
+install(PROGRAMS
+  script/gui.py
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 
 if(BUILD_TESTING)
