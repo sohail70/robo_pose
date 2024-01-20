@@ -31,9 +31,7 @@ namespace Filter{
         private:
             autodiff::MatrixXreal P; //Covariance matrix
             autodiff::MatrixXreal A; //Linearized model
-            autodiff::MatrixXreal B; //Control Matrix
             autodiff::MatrixXreal Q; //Process Noise Matrix
-            autodiff::MatrixXreal H; //Measuring Matrix 
             autodiff::MatrixXreal R; //Measurment Noise covariance Matrix
             autodiff::MatrixXreal I; //Identiy Matrix
            

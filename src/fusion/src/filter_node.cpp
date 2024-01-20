@@ -30,7 +30,7 @@ namespace Filter{
     }
     FilterNode::FilterNode(rclcpp::NodeOptions options_):Node("Filter",options_)
     {
-        this->declare_parameter<std::vector<std::string>>("states");
+        // this->declare_parameter<std::vector<std::string>>("states");
         this->declare_parameter<std::vector<double>>("initial_states");
         this->declare_parameter<bool>("use_cmd");
         this->declare_parameter<bool>("publish_tf");
@@ -41,8 +41,8 @@ namespace Filter{
         this->declare_parameter<std::string>("base_link_frame");
         this->declare_parameter<std::string>("model_plugin");
         // this->declare_parameter<std::vector<double>>("Q_diag");
-        this->declare_parameter<std::vector<double>>("Q_full");
-        this->declare_parameter<std::vector<double>>("R_full");
+        this->declare_parameter<std::vector<double>>("Q");
+        this->declare_parameter<std::vector<double>>("R");
 
         int sensor_id = 0;
         while(true)
@@ -147,19 +147,24 @@ namespace Filter{
 
     void FilterNode::initialize()
     {
-        std::vector<std::string> config_states_;
+        // std::vector<std::string> config_states_;
+        std::vector<std::string> config_states_{"x","y","z",
+                                                "roll","pitch","yaw",
+                                                "x_dot","y_dot","z_dot",
+                                                "roll_dot","pitch_dot","yaw_dot",
+                                                "x_ddot","y_ddot","z_ddot"};
         int model_type;
         int filter_type;
         std::string model_plugin;
         std::vector<double> Q_;
         std::vector<double> R_;
         std::vector<double> initial_states;
-        this->get_parameter("states" , config_states_);
+        // this->get_parameter("states" , config_states_);
         this->get_parameter("model_type" , model_type);
         this->get_parameter("filter_type" , filter_type);
         this->get_parameter("model_plugin" , model_plugin);
-        this->get_parameter("Q_full" , Q_);
-        this->get_parameter("R_full" , R_);
+        this->get_parameter("Q" , Q_);
+        this->get_parameter("R" , R_);
         this->get_parameter("initial_states" , initial_states);
         for(auto cs : config_states_)
         {
@@ -347,7 +352,6 @@ namespace Filter{
         }
         current_obs_.H = H;
         observations_.push(current_obs_);
-            
         // ///////publishing yaw data from odom in a topic//////////
         tf2::Quaternion quaternion_;
         tf2::fromMsg(msg_->pose.pose.orientation, quaternion_);
@@ -388,15 +392,16 @@ namespace Filter{
 
         ///////////////////publishing filtered data into a topic///////////// 
         autodiff::VectorXreal sta_ = filter_->getStates();
+        auto index_ = states_->getStateOrder();
         filtered_odom_.header.frame_id = odom_frame_;
         filtered_odom_.child_frame_id = base_link_frame_;
         filtered_odom_.header.stamp = this->now();
-        filtered_odom_.pose.pose.position.x = sta_(0).val();
-        filtered_odom_.pose.pose.position.y = sta_(1).val();
+        filtered_odom_.pose.pose.position.x = sta_(index_.at("x")).val();
+        filtered_odom_.pose.pose.position.y = sta_(index_.at("y")).val();
 
 
         tf2::Quaternion quaternion_;
-        quaternion_.setRPY(0.0,0.0,sta_(2).val());
+        quaternion_.setRPY(0.0,0.0,sta_(index_.at("yaw")).val());
         geometry_msgs::msg::Quaternion orientation_msg_;
         tf2::convert(quaternion_ , orientation_msg_);
         filtered_odom_.pose.pose.orientation = orientation_msg_;
@@ -404,7 +409,7 @@ namespace Filter{
         // /////////////////////publishing yaw in a topic//////////////////
         autodiff::VectorXreal st_ = filter_->getStates();
         std_msgs::msg::Float64 d;
-        d.data = st_(2).val();
+        d.data = st_(index_.at("yaw")).val();
         yaw_filter_pub_->publish(d);
         ///////////////Send filtered states tf//////////////////////
         if(publish_tf_)

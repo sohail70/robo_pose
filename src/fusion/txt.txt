@@ -421,6 +421,15 @@ don't use a folder named scripts in your folder structure because gazebo won't b
 https://github.com/ros-simulation/gazebo_ros_pkgs/issues/1050
 
 
+
+using a profiler:
+https://navigation.ros.org/tutorials/docs/get_profile.html
+sudo apt install valgrind kcachegrind
+colcon build --cmake-args -DCMAKE_BUILD_TYPE=RelWithDebInfo
+ros2 run --prefix 'valgrind --tool=callgrind' fusion fusion --ros-args --params-file src/fusion/params/ekf.yaml
+now after some time use ctrl+c and check the callgrind.out file
+
+
 namespace Filter{
 
     Ekf::Ekf()

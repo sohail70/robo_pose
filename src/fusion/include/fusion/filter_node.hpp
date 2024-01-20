@@ -100,10 +100,11 @@ namespace Filter{
                 geometry_msgs::msg::Pose2D pose_;
                 while (rclcpp::ok())
                 {
-                    autodiff::VectorXreal states_ = filter_->getStates();
-                    pose_.x = states_(0).val();
-                    pose_.y = states_(1).val();
-                    pose_.theta = states_(2).val();
+                    autodiff::VectorXreal sta_ = filter_->getStates();
+                    auto index_ = states_->getStateOrder();
+                    pose_.x = sta_(index_.at("x")).val();
+                    pose_.y = sta_(index_.at("y")).val();
+                    pose_.theta = sta_(index_.at("yaw")).val();
                     auto t_ = params_->time_;
                     params_->visualization_->clear();
                     params_->visualization_->addArrow(pose_);

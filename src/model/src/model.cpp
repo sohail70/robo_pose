@@ -15,13 +15,23 @@ autodiff::VectorXreal Model::propagate(const autodiff::VectorXreal &state)
     autodiff::real dt = autodiff::real(dt_.seconds());
     const auto index = states_->getStateOrder();
     // std::cout<<"x_dot:"<<(index.find("x") != index.end() )<<"\n";
-    newState(0) = state(index.at("x")) + state(index.at("x_dot")) * cos(state(index.at("yaw"))) * dt; // Update x
-    newState(1) = state(index.at("y")) + state(index.at("x_dot")) * sin(state(index.at("yaw"))) * dt; // Update y
-    newState(2) = state(index.at("yaw")) + state(index.at("yaw_dot")) * dt;                           // Update yaw angle
-    newState(3) = state(index.at("x_dot")) + state(index.at("x_ddot")) * dt;
-    newState(4) = state(index.at("yaw_dot"));
-    newState(5) = state(index.at("x_ddot"));
+    newState(0)  = state(index.at("x")) + state(index.at("x_dot")) * cos(state(index.at("yaw"))) * dt; 
+    newState(1)  = state(index.at("y")) + state(index.at("x_dot")) * sin(state(index.at("yaw"))) * dt; 
+    newState(2)  = state(index.at("z"));                                                             
+    newState(3)  = state(index.at("roll"));
+    newState(4)  = state(index.at("pitch"));
+    newState(5)  = state(index.at("yaw")) + state(index.at("yaw_dot")) * dt;
+    newState(6)  = state(index.at("x_dot")) + state(index.at("x_ddot")) * dt;
+    newState(7)  = state(index.at("y_dot"));
+    newState(8)  = state(index.at("z_dot")); 
+    newState(9)  = state(index.at("roll_dot"));
+    newState(10) = state(index.at("pitch_dot"));
+    newState(11) = state(index.at("yaw_dot"));
+    newState(12) = state(index.at("x_ddot"));
+    newState(13) = state(index.at("y_ddot"));
+    newState(14) = state(index.at("z_ddot"));
     return newState;
+
 }
 
 Model::~Model()
