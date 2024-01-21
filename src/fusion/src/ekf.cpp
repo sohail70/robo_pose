@@ -87,7 +87,6 @@ namespace Filter{
     {
         A = motion_model_->update(current_time_ , dt_);
         P = A*P*A.transpose() + Q;
-        // std::cout<<"P0: "<<P<<"\n \n \n";
     }
 
     void Ekf::update(const Observations& observation_)
@@ -98,14 +97,11 @@ namespace Filter{
         autodiff::MatrixXreal measurement_prediction_ = H*X;
         autodiff::MatrixXreal measurement_residual_ = real_measurement_ - measurement_prediction_;
         autodiff::MatrixXreal innovation_covariance_ = H*P*H.transpose() + R;
-        autodiff::MatrixXreal kalman_gain_ = P*H.transpose()*innovation_covariance_.completeOrthogonalDecomposition().pseudoInverse(); //.inverse() doesn't work because we have 0 in the diagonal due to my design choice of having the full states in the H matrix!
-        // autodiff::MatrixXreal kalman_gain_ = P*H.transpose()*innovation_covariance_.inverse();
+        // autodiff::MatrixXreal kalman_gain_ = P*H.transpose()*innovation_covariance_.completeOrthogonalDecomposition().pseudoInverse(); //.inverse() doesn't work because we have 0 in the diagonal due to my design choice of having the full states in the H matrix!
+        autodiff::MatrixXreal kalman_gain_ = P*H.transpose()*innovation_covariance_.inverse();
         X = X + kalman_gain_*measurement_residual_;
         P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
         // P = (I-kalman_gain_*H)*P;
-        // std::cout<<"P: "<<P<<"\n \n \n ";
-        std::cout<<"X: \n"<<X<<"\n \n \n ";
-        std::cout<<"---------------- \n";
     }
 
     autodiff::VectorXreal Ekf::getStates()

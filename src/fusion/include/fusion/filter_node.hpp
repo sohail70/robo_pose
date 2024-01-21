@@ -50,12 +50,8 @@
 
 namespace Filter{
     struct ThreadParams{
-        // rclcpp::Node::SharedPtr node_;
         std::shared_ptr<Visualization::Visualization> visualization_;
         rclcpp::Time time_;
-        // std::mutex visualization_mutex_;
-        // std::condition_variable cv_;
-        // bool ready;
     };
 
     class FilterNode: public rclcpp::Node{
