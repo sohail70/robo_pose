@@ -87,6 +87,7 @@ namespace Filter{
     {
         A = motion_model_->update(current_time_ , dt_);
         P = A*P*A.transpose() + Q;
+        // std::cout<<"P0 :\n"<<P<<"\n \n";
     }
 
     void Ekf::update(const Observations& observation_)
@@ -102,6 +103,9 @@ namespace Filter{
         X = X + kalman_gain_*measurement_residual_;
         P = (I-kalman_gain_*H)*P*(I-kalman_gain_*H).transpose() + kalman_gain_*R*kalman_gain_.transpose(); // or use P = (I-K*H)*P
         // P = (I-kalman_gain_*H)*P;
+        // std::cout<<"P: \n "<<P<<"\n \n";
+        // std::cout<<"X: \n"<<X<<"\n \n";
+        // std::cout<<"------------ \n";
     }
 
     autodiff::VectorXreal Ekf::getStates()

@@ -401,12 +401,14 @@ namespace Filter{
         filtered_odom_.header.frame_id = odom_frame_;
         filtered_odom_.child_frame_id = base_link_frame_;
         filtered_odom_.header.stamp = this->now();
-        filtered_odom_.pose.pose.position.x = sta_(index_.at("x")).val();
-        filtered_odom_.pose.pose.position.y = sta_(index_.at("y")).val();
+        filtered_odom_.pose.pose.position.x = index_.count("x") ? sta_(index_.at("x")).val() : 0;
+        filtered_odom_.pose.pose.position.y = index_.count("y") ? sta_(index_.at("y")).val() : 0;
 
 
         tf2::Quaternion quaternion_;
-        quaternion_.setRPY(0.0,0.0,sta_(index_.at("yaw")).val());
+        quaternion_.setRPY(index_.count("roll") ? sta_(index_.at("roll")).val() : 0,
+                           index_.count("pitch") ? sta_(index_.at("pitch")).val() : 0,
+                           index_.count("yaw") ? sta_(index_.at("yaw")).val() : 0);
         geometry_msgs::msg::Quaternion orientation_msg_;
         tf2::convert(quaternion_ , orientation_msg_);
         filtered_odom_.pose.pose.orientation = orientation_msg_;
@@ -414,7 +416,7 @@ namespace Filter{
         // /////////////////////publishing yaw in a topic//////////////////
         autodiff::VectorXreal st_ = filter_->getStates();
         std_msgs::msg::Float64 d;
-        d.data = st_(index_.at("yaw")).val();
+        d.data = index_.count("yaw") ? sta_(index_.at("yaw")).val() : 0;
         yaw_filter_pub_->publish(d);
         ///////////////Send filtered states tf//////////////////////
         if(publish_tf_)
