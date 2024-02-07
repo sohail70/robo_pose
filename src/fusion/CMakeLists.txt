@@ -37,7 +37,7 @@ add_library(
   src/motion_model_factory.cpp 
   src/motion_model.cpp 
   src/constant_heading_rate.cpp
-  src/car.cpp
+  src/quadcopter.cpp
 )
 set_target_properties(motion PROPERTIES POSITION_INDEPENDENT_CODE ON)
 

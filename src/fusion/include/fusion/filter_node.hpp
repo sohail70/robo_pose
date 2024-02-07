@@ -93,14 +93,26 @@ namespace Filter{
             std::thread rviz_marker_;
             void rviz_marker(ThreadParams* params_) {
                 rclcpp::Rate loop_rate(200);
-                geometry_msgs::msg::Pose2D pose_;
+                // geometry_msgs::msg::Pose2D pose_;
+                geometry_msgs::msg::Pose pose_;
                 while (rclcpp::ok())
                 {
                     autodiff::VectorXreal sta_ = filter_->getStates();
                     auto index_ = states_->getStateOrder();
-                    pose_.x = sta_(index_.at("x")).val();
-                    pose_.y = sta_(index_.at("y")).val();
-                    pose_.theta = sta_(index_.at("yaw")).val();
+
+                    pose_.position.x = sta_(index_.at("x")).val();
+                    pose_.position.y = sta_(index_.at("y")).val();
+                    pose_.position.z = sta_(index_.at("z")).val();
+                    
+                    tf2::Quaternion quaternion_;
+                    quaternion_.setRPY(index_.count("roll") ? sta_(index_.at("roll")).val() : 0,
+                                       index_.count("pitch") ? sta_(index_.at("pitch")).val() : 0,
+                                       index_.count("yaw") ? sta_(index_.at("yaw")).val() : 0);
+                    geometry_msgs::msg::Quaternion orientation_msg_;
+                    tf2::convert(quaternion_, orientation_msg_);
+                    pose_.orientation = orientation_msg_;
+
+
                     auto t_ = params_->time_;
                     params_->visualization_->clear();
                     params_->visualization_->addArrow(pose_);

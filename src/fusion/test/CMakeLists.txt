@@ -30,7 +30,7 @@ set(TEST_SOURCES
     # ../src/motion_model_factory.cpp
     # ../src/motion_model.cpp
     # ../src/constant_heading_rate.cpp
-    # ../src/car.cpp
+    # ../src/quadcopter.cpp
     # ../src/visualization.cpp
     # ../src/sensor_data.cpp
     # ../src/ekf.cpp 

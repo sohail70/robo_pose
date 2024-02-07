@@ -195,6 +195,14 @@ namespace Filter{
 
     void FilterNode::initializeStateAction()
     {
+        imu_state_action_["roll_dot"] = [](const sensor_msgs::msg::Imu::SharedPtr msg_ ,
+                                          Observations& current_obs_,
+                                          std::unordered_map<std::string,int> index_)
+                                        { current_obs_.states_(index_.at("roll_dot")) = msg_->angular_velocity.x;};
+        imu_state_action_["pitch_dot"] = [](const sensor_msgs::msg::Imu::SharedPtr msg_ ,
+                                          Observations& current_obs_,
+                                          std::unordered_map<std::string,int> index_)
+                                        { current_obs_.states_(index_.at("pitch_dot")) = msg_->angular_velocity.y;};
         imu_state_action_["yaw_dot"] = [](const sensor_msgs::msg::Imu::SharedPtr msg_ ,
                                           Observations& current_obs_,
                                           std::unordered_map<std::string,int> index_)
@@ -403,6 +411,7 @@ namespace Filter{
         filtered_odom_.header.stamp = this->now();
         filtered_odom_.pose.pose.position.x = index_.count("x") ? sta_(index_.at("x")).val() : 0;
         filtered_odom_.pose.pose.position.y = index_.count("y") ? sta_(index_.at("y")).val() : 0;
+        filtered_odom_.pose.pose.position.z = index_.count("z") ? sta_(index_.at("z")).val() : 0;
 
 
         tf2::Quaternion quaternion_;

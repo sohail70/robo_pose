@@ -37,14 +37,14 @@ TEST(FactoryTest , creatingObjectTest) //1st is group and 2nd is specific thing 
 
     Filter::MotionModelFactory factory_;
     std::unique_ptr<Filter::MotionModel> constant_heading_model_ = factory_.createModel(Filter::ModelType::CONSTANT_HEADING_RATE , &states_);
-    std::unique_ptr<Filter::MotionModel> car_ = factory_.createModel(Filter::ModelType::CAR , &states_);
+    std::unique_ptr<Filter::MotionModel> quad_ = factory_.createModel(Filter::ModelType::QUADCOPTER , &states_);
 
     ASSERT_NE(constant_heading_model_,nullptr);
-    ASSERT_NE(car_,nullptr);
+    ASSERT_NE(quad_,nullptr);
 
 
     ASSERT_EQ(typeid(*constant_heading_model_) , typeid(Filter::ConstantHeadingRate));
-    ASSERT_EQ(typeid(*car_) , typeid(Filter::Car));
+    ASSERT_EQ(typeid(*quad_) , typeid(Filter::Quadcopter));
 
 }
 namespace plt = matplotlibcpp;

@@ -26,14 +26,14 @@
 
 #include"fusion/motion_model.hpp"
 #include"fusion/constant_heading_rate.hpp"
-#include"fusion/car.hpp"
+#include"fusion/quadcopter.hpp"
 #include<functional>
 #include<unordered_map>
 #include<memory>
 #include<pluginlib/class_loader.hpp>
 namespace Filter
 {
-    enum class ModelType{CONSTANT_HEADING_RATE , CAR};
+    enum class ModelType{CONSTANT_HEADING_RATE , QUADCOPTER};
     class MotionModelFactory{
             public:
                 MotionModelFactory();

@@ -27,7 +27,7 @@ namespace Filter{
     MotionModelFactory::MotionModelFactory()
     {
        creators[static_cast<int>(ModelType::CONSTANT_HEADING_RATE)] = [](){return std::make_unique<ConstantHeadingRate>();};
-       creators[static_cast<int>(ModelType::CAR)] = [](){return std::make_unique<Car>();};
+       creators[static_cast<int>(ModelType::QUADCOPTER)] = [](){return std::make_unique<Quadcopter>();};
     }
 
     std::unique_ptr<MotionModel> MotionModelFactory::createModel(ModelType type_ , std::shared_ptr<StateSpace> states_)

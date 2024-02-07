@@ -20,18 +20,20 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include "fusion/car.hpp"
+#ifndef QUADCOPTER_HPP
+#define QUADCOPTER_HPP
+
+#include "fusion/motion_model.hpp"
 
 namespace Filter{
-    Car::Car()
+
+    class Quadcopter: public MotionModel
     {
-        std::cout<<"Ctor of Car \n";
-    }
-
-    autodiff::VectorXreal Car::propagate(const autodiff::VectorXreal&)
-    {}
-
-    // Eigen::MatrixXd Car::getJacobian()
-    // {}
-
+        public:
+            Quadcopter();
+            // virtual Eigen::MatrixXd getJacobian() override;
+            virtual autodiff::VectorXreal propagate(const autodiff::VectorXreal&) override;
+        private:
+    };
 } //namespace Filter
+#endif

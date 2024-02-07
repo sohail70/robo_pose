@@ -433,6 +433,25 @@ now after some time use ctrl+c and check the callgrind.out file
 the default build type of cmake is debug so as the colcon build. so you should specify RelWithDebugInfo
 
 
+------------------------------------------------------------
+nice lectures on robotics 
+https://pab47.github.io/robotics.html
+nice video on quadcopter dynamics:
+https://www.youtube.com/watch?v=4hlQ2pf842U
+
+good resource:
+https://www.kth.se/polopoly_fs/1.588039.1600688317!/Thesis%20KTH%20-%20Francesco%20Sabatino.pdf
+and code based on above:
+https://github.com/SchwartzCode/MAE_6245_Robotic-Systems/blob/master/Final_Proj_Quadrotor/main_script.m
+source : https://www.reddit.com/r/ControlTheory/comments/gxxzve/resources_for_understanding_quadcopter_dynamics/
+
+
+great video:
+https://www.youtube.com/watch?v=xCoFaTyn5dg&t=3668s
+------------------------------------------------------------
+
+
+
 
 namespace Filter{
 
