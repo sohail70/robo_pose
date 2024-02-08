@@ -12,6 +12,7 @@ find_package(visualization_msgs REQUIRED)
 find_package(Python3 COMPONENTS Interpreter Development NumPy REQUIRED)
 find_package(Eigen3 REQUIRED)
 find_package(autodiff REQUIRED)
+find_package(pluginlib REQUIRED)
 
 include_directories(
     ${GTEST_INCLUDE_DIRS}
@@ -27,22 +28,23 @@ set(TEST_SOURCES
     # test_ekf.cpp
     # # test_state_space.cpp
     # test_autodiff.cpp
-    # ../src/motion_model_factory.cpp
-    # ../src/motion_model.cpp
-    # ../src/constant_heading_rate.cpp
-    # ../src/quadcopter.cpp
-    # ../src/visualization.cpp
+    test_quad.cpp
+    ../src/motion_model_factory.cpp
+    ../src/motion_model.cpp
+    ../src/constant_heading_rate.cpp
+    ../src/quadcopter.cpp
+    ../src/visualization.cpp
     # ../src/sensor_data.cpp
     # ../src/ekf.cpp 
     # ../src/fusion.cpp
-    # ../src/state_space.cpp
+    ../src/state_space.cpp
     # ../src/mediator.cpp
 
 )
 
 add_executable(run_tests ${TEST_SOURCES})
 target_link_libraries(run_tests ${GTEST_BOTH_LIBRARIES} pthread Python3::Python Python3::NumPy Eigen3::Eigen autodiff::autodiff) #python  ro nazari matplot lib kar nemide
-ament_target_dependencies(run_tests rclcpp std_msgs geometry_msgs sensor_msgs visualization_msgs)
+ament_target_dependencies(run_tests rclcpp std_msgs geometry_msgs sensor_msgs visualization_msgs pluginlib)
 
 enable_testing()
 add_test(NAME YourTestSuite COMMAND run_tests)

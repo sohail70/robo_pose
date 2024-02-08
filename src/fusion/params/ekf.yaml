@@ -77,13 +77,20 @@ Filter:
     # sensor_2_states: ["x_dot"]
     # sensor_2_msg: "nav_msgs::msg::Odom"
 
+    ## for drone bag file
+    # sensor_0_topic: "/ardrone/imu"
+    # sensor_0_states: ["roll" , "pitch" ,"yaw" ]
+    # sensor_0_msg: "sensor_msgs::msg::Imu"
+    # sensor_1_topic: "/ardrone/odometry/raw" 
+    # sensor_1_states: ["z" , "x_dot" , "y_dot" ]
+    # sensor_1_msg: "nav_msgs::msg::Odom"
 
-    sensor_0_topic: "/ardrone/imu"
-    sensor_0_states: ["roll" , "pitch" ,"yaw" ]
-    sensor_0_msg: "sensor_msgs::msg::Imu"
-    sensor_1_topic: "/ardrone/odometry/raw" 
-    sensor_1_states: ["z" , "x_dot" , "y_dot" ]
-    sensor_1_msg: "nav_msgs::msg::Odom"
-
+    ## for sjtu drone pkg
+    # sensor_0_topic: "/simple_drone/imu"
+    # sensor_0_states: ["roll" , "pitch" ,"yaw" ]
+    # sensor_0_msg: "sensor_msgs::msg::Imu"
+    sensor_0_topic: "/simple_drone/odom" 
+    sensor_0_states: ["x" , "y" , "z","roll","pitch" , "yaw" ]
+    sensor_0_msg: "nav_msgs::msg::Odom"
 
     #what if we also needed a measurement model like for lidar which doesn't see the states directly and we need linearization --> future work
