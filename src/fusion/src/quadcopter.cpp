@@ -35,7 +35,7 @@ namespace Filter{
         autodiff::real dt = autodiff::real(dt_.seconds());
         const auto index = states_->getStateOrder();
         // std::cout<<"x_dot:"<<(index.find("x") != index.end() )<<"\n";
-        newState(0) = state(index.at("x")) +  (   state(index.at("z_dot"))*(sin(state(index.at("roll"))) * sin(state(index.at("yaw"))) + cos(state(index.at("roll")))* cos(state(index.at("yaw")))*cos(state(index.at("pitch"))) )        
+        newState(0) = state(index.at("x")) +  (   state(index.at("z_dot"))*(sin(state(index.at("roll"))) * sin(state(index.at("yaw"))) + cos(state(index.at("roll")))* cos(state(index.at("yaw")))*sin(state(index.at("pitch"))) )        
                                                 - state(index.at("y_dot"))*(cos(state(index.at("roll"))) * sin(state(index.at("yaw"))) - cos(state(index.at("yaw")))* sin(state(index.at("roll")))*sin(state(index.at("pitch"))) )        
                                                 + state(index.at("x_dot"))*(cos(state(index.at("yaw"))) * cos(state(index.at("pitch"))))
                                                 )* dt;
