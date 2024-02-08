@@ -7,7 +7,7 @@ endif()
 
 
 if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE RelWithDebInfo)
+  set(CMAKE_BUILD_TYPE Release) #RelWithDebInfo , Release , Debug
 endif()
 
 # find dependencies
